@@ -1,10 +1,11 @@
 package com.huasheng.sysq.editor.service;
 
 import com.huasheng.sysq.editor.model.User;
+import com.huasheng.sysq.editor.util.CallResult;
 
 public interface UserService {
 	
-	public User getUserByName(String name);
+	public CallResult<User> getUserByName(String name);
 
-	public int addUser(User user);
+	public CallResult<Boolean> addUser(User user);
 }

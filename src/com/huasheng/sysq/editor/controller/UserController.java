@@ -25,18 +25,18 @@ public class UserController {
 	@ResponseBody
 	public CallResult<User> getUserByName(@RequestParam("name") String name) {
 		LogUtils.info(this.getClass(), "getUserByName params : name = {}",name);
-		User user = userService.getUserByName(name);
-		LogUtils.info(this.getClass(), "getUserByName result : {}", JsonUtils.toJson(user));
-		return CallResult.success(user);	
+		CallResult<User> result = userService.getUserByName(name);
+		LogUtils.info(this.getClass(), "getUserByName result : {}", JsonUtils.toJson(result));
+		return result;
 	}
 	
 	@RequestMapping(value="/addUser.do",method=RequestMethod.POST)
 	@ResponseBody
-	public CallResult<Integer> addUser(@RequestBody String userJson) {
+	public CallResult<Boolean> addUser(@RequestBody String userJson) {
 		LogUtils.info(this.getClass(), "addUser params : {}", userJson);
 		User user = JsonUtils.toBean(userJson, User.class);
-		int userId = userService.addUser(user);
-		LogUtils.info(this.getClass(), "addUser result : {}", userId);
-		return CallResult.success(userId);
+		CallResult<Boolean> result = userService.addUser(user);
+		LogUtils.info(this.getClass(), "addUser result : {}", result);
+		return result;
 	}
 }
