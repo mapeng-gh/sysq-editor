@@ -8,7 +8,7 @@ import com.huasheng.sysq.editor.model.User;
 @Repository
 public class UserDaoImpl extends BaseDao implements UserDao{
 	
-	private static String NAMESPACE = "com.huasheng.sysq.editor.model.User";
+	private static String NAMESPACE = "mapper.UserMapper";
 
 	@Override
 	public User getByName(String name) {
