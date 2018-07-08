@@ -3,16 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+        <link rel="stylesheet" href="/css/element-ui-theme-chalk-2.4.3.css">
+        <link rel="stylesheet" href="/css/common.css">
+        <link rel="stylesheet" href="/css/layout.css">
+        <link rel="stylesheet" href="/css/header.css">
 </head>
 <body>
 
-     <div id="app">
-        <router-view></router-view>
+     <div class="container" id="app">
+     
+            <div class="header">
+                    <sysq-header></sysq-header>
+            </div>
+            
+            <div class="main">
+                
+                    <div class="aside">
+                            <sysq-aside></sysq-aside>
+                    </div>
+                    
+                    <div class="content">content</div>
+                
+            </div>
+            
+            <div class="footer">
+                    <sysq-footer></sysq-footer>
+            </div>
+     
      </div>
 
     <script type="text/javascript" src="/libs/vue-2.5.16.js"></script>
     <script type="text/javascript" src="/libs/vue-router-3.0.1.js"></script>
-    <script type="text/javascript" src="/layout/layout.js"></script>
+    <script type="text/javascript" src="/libs/element-ui-2.4.3.js"></script>
+    <script type="text/javascript" src="/layout/header.js"></script>
+    <script type="text/javascript" src="/layout/aside.js"></script>
+    <script type="text/javascript" src="/layout/footer.js"></script>
     <script type="text/javascript" src="/views/module1/module1.js"></script>
     <script type="text/javascript" src="/views/module2/module2.js"></script>
     <script type="text/javascript" src="/router.js"></script>
