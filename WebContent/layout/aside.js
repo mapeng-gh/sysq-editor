@@ -3,9 +3,9 @@
 	var template = `
 		<div class="aside-content">
 				
-				<el-menu default-active="2-1" background-color="#212E39" text-color="#A7B7BC" active-text-color="#FFF" :unique-opened="true" :router="true">
+				<el-menu default-active="/module1" background-color="#212E39" text-color="#A7B7BC" active-text-color="#FFF" :unique-opened="true" :router="true">
 				
-						<el-menu-item index="1">
+						<el-menu-item index="/module1">
 								<i class="el-icon-menu"></i>
 								<span slot="title">模块1</span>
 						</el-menu-item>

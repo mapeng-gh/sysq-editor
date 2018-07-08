@@ -21,7 +21,7 @@ html,body{
 .body{
 	position:absolute;
 	top:60px;
-	bottom:60px;
+	bottom:40px;
 	width:100%;
 }
 
@@ -39,6 +39,6 @@ html,body{
 .footer{
 	position: absolute;
 	bottom:0;
-	height:60px;
+	height:40px;
 	width:100%;
 }
