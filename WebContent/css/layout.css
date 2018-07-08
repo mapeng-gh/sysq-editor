@@ -18,7 +18,7 @@ html,body{
 	width:100%;
 }
 
-.main{
+.body{
 	position:absolute;
 	top:60px;
 	bottom:60px;
@@ -31,10 +31,9 @@ html,body{
 	float:left;
 }
 
-.content{
+.main{
 	margin-left:200px;
 	height:100%;
-	
 }
 
 .footer{
