@@ -4,7 +4,7 @@
 		 routes : [
 			 {
 					path : '/',
-					redirect : '/dashboard',
+					redirect : '/userManage/list',
 					component : layoutComponent,
 					children : mappings
 			 }

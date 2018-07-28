@@ -6,7 +6,7 @@
 				
 				<el-col class="left" :span="4">
 					<img class="logo" src="/static/image/logo.png"/>
-					<span class="title">病例对照编辑平台</span>
+					<span class="title">抑郁症数据编辑平台</span>
 				</el-col>
 				
 				<el-col class="right" :span="2" :offset="18">

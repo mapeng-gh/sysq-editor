@@ -2,12 +2,12 @@
 	
 	var mappings = [
 		{
-			 path : '/dashboard',
-			 component : dashboardComponent,
-			 name : 'dashboard',
-			 meta : {
-                 activeIndex : '/dashboard'
-			 }
+			path : '/userManage/list',
+			component : userManageListComponent,
+			name : 'userManageList',
+			meta : {
+                                activeIndex : '/userManage/list'
+			}
 		}
 	];
 	
