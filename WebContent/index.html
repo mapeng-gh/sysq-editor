@@ -2,53 +2,39 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-        <link rel="stylesheet" href="/css/element-ui-theme-chalk-2.4.3.css">
-        <link rel="stylesheet" href="/css/common.css">
-        <link rel="stylesheet" href="/css/layout/layout.css">
-        <link rel="stylesheet" href="/css/layout/header.css">
-        <link rel="stylesheet" href="/css/layout/aside.css">
-        <link rel="stylesheet" href="/css/layout/main.css">
-        <link rel="stylesheet" href="/css/layout/footer.css">
+<title>病例对照编辑平台</title>
+	<link rel="stylesheet" href="/static/css/elementui/element-ui-theme-chalk-2.4.3.css">
+	<link rel="stylesheet" href="/static/css/fontawesome/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/common.css">
+	<link rel="stylesheet" href="/static/css/layout.css">
 </head>
 <body>
 
-     <div class="container" id="app">
-     
-            <div class="header">
-                    <sysq-header></sysq-header>
-            </div>
-            
-            <div class="body">
-                
-                    <div class="aside">
-                            <sysq-aside></sysq-aside>
-                    </div>
-                    
-                    <div class="main">
-                            <sysq-main></sysq-main>
-                    </div>
-                
-            </div>
-            
-            <div class="footer">
-                    <sysq-footer></sysq-footer>
-            </div>
-     
-     </div>
+    <div id="app"></div>
 
     <script type="text/javascript" src="/libs/vue-2.5.16.js"></script>
     <script type="text/javascript" src="/libs/vue-router-3.0.1.js"></script>
     <script type="text/javascript" src="/libs/element-ui-2.4.3.js"></script>
-    <script type="text/javascript" src="/layout/header.js"></script>
-    <script type="text/javascript" src="/layout/aside.js"></script>
-    <script type="text/javascript" src="/layout/main.js"></script>
-    <script type="text/javascript" src="/layout/footer.js"></script>
-    <script type="text/javascript" src="/views/module1/module1.js"></script>
-    <script type="text/javascript" src="/views/module2/module21.js"></script>
-    <script type="text/javascript" src="/views/module2/module22.js"></script>
-    <script type="text/javascript" src="/router.js"></script>
-    <script type="text/javascript" src="/index.js"></script>
+    
+    <script type="text/javascript" src="/libs/vuex-3.0.1.js"></script>
+    <script type="text/javascript" src="/store/menu/menu.js"></script>
+    <script type="text/javascript" src="/store/main.js"></script>
+    
+    <script type="text/javascript" src="/view/dashboard/dashboard.js"></script>
+    
+    <script type="text/javascript" src="/config/menu.js"></script>
+    
+    <script type="text/javascript" src="/view/layout/header.js"></script>
+    <script type="text/javascript" src="/view/layout/aside.js"></script>
+    <script type="text/javascript" src="/view/layout/content.js"></script>
+    <script type="text/javascript" src="/view/layout/footer.js"></script>
+    <script type="text/javascript" src="/view/layout/layout.js"></script>
+    
+    <script type="text/javascript" src="/router/mappings.js"></script>
+    <script type="text/javascript" src="/router/router.js"></script>
+    
+    <script type="text/javascript" src="/app.js"></script>
+    <script type="text/javascript" src="/main.js"></script>
 
 </body>
 </html>
