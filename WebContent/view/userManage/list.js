@@ -66,7 +66,11 @@
                                                         </el-table-column>
                                                         <el-table-column prop="mobile" label="联系电话" width="150" align="center"></el-table-column>
                                                         <el-table-column prop="workingPlace" label="工作单位" width="180" align="center" :show-overflow-tooltip="true"></el-table-column>
-                                                        <el-table-column prop="createDate" label="创建日期" width="180" align="center"></el-table-column>
+                                                        <el-table-column prop="createTime" label="创建日期" width="180" align="center">
+                                                                <template slot-scope="scope">
+                                                                        {{dateFns.format(scope.row.createTime,"YYYY-MM-DD HH:mm:ss")}}
+                                                                </template>
+                                                        </el-table-column>
                                                         <el-table-column prop="auditStatus" label="审核状态" width="150" align="center">
                                                                 <template slot-scope="scope">
                                                                         <el-tag type="info" v-if="scope.row.auditStatus == Constants.AUDIT_STATUS.enums.NONE">{{Constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
@@ -106,13 +110,9 @@
                                         
                                         Constants : Constants,
                                         
-                                        userList : [
-                                                {id:1,name:'张三1',userType:2,mobile:'18611111111',workingPlace:'北京',createDate:'2018-07-28 12:00:00',auditStatus:0},
-                                                {id:2,name:'张三2',userType:3,mobile:'18611111111',workingPlace:'北京',createDate:'2018-07-28 12:00:00',auditStatus:1},
-                                                {id:3,name:'张三3',userType:3,mobile:'18611111111',workingPlace:'北京',createDate:'2018-07-28 12:00:00',auditStatus:2},
-                                                {id:4,name:'张三4',userType:3,mobile:'18611111111',workingPlace:'北京',createDate:'2018-07-28 12:00:00',auditStatus:0},
-                                                {id:5,name:'张三5',userType:3,mobile:'18611111111',workingPlace:'北京',createDate:'2018-07-28 12:00:00',auditStatus:0}
-                                        ],
+                                        dateFns : dateFns,
+                                        
+                                        userList : [],
                                         
                                         userTypeList : Constants.USER_TYPE.getUserTypeList(),
                                         auditStatusList : Constants.AUDIT_STATUS.getAuditStatusList(),
@@ -126,7 +126,7 @@
                                         paginate : {
                                                 pageSize : 10,
                                                 currentPage : 1,
-                                                total : 100
+                                                total : 0
                                         }
                                         
 				}
@@ -134,9 +134,27 @@
                         
                         methods : {
                                 
+                                init : function(){
+                                        var self = this;
+                                        
+                                        request.sendGetRequest("/userManage/list.do",
+                                                _.assignIn({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),
+                                                function(resultObject){
+                                                        self.userList = resultObject.data;
+                                                        self.paginate.total = resultObject.total;
+                                                
+                                                }
+                                        );
+                                },
+                                
                                 handleAudit(scope){
-                                        alert(JSON.stringify(this.Constants));
+                                        
+                                     
                                 }
+                        },
+                        
+                        mounted : function(){
+                                this.init();
                         }
 	};
 	window.userManageListComponent = userManageListComponent;

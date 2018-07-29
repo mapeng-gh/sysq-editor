@@ -5,28 +5,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huasheng.sysq.editor.model.User;
+import com.huasheng.sysq.editor.params.UserManageSearchRequest;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
+import com.huasheng.sysq.editor.util.Page;
 
 @Controller
-@RequestMapping(value="/user")
+@RequestMapping(value="/userManage")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value="/getUserByName.do",method=RequestMethod.GET)
+	@RequestMapping(value="/list.do",method=RequestMethod.GET)
 	@ResponseBody
-	public CallResult<User> getUserByName(@RequestParam("name") String name) {
-		LogUtils.info(this.getClass(), "getUserByName params : name = {}",name);
-		CallResult<User> result = userService.getUserByName(name);
-		LogUtils.info(this.getClass(), "getUserByName result : {}", JsonUtils.toJson(result));
+	public CallResult<Page<User>> list(UserManageSearchRequest searchRequest) {
+		LogUtils.info(this.getClass(), "list params : {}",JsonUtils.toJson(searchRequest));
+		CallResult<Page<User>> result = userService.findUserList(searchRequest);
+		LogUtils.info(this.getClass(), "list result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	
