@@ -1,8 +1,10 @@
 package com.huasheng.sysq.editor.util;
-	
+
+import java.util.List;
+
 public class Page<T> {
 
-        private T data;
+        private List<T> data;
         private int currentPage;
         private int pageSize;
         private int total;
@@ -12,7 +14,7 @@ public class Page<T> {
         public Page() {
         }
 
-        public Page(T data,int currentPage,int pageSize,int total) {
+        public Page(List<T> data,int currentPage,int pageSize,int total) {
                 this.data = data;
                 this.currentPage = currentPage;		
                 this.pageSize = pageSize;
@@ -20,11 +22,11 @@ public class Page<T> {
                 this.totalPages = total%pageSize == 0?total/pageSize:total/pageSize+1;
         }
 
-        public T getData() {
+        public List<T> getData() {
                 return data;
         }
 
-        public void setData(T data) {
+        public void setData(List<T> data) {
                 this.data = data;
         }
 

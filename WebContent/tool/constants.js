@@ -1,6 +1,6 @@
 (function(){
       
-        var Constants = {
+        var constants = {
                 
                 //用户类型
                 USER_TYPE : {
@@ -50,6 +50,6 @@
                 },
         };
         
-        window.Constants = Constants;
+        window.constants = constants;
         
 })();

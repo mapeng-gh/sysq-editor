@@ -26,14 +26,22 @@
                  select <include refid="userColumns"></include> 
 	         from editor_user 
 	         <trim prefix="where" prefixOverrides="and">
-			<if test="name != null and '' != name">and name like concat(concat('%',#{name}),'%')</if>
-	       </trim>
+                         <if test="_parameter != null and name != null and name != ''">and name like concat(concat('%',#{name}),'%')</if>
+                         <if test="_parameter != null and userType != null and userType != ''">and user_type = #{userType}</if>
+                         <if test="_parameter != null and auditStatus != null and auditStatus != ''">and audit_status = #{auditStatus}</if>
+                 </trim>
+                 <if test="_parameter != null and offset != null and limit != null">
+                     limit #{offset},#{limit}
+                 </if>
+	         
 	</select>
 	 
-        <select id="count" parameterType="User" resultType="int">
+        <select id="count" parameterType="hashmap" resultType="_int">
 	         select count(id)  from editor_user 
                  <trim prefix="where" prefixOverrides="and">
-                         <if test="name != null and '' != name">and name like concat(concat('%',#{name}),'%')</if>
+                         <if test="_parameter != null and name != null and name != ''">and name like concat(concat('%',#{name}),'%')</if>
+                         <if test="_parameter != null and userType != null and userType != ''">and user_type = #{userType}</if>
+                         <if test="_parameter != null and auditStatus != null and auditStatus != ''">and audit_status = #{auditStatus}</if>
                  </trim>
         </select>
 	

@@ -1,6 +1,7 @@
 package com.huasheng.sysq.editor.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.huasheng.sysq.editor.model.User;
 
@@ -8,19 +9,17 @@ public interface UserDao {
 
 	/**
 	 * 搜索
-	 * @param searchUser
-	 * @param pageSize
-	 * @param currentPage
+	 * @param searchParams
 	 * @return
 	 */
-	List<User> selectList(User searchUser,int pageSize,int currentPage);
+	List<User> find(Map<String,String> searchParams);
 	
 	/**
 	 * 统计
 	 * @param searchUser
 	 * @return
 	 */
-	int count(User searchUser);
+	int count(Map<String,String> searchParams);
 	
 	/**
 	 * 插入

@@ -1,7 +1,8 @@
 package com.huasheng.sysq.editor.service;
 
+import java.util.Map;
+
 import com.huasheng.sysq.editor.model.User;
-import com.huasheng.sysq.editor.params.UserManageSearchRequest;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Page;
 
@@ -14,7 +15,7 @@ public interface UserService {
 	 * @param currentPage
 	 * @return
 	 */
-	public CallResult<Page<User>> findUserList(UserManageSearchRequest searchRequest);
+	public CallResult<Page<User>> findUserPage(Map<String,String> searchParams);
 	
 	/**
 	 * 添加用户

@@ -1,4 +1,6 @@
 (function(){
+        
+        var Message = Vue.prototype.$message;
       
         //全局配置
         axios.defaults.timeout = 10000;
