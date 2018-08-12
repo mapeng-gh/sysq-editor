@@ -2,7 +2,7 @@
 //注入工具方法
 Vue.prototype.constants = constants;
 Vue.prototype.commons = commons;
-Vue.prototype.request = request;
+Vue.prototype.$request = request;
 
 var app = new Vue({
 	  el: '#app',

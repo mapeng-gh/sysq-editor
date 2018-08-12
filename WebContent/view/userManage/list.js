@@ -134,7 +134,7 @@
                                 init : function(){
                                         var self = this;
                                         
-                                        this.request.sendGetRequest(this.APIS.LIST,
+                                        this.$request.sendGetRequest(this.APIS.LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
                                                         self.userList = resultObject.data;
@@ -150,7 +150,7 @@
                                         
                                         this.paginate.currentPage = 1;
                                         
-                                        this.request.sendGetRequest(this.APIS.LIST,
+                                        this.$request.sendGetRequest(this.APIS.LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
                                                         self.userList = resultObject.data;
@@ -168,7 +168,7 @@
                                         
                                         this.paginate.currentPage = 1;
                                         
-                                        this.request.sendGetRequest(this.APIS.LIST,
+                                        this.$request.sendGetRequest(this.APIS.LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
                                                         self.userList = resultObject.data;

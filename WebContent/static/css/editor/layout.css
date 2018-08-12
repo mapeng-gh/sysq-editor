@@ -1,0 +1,45 @@
+.container .header {
+  height: 80px;
+  background-color: #20a0ff;
+}
+.container .header .left {
+  height: 100%;
+  text-align: center;
+  line-height: 80px;
+}
+.container .header .left .logo {
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+}
+.container .header .left .title {
+  color: #FFF;
+  font-weight: bold;
+  font-size: 20px;
+  vertical-align: middle;
+}
+.container .header .right {
+  height: 100%;
+  text-align: center;
+  line-height: 80px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+.container .header .right .el-dropdown {
+  color: #fff;
+  font-size: 16px;
+}
+.container .content {
+  padding: 25px;
+  min-height: 500px;
+}
+.container .footer {
+  padding: 32px 0;
+  background-color: #324057;
+}
+.container .footer .info {
+  text-align: center;
+  font-size: 13px;
+  color: #9BA9C0;
+}

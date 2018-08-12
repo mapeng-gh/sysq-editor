@@ -1,0 +1,57 @@
+.container{
+        .header{
+                height:80px;
+                background-color:#20a0ff;
+                
+                .left{
+                        height:100%;
+                        text-align:center;
+                        line-height: 80px;
+                        
+                        .logo{
+                                width:50px;
+                                height:50px;
+                                vertical-align: middle;
+                        }
+                        
+                        .title{
+                                color:#FFF;
+                                font-weight:bold;
+                                font-size:20px;
+                                vertical-align: middle;
+                        }
+                }
+                
+                .right{
+                        height:100%;
+                        text-align:center;
+                        line-height: 80px;
+                        color:#fff;
+                        font-size:16px;
+                        cursor: pointer;
+                        
+                        .el-dropdown{
+                                color:#fff;
+                                font-size:16px;
+                        }
+                }
+                
+              
+        }
+        
+        .content{
+                padding:25px;
+                min-height: 500px;
+        }
+        
+        .footer{
+                padding: 32px 0;
+                background-color: #324057;
+                
+                .info{
+                        text-align:center;
+                        font-size: 13px;
+                        color: #9BA9C0;
+                }
+        }
+}

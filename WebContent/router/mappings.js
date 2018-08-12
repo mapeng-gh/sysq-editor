@@ -2,9 +2,9 @@
 	
 	var mappings = [
 		{
-			path : '/userManage/list',
-			component : userManageListComponent,
 			name : 'userManageList',
+			component : userManageListComponent,
+			path : '/userManage/list',
 			meta : {
                                 activeIndex : '/userManage/list'
 			}

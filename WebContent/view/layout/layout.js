@@ -4,24 +4,20 @@
 			
 		template : `
 		
-			<div>
-				
+			<div class="container">
 				<sysq-header class="header"></sysq-header>
-     
-	           	<el-row>
-	           	
-	           		<el-col :span="4" class="aside">
-	           			<sysq-aside></sysq-aside>
-	           		</el-col>
-	           		
-	           		<el-col :span="20" class="content">
-	              		<sysq-content></sysq-content>
-	              	</el-col>
-	           	
-	           	</el-row>
+                                
+                                <el-row>
+                                        <el-col :span="4" class="aside">
+                                                <sysq-aside></sysq-aside>
+                                        </el-col>
+                        
+                                        <el-col :span="20" class="content">
+                                                <sysq-content></sysq-content>
+                                        </el-col>
+                                </el-row>
                 	
-            	<sysq-footer class="footer"></sysq-footer>     
-				
+                                <sysq-footer class="footer"></sysq-footer>     
 			</div>
 			
 		`,
@@ -33,4 +29,5 @@
 		}
 	};
 	window.layoutComponent = layoutComponent;
+        
 })();
