@@ -109,7 +109,7 @@
 				return {
                                         
                                         APIS : {
-                                                LIST : '/userManage/list.do'
+                                                USER_LIST : '/userManage/list.do'
                                         },
                                         
                                         userList : [],
@@ -134,7 +134,7 @@
                                 init : function(){
                                         var self = this;
                                         
-                                        this.$request.sendGetRequest(this.APIS.LIST,
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
                                                         self.userList = resultObject.data;
@@ -150,7 +150,7 @@
                                         
                                         this.paginate.currentPage = 1;
                                         
-                                        this.$request.sendGetRequest(this.APIS.LIST,
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
                                                         self.userList = resultObject.data;
@@ -168,8 +168,8 @@
                                         
                                         this.paginate.currentPage = 1;
                                         
-                                        this.$request.sendGetRequest(this.APIS.LIST,
-                                                _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,
+                                                this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
                                                         self.userList = resultObject.data;
                                                         self.paginate.total = resultObject.total;
@@ -178,10 +178,33 @@
                                         );
                                 },
                                 
+                                 //切换分页
+                                handleCurrentChange(currentPage){
+                                        var self = this;
+                                        
+                                        this.paginate.currentPage = currentPage;
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
+                                                self.userList = resultObject.data;
+                                                self.paginate.total = resultObject.total;
+                                        });
+                                },
+                                
+                                //切换大小
+                                handleSizeChange(currentSize){
+                                        var self = this;
+                                        
+                                        this.paginate.pageSize = currentSize;
+                                         this.paginate.currentPage = 1;
+                                         this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
+                                                self.userList = resultObject.data;
+                                                self.paginate.total = resultObject.total;
+                                        });
+                                },
+                                
                                 handleAudit(scope){
                                         
                                      
-                                }
+                                },
                         },
                         
                         mounted : function(){

@@ -1,5 +1,6 @@
 package com.huasheng.sysq.editor.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.UserCreateRequest;
+import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -40,5 +42,23 @@ public class UserController {
 		LogUtils.info(this.getClass(), "createUser params : {}", createRequest);
 //		LogUtils.info(this.getClass(), "createUser result : {}", result);
 		return null;
+	}
+	
+	@RequestMapping(value="/login.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<UserLoginResponse> login(@RequestBody String userLoginJsonStr) {
+		LogUtils.info(this.getClass(), "login params : {}",userLoginJsonStr);
+		
+		Map userLoginMap = new HashMap();
+		try {
+			userLoginMap = JsonUtils.toMap(userLoginJsonStr);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "login error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<UserLoginResponse> result = userService.login((String)userLoginMap.get("loginName"), (String)userLoginMap.get("loginPwd"));
+		LogUtils.info(this.getClass(), "login result : {}", JsonUtils.toJson(result));
+		return result;
 	}
 }

@@ -3,7 +3,7 @@
         var Message = Vue.prototype.$message;
       
         //全局配置
-        axios.defaults.timeout = 10000;
+        axios.defaults.timeout = 30000;
         axios.defaults.baseURL = location.protocol + "//" + location.host;
 
         //错误请求处理
@@ -13,9 +13,27 @@
                 }else if(error.request){
                         Message.error('请求连接超时：' + error.config.url);
                 }else{
-                        Message.error(error.message);
+                        Message.error(error);
                 }
         };
+        
+        //请求拦截
+        axios.interceptors.request.use((config)=>{
+                if(config.url == '/userManage/login.do'){
+                        return config;
+                }else{
+                        var token = (JSON.parse(localStorage.getItem("loginUser")) || {}).token;
+                        if(!token){
+                                window.location.hash = '#/login';
+                                return Promise.reject("用户未登录");
+                        }else{
+                                config.headers.common['Authorization'] = token;
+                                return config;
+                        }
+                }
+        },(error)=>{
+                return Promise.reject(error);
+        });
 
         //GET请求
         var sendGetRequest = function(url , params , successCB , errorCB){
@@ -52,7 +70,7 @@
                         if(errorCB){
                                 errorCB(result);
                         }else{
-                                Message.error('业务处理失败：' + JSON.stringify(result));
+                                Message.error(result.msg);
                         }
                 }
         }

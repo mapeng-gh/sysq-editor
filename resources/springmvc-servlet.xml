@@ -11,12 +11,22 @@
 
     <context:component-scan base-package="com.huasheng.sysq.editor.controller"/>
     
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <bean class="com.huasheng.sysq.editor.filter.SessionInterceptor"></bean>
+            </list>
+        </property>
+    </bean>
     
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                       <constructor-arg value="UTF-8" />
+               </bean> 
                 <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"></bean>
+                
             </list>
         </property>
     </bean>

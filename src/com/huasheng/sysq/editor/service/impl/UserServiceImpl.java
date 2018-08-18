@@ -2,6 +2,7 @@ package com.huasheng.sysq.editor.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.User;
+import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
+import com.huasheng.sysq.editor.util.SessionCache;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -92,5 +95,34 @@ public class UserServiceImpl implements UserService{
 			}
 		});
 		return result;
+	}
+
+	@Override
+	public CallResult<UserLoginResponse> login(String loginName, String loginPwd) {
+		
+		//数据校验
+		if(StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
+			return CallResult.failure("登录名和登录密码不能为空");
+		}
+		
+		User loginUser = userDao.selectByLoginName(loginName);
+		if(loginUser == null) {
+			return CallResult.failure("登录名不存在");
+		}
+		
+		if(!loginPwd.equals(loginUser.getLoginPwd())) {
+			return CallResult.failure("登录密码不正确");
+		}
+		
+		//保存会话
+		String token = SessionCache.USER_LOGIN_KEY + UUID.randomUUID().toString();
+		SessionCache.add(token, loginUser);
+		
+		UserLoginResponse userLoginResponse = new UserLoginResponse();
+		userLoginResponse.setName(loginUser.getName());
+		userLoginResponse.setUserType(loginUser.getUserType());
+		userLoginResponse.setToken(token);
+		
+		return CallResult.success(userLoginResponse);
 	}
 }

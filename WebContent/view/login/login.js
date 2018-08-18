@@ -38,7 +38,7 @@
                                                 <div class="pwd">
                                                         <el-input
                                                                 placeholder="请输入您的密码"
-                                                                v-model="loginPasswd"
+                                                                v-model="loginPwd"
                                                                 type="password">
                                                                 <i slot="prefix" class="el-input__icon fa fa-key"></i>
                                                         </el-input>
@@ -66,8 +66,8 @@
 		
 		data : function(){
 			return {
-				loginName : '',
-                                loginPasswd : ''
+				loginName : 'zhangsan',
+                                loginPwd : '123456'
 			}
 		},
                 
@@ -77,8 +77,10 @@
 			login : function(){
                                 var self = this;
                                 
-				this.$request.sendPostRequest("/user/login.do",{loginName : this.loginName,loginPasswd : this.loginPasswd},function(resultObject){
-					console.log('login = ' + JSON.stringify(resultObject));
+				this.$request.sendPostRequest('/userManage/login.do',{loginName : this.loginName,loginPwd : this.loginPwd},function(resultObject){
+					window.localStorage.setItem('loginUser',JSON.stringify(resultObject));
+                                        
+                                        self.$router.push({name : 'userManageList'});
 				});
 			}
                 }

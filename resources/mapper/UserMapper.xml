@@ -44,5 +44,11 @@
                          <if test="_parameter != null and auditStatus != null and auditStatus != ''">and audit_status = #{auditStatus}</if>
                  </trim>
         </select>
+        
+        <select id="selectByLoginName" parameterType="string" resultMap="userResultMap">
+                select <include refid="userColumns"></include> 
+                from editor_user 
+                where login_name = #{loginName}
+        </select>
 	
 </mapper>  

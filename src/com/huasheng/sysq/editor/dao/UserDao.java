@@ -26,4 +26,11 @@ public interface UserDao {
 	 * @param newUser
 	 */
 	void insert(User newUser);
+	
+	/**
+	 * 登录账号查询
+	 * @param loginName
+	 * @return
+	 */
+	User selectByLoginName(String loginName);
 }
