@@ -45,10 +45,16 @@ function open(hash,params){
         window.open(url,'_blank');
 }
 
+function logout(){
+        window.localStorage.removeItem('loginUser');
+        window.location.hash = '#/login';
+}
+
 window.commons = {
         formatDate : formatDate,
         serialize : serialize,
-        open : open
+        open : open,
+        logout : logout
 }
       
 })();

@@ -24,7 +24,7 @@
                 }else{
                         var token = (JSON.parse(localStorage.getItem("loginUser")) || {}).token;
                         if(!token){
-                                window.location.hash = '#/login';
+                                commons.logout();
                                 return Promise.reject("用户未登录");
                         }else{
                                 config.headers.common['Authorization'] = token;
@@ -63,7 +63,7 @@
         var handleRequest = function(response,successCB,errorCB){
                 var result = response.data;
                 if(result.code == -2){
-                        window.hash = '#/login';
+                        commons.logout();
                 }else if(result.code == 1){
                         successCB(result.resultObject);
                 }else{

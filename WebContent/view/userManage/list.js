@@ -68,7 +68,7 @@
                                                         <el-table-column prop="workingPlace" label="工作单位" width="180" align="center" :show-overflow-tooltip="true"></el-table-column>
                                                         <el-table-column prop="createTime" label="创建日期" width="180" align="center">
                                                                 <template slot-scope="scope">
-                                                                        {{commons.formatDate(scope.row.createTime)}}
+                                                                        {{$commons.formatDate(scope.row.createTime)}}
                                                                 </template>
                                                         </el-table-column>
                                                         <el-table-column prop="auditStatus" label="审核状态" width="150" align="center">

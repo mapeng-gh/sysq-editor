@@ -16,6 +16,7 @@ import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
+import com.huasheng.sysq.editor.util.Constants;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
 import com.huasheng.sysq.editor.util.SessionCache;
@@ -100,16 +101,21 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public CallResult<UserLoginResponse> login(String loginName, String loginPwd) {
 		
-		//数据校验
+		//参数校验
 		if(StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
 			return CallResult.failure("登录名和登录密码不能为空");
 		}
 		
+		//业务校验
 		User loginUser = userDao.selectByLoginName(loginName);
 		if(loginUser == null) {
 			return CallResult.failure("登录名不存在");
 		}
-		
+		if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_NONE) {
+			return CallResult.failure("用户正在审核");
+		}else if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_REJECT) {
+			return CallResult.failure("用户审核未通过：" + loginUser.getAuditRemark());
+		}
 		if(!loginPwd.equals(loginUser.getLoginPwd())) {
 			return CallResult.failure("登录密码不正确");
 		}
