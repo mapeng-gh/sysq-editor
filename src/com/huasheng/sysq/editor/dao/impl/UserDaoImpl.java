@@ -66,4 +66,9 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 	public User selectByLoginName(String loginName) {
 		return super.getSqlSession().selectOne(NAMESPACE + ".selectByLoginName",loginName);
 	}
+
+	@Override
+	public User selectById(int id) {
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectById",id);
+	}
 }

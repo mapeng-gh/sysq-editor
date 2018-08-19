@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService{
 		if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_ING) {
 			return CallResult.failure("用户正在审核");
 		}else if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_REJECT) {
-			return CallResult.failure("用户审核未通过：" + loginUser.getAuditRemark());
+			return CallResult.failure("用户审核未通过：" + loginUser.getRemark());
 		}
 		if(!loginPwd.equals(loginUser.getLoginPwd())) {
 			return CallResult.failure("登录密码不正确");
@@ -130,5 +130,17 @@ public class UserServiceImpl implements UserService{
 		userLoginResponse.setToken(token);
 		
 		return CallResult.success(userLoginResponse);
+	}
+
+	@Override
+	public CallResult<User> viewUser(int userId) {
+		try {
+			User user = userDao.selectById(userId);
+			return CallResult.success(user);
+		}catch(Exception e) {
+			LogUtils.error(UserServiceImpl.class, "viewUser error", e);
+			return CallResult.failure("获取用户失败"); 
+		}
+		
 	}
 }

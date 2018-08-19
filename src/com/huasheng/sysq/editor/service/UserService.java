@@ -19,6 +19,13 @@ public interface UserService {
 	public CallResult<Page<User>> findUserPage(Map<String,String> searchParams);
 	
 	/**
+	 * 查看用户
+	 * @param userId
+	 * @return
+	 */
+	public CallResult<User> viewUser(int userId);
+	
+	/**
 	 * 添加用户
 	 * @param newUser
 	 */

@@ -12,25 +12,32 @@ public interface UserDao {
 	 * @param searchParams
 	 * @return
 	 */
-	List<User> find(Map<String,String> searchParams);
+	public List<User> find(Map<String,String> searchParams);
 	
 	/**
 	 * 统计
 	 * @param searchUser
 	 * @return
 	 */
-	int count(Map<String,String> searchParams);
+	public int count(Map<String,String> searchParams);
 	
 	/**
 	 * 插入
 	 * @param newUser
 	 */
-	void insert(User newUser);
+	public void insert(User newUser);
 	
 	/**
 	 * 登录账号查询
 	 * @param loginName
 	 * @return
 	 */
-	User selectByLoginName(String loginName);
+	public User selectByLoginName(String loginName);
+	
+	/**
+	 * 主键查找
+	 * @param id
+	 * @return
+	 */
+	public User selectById(int id);
 }

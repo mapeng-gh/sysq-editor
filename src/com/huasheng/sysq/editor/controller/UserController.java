@@ -39,6 +39,25 @@ public class UserController {
 		return result;
 	}
 	
+	@RequestMapping(value="/detail.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<User> detail(@RequestParam("userId") String userId) {
+		LogUtils.info(this.getClass(), "detail params : userId = {}",userId);
+		
+		//参数校验
+		if(StringUtils.isBlank(userId)) {
+			return CallResult.failure("参数不能为空");
+		}
+		if(!StringUtils.isNumeric(userId)) {
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<User> result = userService.viewUser(Integer.valueOf(userId));
+		LogUtils.info(this.getClass(), "detail result : {}", JsonUtils.toJson(result));
+		
+		return result;
+	}
+	
 	@RequestMapping(value="/createUser.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Boolean> createUser(@RequestBody UserCreateRequest createRequest) {

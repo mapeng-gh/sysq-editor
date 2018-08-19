@@ -3,7 +3,7 @@
 <mapper namespace="mapper.UserMapper">
 	
 	<sql id="userColumns">
-	    id,login_name,login_pwd,name,user_type,email,working_place,mobile,audit_status,audit_remark,create_time,update_time
+	    id,login_name,login_pwd,name,user_type,email,working_place,mobile,audit_status,remark,create_time,update_time
 	</sql>
 	
 	<resultMap id="userResultMap" type="User">
@@ -16,7 +16,7 @@
   		<result column="working_place" property="workingPlace" jdbcType="VARCHAR" javaType="String"/>
   		<result column="mobile" property="mobile" jdbcType="VARCHAR" javaType="String"/>
   		<result column="audit_status" property="auditStatus" jdbcType="INTEGER" javaType="int"/>
-  		<result column="audit_remark" property="auditRemark" jdbcType="VARCHAR" javaType="String"/>
+  		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="String"/>
   		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
   		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
   		
@@ -49,6 +49,12 @@
                 select <include refid="userColumns"></include> 
                 from editor_user 
                 where login_name = #{loginName}
+        </select>
+        
+        <select id="selectById" parameterType="_int" resultMap="userResultMap">
+                select <include refid="userColumns"></include> 
+                from editor_user 
+                where id = #{id}
         </select>
 	
 </mapper>  

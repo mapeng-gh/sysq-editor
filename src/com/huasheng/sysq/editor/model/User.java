@@ -13,7 +13,7 @@ public class User {
 	private String workingPlace;
 	private String mobile;
 	private int auditStatus;
-	private String auditRemark;
+	private String remark;
 	private Date createTime;
 	private Date updateTime;
 	
@@ -71,11 +71,11 @@ public class User {
 	public void setAuditStatus(int auditStatus) {
 		this.auditStatus = auditStatus;
 	}
-	public String getAuditRemark() {
-		return auditRemark;
+	public String getRemark() {
+		return remark;
 	}
-	public void setAuditRemark(String auditRemark) {
-		this.auditRemark = auditRemark;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	public Date getCreateTime() {
 		return createTime;

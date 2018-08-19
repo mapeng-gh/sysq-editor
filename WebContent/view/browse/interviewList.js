@@ -24,7 +24,7 @@
                                                                 <el-form-item label="访谈类型">
                                                                         <el-select v-model="search.interviewType" style="width:100%;">
                                                                                 <el-option value="" label="全部"></el-option>
-                                                                                <el-option v-for="item in constants.INTERVIEW_TYPE.getInterviewTypeList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
+                                                                                <el-option v-for="item in $constants.INTERVIEW_TYPE.getInterviewTypeList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
                                                                         </el-select>
                                                                 </el-form-item>
                                 
@@ -53,7 +53,7 @@
                                                 <el-table-column prop="interview.id" label="编号" width="150" align="center"></el-table-column>
 						<el-table-column prop="interview.type" label="访谈类型" width="150" align="center">
                                                         <template slot-scope="scope">
-                                                                {{constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
+                                                                {{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
                                                         </template>
                                                 </el-table-column>
                                                 <el-table-column prop="patient.username" label="患者姓名" width="150" align="center"></el-table-column>

@@ -24,7 +24,7 @@
                                                                         <el-form-item label="类型">
                                                                                 <el-select v-model="search.userType" style="width:100%;">
                                                                                         <el-option value="" label="全部"></el-option>
-                                                                                        <el-option v-for="item in constants.USER_TYPE.getUserTypeList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
+                                                                                        <el-option v-for="item in $constants.USER_TYPE.getUserTypeList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
                                                                                 </el-select>
                                                                         </el-form-item>
 					
@@ -35,7 +35,7 @@
                                                                         <el-form-item label="审核状态">
                                                                                 <el-select v-model="search.auditStatus" style="width:100%;">
                                                                                         <el-option value="" label="全部"></el-option>
-                                                                                        <el-option v-for="item in constants.AUDIT_STATUS.getAuditStatusList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
+                                                                                        <el-option v-for="item in $constants.AUDIT_STATUS.getAuditStatusList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
                                                                                 </el-select>
                                                                         </el-form-item>
 					
@@ -57,15 +57,17 @@
                                                         :data="userList"
                                                         border
                                                         header-cell-class-name="common-table-header"
-                                                        style="width: 100%">
+                                                        style="width: 100%"
+							v-loading="isLoading"
+							element-loading-text="正在加载中..."
+							element-loading-spinner="el-icon-loading">
                                                         <el-table-column prop="name" label="姓名" width="150" align="center"></el-table-column>
                                                         <el-table-column prop="userType" label="类型" width="150" align="center">
                                                                 <template slot-scope="scope">
-                                                                        {{constants.USER_TYPE.getUserTypeText(scope.row.userType)}}
+                                                                        {{$constants.USER_TYPE.getUserTypeText(scope.row.userType)}}
                                                                 </template>
                                                         </el-table-column>
-                                                        <el-table-column prop="mobile" label="联系电话" width="150" align="center"></el-table-column>
-                                                        <el-table-column prop="workingPlace" label="工作单位" width="180" align="center" :show-overflow-tooltip="true"></el-table-column>
+                                                        <el-table-column prop="workingPlace" label="工作单位" width="250" align="center" :show-overflow-tooltip="true"></el-table-column>
                                                         <el-table-column prop="createTime" label="创建日期" width="180" align="center">
                                                                 <template slot-scope="scope">
                                                                         {{$commons.formatDate(scope.row.createTime)}}
@@ -73,16 +75,15 @@
                                                         </el-table-column>
                                                         <el-table-column prop="auditStatus" label="审核状态" width="150" align="center">
                                                                 <template slot-scope="scope">
-                                                                        <el-tag type="info" v-if="scope.row.auditStatus == constants.AUDIT_STATUS.enums.NONE">{{constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
-                                                                        <el-tag type="success" v-if="scope.row.auditStatus == constants.AUDIT_STATUS.enums.PASS">{{constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
-                                                                        <el-tag type="danger" v-if="scope.row.auditStatus == constants.AUDIT_STATUS.enums.REJECT">{{constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
+                                                                        <el-tag type="info" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.NONE">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
+                                                                        <el-tag type="success" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.PASS">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
+                                                                        <el-tag type="danger" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.REJECT">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
                                                                 </template>
                                                         </el-table-column>
                                                         <el-table-column prop="operate" label="操作" align="center">
                                                                 <template slot-scope="scope">
-                                                                        <el-button type="text" size="mini" @click="handleOrderDetail(scope)">查看</el-button>
-                                                                        <el-button type="text" size="mini" @click="handleAudit(scope)">审核</el-button>
-                                                                        <el-button type="text" size="mini" @click="handleOrderDetail(scope)">授权</el-button>
+                                                                        <el-button type="text" size="mini" @click="handleUserDetail(scope)">查看详情</el-button>
+                                                                        <el-button type="text" size="mini" @click="handleAudit(scope)">账号审核</el-button>
                                                                         <el-button type="text" size="mini" @click="handleOrderDetail(scope)">任务分配</el-button>
                                                                 </template>
                                                         </el-table-column>
@@ -124,7 +125,9 @@
                                                 pageSize : 10,
                                                 currentPage : 1,
                                                 total : 0
-                                        }
+                                        },
+					
+					isLoading : false
                                         
 				}
 			},
@@ -133,10 +136,13 @@
                                 
                                 init : function(){
                                         var self = this;
-                                        
+                                        this.isLoading = true;
+					
                                         this.$request.sendGetRequest(this.APIS.USER_LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
+							self.isLoading = false;
+							
                                                         self.userList = resultObject.data;
                                                         self.paginate.total = resultObject.total;
                                                 
@@ -146,13 +152,15 @@
                                 
                                 //搜索
                                 handleSearch(){
-                                        var self = this;
-                                        
+                                        var self = this;        
                                         this.paginate.currentPage = 1;
+					 this.isLoading = true;
                                         
                                         this.$request.sendGetRequest(this.APIS.USER_LIST,
                                                 _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
+							 self.isLoading = false;
+							
                                                         self.userList = resultObject.data;
                                                         self.paginate.total = resultObject.total;
                                                 
@@ -163,14 +171,15 @@
                                 //重置
                                 handleReset(){
                                         var self = this;
-                                        
                                         this.search = {name : '',userType : '',auditStatus : ''},
-                                        
                                         this.paginate.currentPage = 1;
+					this.isLoading = true;
                                         
                                         this.$request.sendGetRequest(this.APIS.USER_LIST,
                                                 this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
                                                 function(resultObject){
+							self.isLoading = false;
+							
                                                         self.userList = resultObject.data;
                                                         self.paginate.total = resultObject.total;
                                                 
@@ -181,10 +190,13 @@
                                  //切换分页
                                 handleCurrentChange(currentPage){
                                         var self = this;
-                                        
                                         this.paginate.currentPage = currentPage;
+					this.isLoading = true;
+					
                                         this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
-                                                self.userList = resultObject.data;
+                                                self.isLoading = false;
+						
+						self.userList = resultObject.data;
                                                 self.paginate.total = resultObject.total;
                                         });
                                 },
@@ -192,19 +204,22 @@
                                 //切换大小
                                 handleSizeChange(currentSize){
                                         var self = this;
-                                        
                                         this.paginate.pageSize = currentSize;
-                                         this.paginate.currentPage = 1;
+                                        this.paginate.currentPage = 1;
+					this.isLoading = true; 
+					 
                                          this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
-                                                self.userList = resultObject.data;
+                                                self.isLoading = false;
+						
+						self.userList = resultObject.data;
                                                 self.paginate.total = resultObject.total;
                                         });
                                 },
                                 
-                                handleAudit(scope){
-                                        
-                                     
-                                },
+				//查看详情
+                                handleUserDetail(scope){
+					this.$router.push({name : 'userManageDetail' , query : {userId : scope.row.id}});
+                                }
                         },
                         
                         mounted : function(){

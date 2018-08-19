@@ -9,6 +9,15 @@
 			meta : {
                                 activeIndex : '/userManage/list'
 			}
+                },
+		
+		{
+                        name : 'userManageDetail',
+			component : userManageDetailComponent,
+			path : '/userManage/detail',
+			meta : {
+                                activeIndex : '/userManage/list'
+			}
                 }
         ];
         
