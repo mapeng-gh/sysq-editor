@@ -17,7 +17,7 @@
 							<el-col :span="12">
 								
 								<el-form-item label="登录账号">
-									<el-input :value="userDetail.loginName" disabled></el-input>
+									<el-input :value="userDetail.loginName"  class="readonly" readonly></el-input>
 								</el-form-item>
 								
 							</el-col>
@@ -25,7 +25,7 @@
 							<el-col :span="12">
 							
 								<el-form-item label="账号类型">
-									<el-input :value="$constants.USER_TYPE.getUserTypeText(userDetail.userType)" disabled></el-input>
+									<el-input :value="$constants.USER_TYPE.getUserTypeText(userDetail.userType)" class="readonly" readonly></el-input>
 								</el-form-item>
 							
 							</el-col>
@@ -35,7 +35,7 @@
 							<el-col :span="12">
 								
 								<el-form-item label="用户姓名">
-									<el-input :value="userDetail.name" disabled></el-input>
+									<el-input :value="userDetail.name" class="readonly" readonly></el-input>
 								</el-form-item>
 								
 							</el-col>
@@ -43,7 +43,7 @@
 							<el-col :span="12">
 							
 								<el-form-item label="联系电话">
-									<el-input :value="userDetail.mobile" disabled></el-input>
+									<el-input :value="userDetail.mobile" class="readonly" readonly></el-input>
 								</el-form-item>
 							
 							</el-col>
@@ -53,7 +53,7 @@
 							<el-col :span="12">
 								
 								<el-form-item label="电子邮箱">
-									<el-input :value="userDetail.email" disabled></el-input>
+									<el-input :value="userDetail.email" class="readonly" readonly></el-input>
 								</el-form-item>
 								
 							</el-col>
@@ -61,7 +61,7 @@
 							<el-col :span="12">
 							
 								<el-form-item label="工作单位">
-									<el-input :value="userDetail.workingPlace" disabled></el-input>
+									<el-input :value="userDetail.workingPlace" class="readonly" readonly></el-input>
 								</el-form-item>
 							
 							</el-col>
@@ -71,7 +71,7 @@
 							<el-col :span="12">
 								
 								<el-form-item label="审核状态">
-									<el-input :value="$constants.AUDIT_STATUS.getAuditStatusText(userDetail.auditStatus)" disabled></el-input>
+									<el-input :value="$constants.AUDIT_STATUS.getAuditStatusText(userDetail.auditStatus)" class="readonly" readonly></el-input>
 								</el-form-item>
 								
 							</el-col>
@@ -79,7 +79,7 @@
 							<el-col :span="12">
 							
 								<el-form-item label="创建时间">
-									<el-input :value="$commons.formatDate(userDetail.createTime)" disabled></el-input>
+									<el-input :value="$commons.formatDate(userDetail.createTime)" class="readonly" readonly></el-input>
 								</el-form-item>
 							
 							</el-col>
@@ -89,7 +89,7 @@
 							<el-col :span="12">
 								
 								<el-form-item label="备注">
-									<el-input type="textarea" :rows="4" :value="userDetail.remark" disabled></el-input>
+									<el-input type="textarea" :rows="4" :value="userDetail.remark" class="readonly" readonly></el-input>
 								</el-form-item>
 								
 							</el-col>
