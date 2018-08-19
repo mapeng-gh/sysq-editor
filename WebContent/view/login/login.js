@@ -66,7 +66,7 @@
 		
 		data : function(){
 			return {
-				loginName : 'zhangsan',
+				loginName : '18110879836',
                                 loginPwd : '123456'
 			}
 		},

@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService{
 		if(loginUser == null) {
 			return CallResult.failure("登录名不存在");
 		}
-		if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_NONE) {
+		if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_ING) {
 			return CallResult.failure("用户正在审核");
 		}else if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_REJECT) {
 			return CallResult.failure("用户审核未通过：" + loginUser.getAuditRemark());

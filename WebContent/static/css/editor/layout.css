@@ -35,11 +35,11 @@
   min-height: 500px;
 }
 .container .footer {
-  padding: 32px 0;
-  background-color: #324057;
+  padding: 20px 0;
+  background-color: #eef1f6;
 }
 .container .footer .info {
   text-align: center;
   font-size: 13px;
-  color: #9BA9C0;
+  color: #48576a;
 }

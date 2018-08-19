@@ -31,10 +31,10 @@
 	    
                 {
 			name: '访谈浏览',
-			index: '/interviewView',
+			index: '/browse',
 			icon: 'fa fa-eye',
 			sub: [
-				{index : '/interviewView/list' , name: '访谈列表'}
+				{index : '/browse/interviewList' , name: '访谈列表'}
 			]
                 },
 	    

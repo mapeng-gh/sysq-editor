@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.PatientMapper">
+    
+	<sql id="allColumns">
+		id,username,identity_card,mobile,province,city,address,post_code,family_mobile,family_address,dna,remark 
+	</sql>
+	
+	<resultMap id="allResultMap" type="Patient">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
+		<result column="username" property="username" jdbcType="VARCHAR" javaType="string"/>
+		<result column="identity_card" property="identityCard" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="mobile" property="mobile" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="province" property="province" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="city" property="city" jdbcType="VARCHAR" javaType="string"/>
+  		
+  		<result column="address" property="address" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="post_code" property="postCode" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="family_mobile" property="familyMobile" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="family_address" property="familyAddress" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="dna" property="dna" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="string"/>
+	</resultMap>
+	
+        <select id="selectById" parameterType="_int" resultMap="allResultMap">
+	         select <include refid="allColumns"></include> 
+                 from sysq_patient 
+                 where id = #{id}
+        </select>
+        
+</mapper>  

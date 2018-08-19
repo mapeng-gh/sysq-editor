@@ -12,10 +12,9 @@
 				<el-col class="right" :span="2" :offset="18">
 					<i class="fa fa-user-circle"></i>
 					<el-dropdown trigger="click"@command="handleCommand">
-						<span>张三<i class="el-icon-arrow-down"></i></span>
+						<span>{{name}}<i class="el-icon-arrow-down"></i></span>
 						 <el-dropdown-menu slot="dropdown">
-						 	<el-dropdown-item>修改密码</el-dropdown-item>
-							<el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
+							<el-dropdown-item command="logout">退出登录</el-dropdown-item>
 						  </el-dropdown-menu>
 					</el-dropdown>
 				</el-col>
@@ -25,12 +24,18 @@
 		
 		data : function(){
 			return {
-				
                                 APIS : {
                                         USER_LOGOUT : '/userManage/logout.do'
                                 }
 			}
 		},
+                
+                computed : {
+			name : function(){
+				var loginUser = JSON.parse(window.localStorage.getItem('loginUser')) || {};
+				return loginUser.name || '';
+			}
+                },
                 
                 methods : {
                         

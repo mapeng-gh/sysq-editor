@@ -4,16 +4,22 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     
-    <settings>
-        <setting name="logImpl" value="SLF4J"/>
-    </settings>
+	<settings>
+		<setting name="logImpl" value="SLF4J"/>
+	</settings>
     
-    <typeAliases>
-        <typeAlias type="com.huasheng.sysq.editor.model.User" alias="User"/>
-    </typeAliases>
+	<typeAliases>
+		<typeAlias type="com.huasheng.sysq.editor.model.User" alias="User"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.Interview" alias="Interview"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.Doctor" alias="Doctor"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.Patient" alias="Patient"/>
+	</typeAliases>
     
-    <mappers>
-        <mapper resource="mapper/UserMapper.xml"/>
-    </mappers>
+	<mappers>
+		<mapper resource="mapper/UserMapper.xml"/>
+		<mapper resource="mapper/InterviewMapper.xml"/>
+		<mapper resource="mapper/DoctorMapper.xml"/>
+        	<mapper resource="mapper/PatientMapper.xml"/>
+	</mappers>
     
 </configuration>
