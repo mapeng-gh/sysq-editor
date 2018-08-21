@@ -71,4 +71,9 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 	public User selectById(int id) {
 		return super.getSqlSession().selectOne(NAMESPACE + ".selectById",id);
 	}
+
+	@Override
+	public void update(User user) {
+		super.getSqlSession().update(NAMESPACE + ".update",user);
+	}
 }

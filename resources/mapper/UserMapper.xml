@@ -56,5 +56,13 @@
                 from editor_user 
                 where id = #{id}
         </select>
+        
+        <update id="update" parameterType="User">
+            update editor_user 
+            set login_name = #{loginName},login_pwd = #{loginPwd},name = #{name},user_type = #{userType},
+            email = #{email},working_place = #{workingPlace},mobile = #{mobile},audit_status = #{auditStatus},
+            remark = #{remark},create_time = #{createTime},update_time = #{updateTime}
+            where id = #{id}
+        </update>
 	
 </mapper>  

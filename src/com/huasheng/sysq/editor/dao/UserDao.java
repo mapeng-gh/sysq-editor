@@ -40,4 +40,10 @@ public interface UserDao {
 	 * @return
 	 */
 	public User selectById(int id);
+	
+	/**
+	 * 更新
+	 * @param user
+	 */
+	public void update(User user);
 }

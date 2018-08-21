@@ -75,7 +75,7 @@
                                                         </el-table-column>
                                                         <el-table-column prop="auditStatus" label="审核状态" width="150" align="center">
                                                                 <template slot-scope="scope">
-                                                                        <el-tag type="info" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.NONE">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
+                                                                        <el-tag type="info" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.ING">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
                                                                         <el-tag type="success" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.PASS">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
                                                                         <el-tag type="danger" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.REJECT">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
                                                                 </template>
@@ -83,7 +83,7 @@
                                                         <el-table-column prop="operate" label="操作" align="center">
                                                                 <template slot-scope="scope">
                                                                         <el-button type="text" size="mini" @click="handleUserDetail(scope)">查看详情</el-button>
-                                                                        <el-button type="text" size="mini" @click="handleAudit(scope)">账号审核</el-button>
+                                                                        <el-button type="text" size="mini" @click="handleAuditDialog(scope)">账号审核</el-button>
                                                                         <el-button type="text" size="mini" @click="handleOrderDetail(scope)">任务分配</el-button>
                                                                 </template>
                                                         </el-table-column>
@@ -103,14 +103,43 @@
                                                         @size-change="handleSizeChange">
                                                 </el-pagination>
                                         </div>
+					
+					<el-dialog
+						title="账号审核"
+						:visible.sync="auditDialog.visible"
+						width="50%">
+						
+						<el-form  label-width="80px">
+						
+							<el-form-item label="审核结果">
+								<el-radio-group v-model="auditDialog.auditStatus">
+									<el-radio v-for="item in auditDialog.auditStatusList" :label="item.code" :key="item.code">{{item.text}}</el-radio>
+								</el-radio-group>
+                                                        </el-form-item>
+							
+							<el-form-item label="备注">
+								<el-input v-model="auditDialog.remark" type="textarea" :rows="4" placeholder="请输入备注信息"></el-input>
+                                                        </el-form-item>
+							
+						</el-form>
+						
+						<span slot="footer" class="dialog-footer">
+							<el-button @click="auditDialog.visible = false">取 消</el-button>
+							<el-button type="primary" @click="handleAudit" :loading="auditDialog.loading">确 定</el-button>
+						</span>
+					</el-dialog>
+
                                 
                                 </div>
                         `,
 			data : function(){
+				var self = this;
+				
 				return {
                                         
                                         APIS : {
-                                                USER_LIST : '/userManage/list.do'
+                                                USER_LIST : '/userManage/list.do',
+						USER_AUDIT : 'userManage/audit.do'
                                         },
                                         
                                         userList : [],
@@ -127,7 +156,16 @@
                                                 total : 0
                                         },
 					
-					isLoading : false
+					isLoading : false,
+					
+					auditDialog :{
+						visible :false,
+						auditStatusList : this.$lodash.filter(this.$constants.AUDIT_STATUS.getAuditStatusList(),function(item){return item.code != self.$constants.AUDIT_STATUS.enums.ING}),
+						userId : '',
+						auditStatus : '',
+						remark : '',
+						loading : false
+					}
                                         
 				}
 			},
@@ -151,7 +189,7 @@
                                 },
                                 
                                 //搜索
-                                handleSearch(){
+                                handleSearch : function(){
                                         var self = this;        
                                         this.paginate.currentPage = 1;
 					 this.isLoading = true;
@@ -169,7 +207,7 @@
                                 },
                                 
                                 //重置
-                                handleReset(){
+                                handleReset : function(){
                                         var self = this;
                                         this.search = {name : '',userType : '',auditStatus : ''},
                                         this.paginate.currentPage = 1;
@@ -188,7 +226,7 @@
                                 },
                                 
                                  //切换分页
-                                handleCurrentChange(currentPage){
+                                handleCurrentChange : function(currentPage){
                                         var self = this;
                                         this.paginate.currentPage = currentPage;
 					this.isLoading = true;
@@ -202,7 +240,7 @@
                                 },
                                 
                                 //切换大小
-                                handleSizeChange(currentSize){
+                                handleSizeChange : function(currentSize){
                                         var self = this;
                                         this.paginate.pageSize = currentSize;
                                         this.paginate.currentPage = 1;
@@ -217,9 +255,49 @@
                                 },
                                 
 				//查看详情
-                                handleUserDetail(scope){
+                                handleUserDetail : function(scope){
 					this.$router.push({name : 'userManageDetail' , query : {userId : scope.row.id}});
-                                }
+                                },
+				
+				//账号审核对话框
+				handleAuditDialog : function(scope){
+					this.auditDialog.visible = true;
+					this.auditDialog.userId = scope.row.id;
+					
+					//数据清空
+					this.auditDialog.auditStatus = this.$constants.AUDIT_STATUS.enums.PASS;
+					this.auditDialog.remark = '';
+				},
+				
+				//账号审核
+				handleAudit : function(){
+					var self = this;
+					
+					//参数校验
+					if(this.auditDialog.auditStatus == this.$constants.AUDIT_STATUS.enums.REJECT && this.auditDialog.remark.trim().length == 0){
+						this.$message.error('请在备注处填写审核不通过原因');
+						return;
+					}
+					
+					//发送请求
+					this.auditDialog.loading = true;
+					this.$request.sendPostRequest(this.APIS.USER_AUDIT,{userId : this.auditDialog.userId , auditStatus : this.auditDialog.auditStatus , remark : this.auditDialog.remark},function(resultObject){
+						self.auditDialog.loading = false;
+						
+						//关闭对话框
+						self.auditDialog.visible = false;
+						
+						//刷新列表
+						self.isLoading = true;
+						self.$request.sendGetRequest(self.APIS.USER_LIST,self.$lodash.assignIn({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+							self.isLoading = false;
+							
+                                                        self.userList = resultObject.data;
+                                                        self.paginate.total = resultObject.total;
+                                                });
+					});
+					
+				}
                         },
                         
                         mounted : function(){

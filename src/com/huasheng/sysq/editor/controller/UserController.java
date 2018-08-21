@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.UserCreateRequest;
 import com.huasheng.sysq.editor.params.UserLoginResponse;
@@ -55,6 +57,16 @@ public class UserController {
 		CallResult<User> result = userService.viewUser(Integer.valueOf(userId));
 		LogUtils.info(this.getClass(), "detail result : {}", JsonUtils.toJson(result));
 		
+		return result;
+	}
+	
+	@RequestMapping(value="/audit.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> auditUser(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "auditUser params : {}", requestJsonStr);
+		JSONObject requestJson = JSON.parseObject(requestJsonStr);
+		CallResult<Boolean> result = userService.auditUser(requestJson.getIntValue("userId"),requestJson.getIntValue("auditStatus"),requestJson.getString("remark"));
+		LogUtils.info(this.getClass(), "auditUser result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	

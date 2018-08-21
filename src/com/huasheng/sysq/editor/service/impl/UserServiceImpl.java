@@ -1,5 +1,6 @@
 package com.huasheng.sysq.editor.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.huasheng.sysq.editor.dao.UserDao;
@@ -76,7 +78,7 @@ public class UserServiceImpl implements UserService{
 			return CallResult.success(new Page<User>(userList,Integer.parseInt(currentPage),Integer.parseInt(pageSize),total));
 			
 		}catch(Exception e) {
-			LogUtils.error(UserServiceImpl.class, "findUserList error", e);
+			LogUtils.error(this.getClass(), "findUserList error", e);
 			return CallResult.failure("查找用户失败");
 		}
 	}
@@ -138,9 +140,29 @@ public class UserServiceImpl implements UserService{
 			User user = userDao.selectById(userId);
 			return CallResult.success(user);
 		}catch(Exception e) {
-			LogUtils.error(UserServiceImpl.class, "viewUser error", e);
+			LogUtils.error(this.getClass(), "viewUser error", e);
 			return CallResult.failure("获取用户失败"); 
 		}
 		
+	}
+
+	@Override
+	public CallResult<Boolean> auditUser(int userId, int auditStatus, String remark) {
+		try {
+			transactionTemplate.execute(new TransactionCallbackWithoutResult(){
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					User user = userDao.selectById(userId);
+					user.setAuditStatus(auditStatus);
+					user.setRemark(remark);
+					user.setUpdateTime(new Date());
+					userDao.update(user);
+				}
+			});
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "auditUser error", e);
+			return CallResult.failure("用户审核失败"); 
+		}
+		return CallResult.success(true);
 	}
 }

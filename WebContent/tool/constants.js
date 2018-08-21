@@ -35,7 +35,7 @@
                                 REJECT : 3
                         },
                         getAuditStatusText(code){
-                                if(code == this.enums.NONE){
+                                if(code == this.enums.ING){
                                         return '审核中';
                                 }else if(code == this.enums.PASS){
                                         return '审核通过';

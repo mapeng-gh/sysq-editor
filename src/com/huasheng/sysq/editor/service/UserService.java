@@ -38,4 +38,13 @@ public interface UserService {
 	 * @return
 	 */
 	public CallResult<UserLoginResponse> login(String loginName,String password);
+	
+	/**
+	 * 用户审核
+	 * @param loginName
+	 * @param auditStatus
+	 * @param remark
+	 * @return
+	 */
+	public CallResult<Boolean> auditUser(int userId , int auditStatus , String remark);
 }
