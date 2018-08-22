@@ -20,6 +20,7 @@ import com.huasheng.sysq.editor.params.UserCreateRequest;
 import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
+import com.huasheng.sysq.editor.util.CommonUtil;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
@@ -64,8 +65,21 @@ public class UserController {
 	@ResponseBody
 	public CallResult<Boolean> auditUser(@RequestBody String requestJsonStr) {
 		LogUtils.info(this.getClass(), "auditUser params : {}", requestJsonStr);
-		JSONObject requestJson = JSON.parseObject(requestJsonStr);
-		CallResult<Boolean> result = userService.auditUser(requestJson.getIntValue("userId"),requestJson.getIntValue("auditStatus"),requestJson.getString("remark"));
+		
+		//参数校验
+		String userId,auditStatus,remark;
+		try {
+			Map map = JsonUtils.toMap(requestJsonStr);
+			userId = CommonUtil.getParamValue(map, "userId");
+			auditStatus = CommonUtil.getParamValue(map, "auditStatus");
+			remark = CommonUtil.getParamValue(map, "remark");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "auditUser error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		
+		CallResult<Boolean> result = userService.auditUser(Integer.parseInt(userId),Integer.parseInt(auditStatus),remark);
 		LogUtils.info(this.getClass(), "auditUser result : {}", JsonUtils.toJson(result));
 		return result;
 	}
