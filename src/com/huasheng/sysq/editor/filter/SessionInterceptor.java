@@ -23,6 +23,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter{
 		
 		String token = request.getHeader("Authorization");
 		if(StringUtils.isBlank(token) || SessionCache.get(token) == null) {
+			response.setHeader("Content-Type", "application/json;charset=UTF-8");
 			response.getWriter().write(JsonUtils.toJson(CallResult.failure(-2,"用户未登录")));
 			return false;
 		}

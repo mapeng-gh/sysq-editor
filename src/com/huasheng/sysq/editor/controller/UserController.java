@@ -1,6 +1,5 @@
 package com.huasheng.sysq.editor.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +19,6 @@ import com.huasheng.sysq.editor.params.UserCreateRequest;
 import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
-import com.huasheng.sysq.editor.util.CommonUtil;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
@@ -33,6 +31,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	/**
+	 * 用户搜索
+	 * @param searchRequest
+	 * @return
+	 */
 	@RequestMapping(value="/list.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Page<User>> list(@RequestParam Map<String,String> searchRequest) {
@@ -42,6 +45,11 @@ public class UserController {
 		return result;
 	}
 	
+	/**
+	 * 用户详情
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping(value="/detail.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<User> detail(@RequestParam("userId") String userId) {
@@ -61,25 +69,31 @@ public class UserController {
 		return result;
 	}
 	
+	/**
+	 * 用户审核
+	 * @param requestJsonStr
+	 * @return
+	 */
 	@RequestMapping(value="/audit.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Boolean> auditUser(@RequestBody String requestJsonStr) {
 		LogUtils.info(this.getClass(), "auditUser params : {}", requestJsonStr);
 		
-		//参数校验
-		String userId,auditStatus,remark;
+		//参数处理
+		int userId,auditStatus;
+		String remark;
 		try {
-			Map map = JsonUtils.toMap(requestJsonStr);
-			userId = CommonUtil.getParamValue(map, "userId");
-			auditStatus = CommonUtil.getParamValue(map, "auditStatus");
-			remark = CommonUtil.getParamValue(map, "remark");
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			userId = requestJson.getIntValue("userId");
+			auditStatus = requestJson.getIntValue("auditStatus");
+			remark = requestJson.getString("remark");
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "auditUser error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
 		
-		CallResult<Boolean> result = userService.auditUser(Integer.parseInt(userId),Integer.parseInt(auditStatus),remark);
+		CallResult<Boolean> result = userService.auditUser(userId,auditStatus,remark);
 		LogUtils.info(this.getClass(), "auditUser result : {}", JsonUtils.toJson(result));
 		return result;
 	}
@@ -92,24 +106,38 @@ public class UserController {
 		return null;
 	}
 	
+	/**
+	 * 用户登录
+	 * @param requestJsonStr
+	 * @return
+	 */
 	@RequestMapping(value="/login.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<UserLoginResponse> login(@RequestBody String userLoginJsonStr) {
-		LogUtils.info(this.getClass(), "login params : {}",userLoginJsonStr);
+	public CallResult<UserLoginResponse> login(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "login params : {}",requestJsonStr);
 		
-		Map userLoginMap = new HashMap();
+		//参数处理
+		String loginName,loginPwd;
 		try {
-			userLoginMap = JsonUtils.toMap(userLoginJsonStr);
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			loginName = requestJson.getString("loginName");
+			loginPwd = requestJson.getString("loginPwd");
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "login error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<UserLoginResponse> result = userService.login((String)userLoginMap.get("loginName"), (String)userLoginMap.get("loginPwd"));
+		CallResult<UserLoginResponse> result = userService.login(loginName,loginPwd);
 		LogUtils.info(this.getClass(), "login result : {}", JsonUtils.toJson(result));
+		
 		return result;
 	}
 	
+	/**
+	 * 用户退出
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(value="/logout.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Boolean> logout(@RequestHeader(value="Authorization",required=false) String token) {
@@ -128,6 +156,7 @@ public class UserController {
 		
 		SessionCache.remove(token);
 		LogUtils.info(this.getClass(), "logout result : success");
+		
 		return CallResult.success(true);
 	}
 }
