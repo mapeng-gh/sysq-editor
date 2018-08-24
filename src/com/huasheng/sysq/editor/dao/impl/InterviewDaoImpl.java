@@ -20,7 +20,7 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	 * @param searchParams
 	 * @return
 	 */
-	private Map<String,Object> handleFindParams(Map<String,String> searchParams){
+	private Map<String,Object> handleFindDoctorInterviewParams(Map<String,String> searchParams){
 		if(searchParams != null) {
 			String doctorMobile = searchParams.get("doctorMobile");
 			String patientName = searchParams.get("patientName");
@@ -50,14 +50,15 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	}
 
 	@Override
-	public List<Interview> find(Map<String, String> searchParams) {
-		Map<String,Object> handledParams = this.handleFindParams(searchParams);
-        	return super.getSqlSession().selectList(NAMESPACE + ".find",handledParams);
+	public List<Interview> findDoctorInterviewList(Map<String, String> searchParams) {
+		Map<String,Object> handledParams = this.handleFindDoctorInterviewParams(searchParams);
+        	return super.getSqlSession().selectList(NAMESPACE + ".findDoctorInterviewList",handledParams);
 	}
 
 	@Override
-	public int count(Map<String, String> searchParams) {
-		return super.getSqlSession().selectOne(NAMESPACE + ".count",searchParams);
+	public int countDoctorInterviewList(Map<String, String> searchParams) {
+		return super.getSqlSession().selectOne(NAMESPACE + ".countDoctorInterviewList",searchParams);
 	}
+
 
 }

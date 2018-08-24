@@ -102,4 +102,18 @@ public class UserController {
 		return result;
 	}
 	
+	/**
+	 * 获取未分配访谈列表
+	 * @param searchRequest
+	 * @return
+	 */
+	@RequestMapping(value="/task.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Page<User>> task(@RequestParam Map<String,String> searchRequest) {
+		LogUtils.info(this.getClass(), "task params : {}",JsonUtils.toJson(searchRequest));
+		CallResult<Page<User>> result = userService.findUserPage(searchRequest);
+		LogUtils.info(this.getClass(), "list result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
 }

@@ -13,8 +13,10 @@ import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.dao.PatientDao;
 import com.huasheng.sysq.editor.model.Interview;
 import com.huasheng.sysq.editor.params.InterviewWrap;
+import com.huasheng.sysq.editor.params.UnAssignInterviewResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.util.CallResult;
+import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
 
@@ -31,39 +33,15 @@ public class InterviewServiceImpl implements InterviewService{
 	private PatientDao patientDao;
 
 	@Override
-	public CallResult<Page<InterviewWrap>> findDoctorInterviewPage(Map<String, String> searchParams) {
+	public CallResult<Page<InterviewWrap>> findDoctorInterviewPage(Map<String, String> searchRequest) {
+		LogUtils.info(this.getClass(), "findDoctorInterviewPage params : {}", JsonUtils.toJson(searchRequest));
+		
 		try {
-			//参数校验
-			String doctorMobile = searchParams.get("doctorMobile");
-			if(StringUtils.isBlank(doctorMobile)) {
-				return CallResult.failure("医生账号不能为空");
-			}
-			
-			String interviewType = searchParams.get("interviewType");
-			if(!StringUtils.isBlank(interviewType)) {
-				if(!StringUtils.isNumeric(interviewType)) {
-					return CallResult.failure("访谈类型参数不正确");
-				}
-			}
-			String currentPage = searchParams.get("currentPage");
-			if(StringUtils.isBlank(currentPage)) {
-				return CallResult.failure("分页参数不能为空");
-			}else {
-				if(!StringUtils.isNumeric(currentPage) || Integer.parseInt(currentPage) <= 0){
-					return CallResult.failure("分页参数不正确");
-				}
-			}
-			String pageSize = searchParams.get("pageSize");
-			if(StringUtils.isBlank(pageSize)) {
-				return CallResult.failure("分页参数不能为空");
-			}else {
-				if(!StringUtils.isNumeric(pageSize) || Integer.parseInt(pageSize) <= 0) {
-					return CallResult.failure("分页参数不正确");
-				}
-			}
+			int currentPage = Integer.parseInt(searchRequest.get("currentPage"));
+			int pageSize = Integer.parseInt(searchRequest.get("pageSize"));
 			
 			//搜索
-			List<Interview> interviewList = interviewDao.find(searchParams);
+			List<Interview> interviewList = interviewDao.findDoctorInterviewList(searchRequest);
 			
 			//获取关联数据
 			List<InterviewWrap> interviewWrapList = new ArrayList<InterviewWrap>(); 
@@ -78,14 +56,21 @@ public class InterviewServiceImpl implements InterviewService{
 			}
 			
 			//统计
-			int total = interviewDao.count(searchParams);
+			int total = interviewDao.countDoctorInterviewList(searchRequest);
 			
-			return CallResult.success(new Page<InterviewWrap>(interviewWrapList,Integer.parseInt(currentPage),Integer.parseInt(pageSize),total));
+			return CallResult.success(new Page<InterviewWrap>(interviewWrapList,currentPage,pageSize,total));
 			
 		}catch(Exception e) {
 			LogUtils.error(UserServiceImpl.class, "findInterviewPage error", e);
 			return CallResult.failure("查找医生访谈列表失败");
 		}
 	}
+
+	@Override
+	public CallResult<Page<UnAssignInterviewResponse>> findUnAssignInterviewPage(Map<String, String> searchRequest) {
+		return null;
+	}
+	
+	
 
 }
