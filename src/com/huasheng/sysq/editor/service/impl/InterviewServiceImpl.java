@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +36,6 @@ public class InterviewServiceImpl implements InterviewService{
 		LogUtils.info(this.getClass(), "findDoctorInterviewPage params : {}", JsonUtils.toJson(searchRequest));
 		
 		try {
-			int currentPage = Integer.parseInt(searchRequest.get("currentPage"));
-			int pageSize = Integer.parseInt(searchRequest.get("pageSize"));
-			
 			//搜索
 			List<Interview> interviewList = interviewDao.findDoctorInterviewList(searchRequest);
 			
@@ -58,6 +54,8 @@ public class InterviewServiceImpl implements InterviewService{
 			//统计
 			int total = interviewDao.countDoctorInterviewList(searchRequest);
 			
+			int currentPage = Integer.parseInt(searchRequest.get("currentPage"));
+			int pageSize = Integer.parseInt(searchRequest.get("pageSize"));
 			return CallResult.success(new Page<InterviewWrap>(interviewWrapList,currentPage,pageSize,total));
 			
 		}catch(Exception e) {
@@ -67,10 +65,34 @@ public class InterviewServiceImpl implements InterviewService{
 	}
 
 	@Override
-	public CallResult<Page<UnAssignInterviewResponse>> findUnAssignInterviewPage(Map<String, String> searchRequest) {
-		return null;
+	public CallResult<Page<UnAssignInterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchRequest,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : {}", JsonUtils.toJson(searchRequest));
+		
+		try {
+			//搜索
+			List<Interview> unAssignInterviewList = interviewDao.findUnAssignInterviewList(null,currentPage,pageSize);
+			
+			//获取关联数据
+			List<UnAssignInterviewResponse> unAssignInterviewResponseList = new ArrayList<UnAssignInterviewResponse>(); 
+			if(unAssignInterviewList != null && unAssignInterviewList.size() > 0) {
+				for(Interview unAssignInterview : unAssignInterviewList) {
+					UnAssignInterviewResponse unAssignInterviewResponse = new UnAssignInterviewResponse();
+					unAssignInterviewResponse.setInterview(unAssignInterview);
+					unAssignInterviewResponse.setDoctor(doctorDao.selectById(unAssignInterview.getDoctorId()));
+					unAssignInterviewResponse.setPatient(patientDao.selectById(unAssignInterview.getPatientId()));
+					unAssignInterviewResponseList.add(unAssignInterviewResponse);
+				}
+			}
+			
+			//统计
+			int total = interviewDao.countUnAssignInterviewList(null);
+			
+			
+			return CallResult.success(new Page<UnAssignInterviewResponse>(unAssignInterviewResponseList,currentPage,pageSize,total));
+			
+		}catch(Exception e) {
+			LogUtils.error(UserServiceImpl.class, "findUnAssignInterviewPage error", e);
+			return CallResult.failure("查找未分配访谈列表失败");
+		}
 	}
-	
-	
-
 }

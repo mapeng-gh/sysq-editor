@@ -8,16 +8,30 @@ import com.huasheng.sysq.editor.model.Interview;
 public interface InterviewDao {
 
 	/**
-	 * 搜索医生访谈列表
+	 * 查找医生访谈列表
 	 * @param searchRequest
 	 * @return
 	 */
-	List<Interview> findDoctorInterviewList(Map<String,String> searchRequest);
+	public List<Interview> findDoctorInterviewList(Map<String,String> searchParams);
 	
 	/**
 	 * 统计医生访谈列表
 	 * @param searchRequest
 	 * @return
 	 */
-	int countDoctorInterviewList(Map<String,String> searchRequest);
+	public int countDoctorInterviewList(Map<String,String> searchParams);
+	
+	/**
+	 * 查找未分配访谈列表
+	 * @param searchParams
+	 * @return
+	 */
+	public List<Interview> findUnAssignInterviewList(Map<String,Object> searchParams,int currentPage,int pageSize);
+	
+	/**
+	 * 统计未分配访谈列表
+	 * @param searchParams
+	 * @return
+	 */
+	public int countUnAssignInterviewList(Map<String,Object> searchParams);
 }

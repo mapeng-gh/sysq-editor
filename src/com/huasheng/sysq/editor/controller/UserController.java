@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
+import com.huasheng.sysq.editor.params.UnAssignInterviewResponse;
 import com.huasheng.sysq.editor.params.UserCreateRequest;
 import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
@@ -109,10 +110,10 @@ public class UserController {
 	 */
 	@RequestMapping(value="/task.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<User>> task(@RequestParam Map<String,String> searchRequest) {
-		LogUtils.info(this.getClass(), "task params : {}",JsonUtils.toJson(searchRequest));
-		CallResult<Page<User>> result = userService.findUserPage(searchRequest);
-		LogUtils.info(this.getClass(), "list result : {}", JsonUtils.toJson(result));
+	public CallResult<Page<UnAssignInterviewResponse>> task(@RequestParam(value="currentPage") int currentPage,@RequestParam(value="pageSize") int pageSize) {
+		LogUtils.info(this.getClass(), "task params : currentPage = {},pageSize = {}",currentPage,pageSize);
+		CallResult<Page<UnAssignInterviewResponse>> result = interviewService.findUnAssignInterviewPage(null,currentPage,pageSize);
+		LogUtils.info(this.getClass(), "task result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	

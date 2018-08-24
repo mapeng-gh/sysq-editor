@@ -21,5 +21,5 @@ public interface InterviewService {
 	 * @param searchRequest
 	 * @return
 	 */
- 	public CallResult<Page<UnAssignInterviewResponse>> findUnAssignInterviewPage(Map<String,String> searchRequest);
+ 	public CallResult<Page<UnAssignInterviewResponse>> findUnAssignInterviewPage(Map<String,Object> searchRequest,int currentPage,int pageSize);
 }
