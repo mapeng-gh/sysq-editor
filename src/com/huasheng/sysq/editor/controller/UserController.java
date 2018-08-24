@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.UserCreateRequest;
 import com.huasheng.sysq.editor.params.UserLoginResponse;
+import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -30,6 +31,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private InterviewService interviewService;
 	
 	/**
 	 * 用户搜索
@@ -98,65 +102,4 @@ public class UserController {
 		return result;
 	}
 	
-	@RequestMapping(value="/createUser.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
-	@ResponseBody
-	public CallResult<Boolean> createUser(@RequestBody UserCreateRequest createRequest) {
-		LogUtils.info(this.getClass(), "createUser params : {}", createRequest);
-//		LogUtils.info(this.getClass(), "createUser result : {}", result);
-		return null;
-	}
-	
-	/**
-	 * 用户登录
-	 * @param requestJsonStr
-	 * @return
-	 */
-	@RequestMapping(value="/login.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
-	@ResponseBody
-	public CallResult<UserLoginResponse> login(@RequestBody String requestJsonStr) {
-		LogUtils.info(this.getClass(), "login params : {}",requestJsonStr);
-		
-		//参数处理
-		String loginName,loginPwd;
-		try {
-			JSONObject requestJson = JSON.parseObject(requestJsonStr);
-			loginName = requestJson.getString("loginName");
-			loginPwd = requestJson.getString("loginPwd");
-		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "login error", e);
-			return CallResult.failure("参数格式不正确");
-		}
-		
-		CallResult<UserLoginResponse> result = userService.login(loginName,loginPwd);
-		LogUtils.info(this.getClass(), "login result : {}", JsonUtils.toJson(result));
-		
-		return result;
-	}
-	
-	/**
-	 * 用户退出
-	 * @param token
-	 * @return
-	 */
-	@RequestMapping(value="/logout.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
-	@ResponseBody
-	public CallResult<Boolean> logout(@RequestHeader(value="Authorization",required=false) String token) {
-		LogUtils.info(this.getClass(), "logout params : token = {}",token);
-		
-		if(StringUtils.isBlank(token)) {
-			LogUtils.info(this.getClass(), "logout result : token is empty");
-			return CallResult.success(true);
-		}
-		
-		User loginUser = SessionCache.get(token);
-		if(loginUser == null) {
-			LogUtils.info(this.getClass(), "logout result : token not exists");
-			return CallResult.success(true);
-		}
-		
-		SessionCache.remove(token);
-		LogUtils.info(this.getClass(), "logout result : success");
-		
-		return CallResult.success(true);
-	}
 }

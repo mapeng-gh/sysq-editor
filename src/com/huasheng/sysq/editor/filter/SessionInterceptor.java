@@ -17,7 +17,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		String requestPath = request.getRequestURI();
-		if(ArrayUtils.contains(new String[] {"/userManage/login.do","/userManage/logout.do"}, requestPath)) {
+		if(ArrayUtils.contains(new String[] {"/login.do","/logout.do"}, requestPath)) {
 			return true;
 		}
 		

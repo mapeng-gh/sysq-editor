@@ -77,7 +77,7 @@
 			login : function(){
                                 var self = this;
                                 
-				this.$request.sendPostRequest('/userManage/login.do',{loginName : this.loginName,loginPwd : this.loginPwd},function(resultObject){
+				this.$request.sendPostRequest('/login.do',{loginName : this.loginName,loginPwd : this.loginPwd},function(resultObject){
 					window.localStorage.setItem('loginUser',JSON.stringify(resultObject));
                                         
                                         self.$router.push({name : 'userManageList'});

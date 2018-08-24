@@ -19,7 +19,7 @@
         
         //请求拦截
         axios.interceptors.request.use((config)=>{
-                if(config.url == '/userManage/login.do'){
+                if(config.url == '/login.do'){
                         return config;
                 }else{
                         var token = (JSON.parse(localStorage.getItem("loginUser")) || {}).token;

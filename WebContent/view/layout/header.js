@@ -25,7 +25,7 @@
 		data : function(){
 			return {
                                 APIS : {
-                                        USER_LOGOUT : '/userManage/logout.do'
+                                        USER_LOGOUT : '/logout.do'
                                 }
 			}
 		},

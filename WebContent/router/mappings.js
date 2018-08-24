@@ -18,6 +18,15 @@
 			meta : {
                                 activeIndex : '/userManage/list'
 			}
+                },
+		
+		{
+                        name : 'userManageTask',
+			component : userManageTaskComponent,
+			path : '/userManage/task',
+			meta : {
+                                activeIndex : '/userManage/list'
+			}
                 }
         ];
         
