@@ -84,7 +84,7 @@
                                                                 <template slot-scope="scope">
                                                                         <el-button type="text" size="mini" @click="handleUserDetail(scope)">查看详情</el-button>
                                                                         <el-button type="text" size="mini" @click="handleAuditDialog(scope)">账号审核</el-button>
-                                                                        <el-button type="text" size="mini" @click="handleOrderDetail(scope)">任务分配</el-button>
+                                                                        <el-button type="text" size="mini" @click="handleTaskDialog(scope)" :disabled="scope.row.userType != $constants.USER_TYPE.enums.EDITOR">任务分配</el-button>
                                                                 </template>
                                                         </el-table-column>
                                                 </el-table>
@@ -128,6 +128,45 @@
 							<el-button type="primary" @click="handleAudit" :loading="auditDialog.loading">确 定</el-button>
 						</span>
 					</el-dialog>
+					
+					<el-dialog
+						title="任务分配"
+						:visible.sync="taskDialog.visible"
+						width="50%">
+						
+						<el-table 
+							ref="multipleTable"
+							:data="taskDialog.taskList" 
+							border
+                                                        header-cell-class-name="common-table-header"
+							@select="handleSelectTask">
+							<el-table-column type="selection"  width="55"></el-table-column>
+							<el-table-column property="id" label="编号" width="150"></el-table-column>
+							<el-table-column property="type" label="类型" width="120"></el-table-column>
+							<el-table-column property="patientName" label="患者" width="120"></el-table-column>
+							<el-table-column property="doctorName" label="医生" width="120"></el-table-column>
+							<el-table-column property="endTime" label="日期"></el-table-column>
+						</el-table>
+						
+						<div class="common-pagination">
+							<el-pagination
+								:page-size="taskDialog.paginate.pageSize"
+								:current-page="taskDialog.paginate.currentPage"
+								layout="total,prev,pager,next,jumper"
+								:total="taskDialog.paginate.total"
+								:pager-count="7"
+								background
+								@current-change="handleCurrentChange"
+								@size-change="handleSizeChange">
+							</el-pagination>
+						</div>
+						
+						
+						<span slot="footer" class="dialog-footer">
+							<el-button @click="taskDialog.visible = false">取 消</el-button>
+							<el-button type="primary" @click="handleTask" :loading="taskDialog.loading">确 定</el-button>
+						</span>
+					</el-dialog>
 
                                 
                                 </div>
@@ -165,6 +204,25 @@
 						auditStatus : '',
 						remark : '',
 						loading : false
+					},
+					
+					taskDialog : {
+						visible :false,
+						userId : '',
+						loading : false,
+						taskList : [
+							{id : 1357478941,type:'病例',patientName:'张三丰1',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'},
+							{id : 1357478942,type:'病例',patientName:'张三丰2',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'},
+							{id : 1357478943,type:'病例',patientName:'张三丰3',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'},
+							{id : 1357478944,type:'病例',patientName:'张三丰4',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'},
+							{id : 1357478945,type:'病例',patientName:'张三丰5',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'},
+							{id : 1357478946,type:'病例',patientName:'张三丰6',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'}
+						],
+						paginate : {
+							pageSize : 6,
+							currentPage : 1,
+							total : 0
+						}
 					}
                                         
 				}
@@ -297,6 +355,24 @@
                                                 });
 					});
 					
+				},
+				
+				//任务分配对话框
+				handleTaskDialog : function(scope){
+					this.taskDialog.visible = true;
+					this.taskDialog.userId = scope.row.id;
+					
+					
+				},
+				
+				//勾选任务
+				handleSelectTask(selection, row){
+					console.log('select = ' + JSON.stringify(selection) + ',' + JSON.stringify(row));
+				},
+				
+				//任务分配
+				handleTask(){
+					//this.$refs.multipleTable.toggleRowSelection({id : 1357478944,type:'病例',patientName:'张三丰4',doctorName:'张三丰',endTime:'2018-08-23 12:00:00'},true);
 				}
                         },
                         
