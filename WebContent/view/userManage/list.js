@@ -314,7 +314,7 @@
                                 
 				//查看详情
                                 handleUserDetail : function(scope){
-					this.$router.push({name : 'userManageDetail' , query : {userId : scope.row.id}});
+					this.$commons.openWindow('#/userManage/detail',{userId : scope.row.id});
                                 },
 				
 				//账号审核对话框

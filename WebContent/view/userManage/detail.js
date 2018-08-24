@@ -100,7 +100,7 @@
 				</div>
 				
 				<div class="common-detail-operate">
-					<el-button plain @click="handleBack">返回</el-button>
+					<el-button plain @click="handleClose">关闭</el-button>
 				</div>
 			
 			</div>
@@ -144,9 +144,9 @@
 				);
 			},
 			
-			//返回
-			handleBack(){
-				this.$router.push({name : 'userManageList'});
+			//关闭
+			handleClose(){
+				this.$commons.closeWindow();
 			}
 		}
 		

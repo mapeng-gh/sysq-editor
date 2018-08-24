@@ -30,12 +30,7 @@ function serialize(params){
         return serializeStr;
 }
 
-/**
-* 打开新标签
-* @param  {[type]} hash   地址hash值
-* @param  {[type]} params 查询参数对象【可选】
-*/
-function open(hash,params){
+function openWindow(hash,params){
         var url = window.location.href.replace(window.location.hash,hash);
 
         if(params){
@@ -43,6 +38,10 @@ function open(hash,params){
         }
 
         window.open(url,'_blank');
+}
+
+function closeWindow(){
+	window.close();
 }
 
 function logout(){
@@ -53,7 +52,8 @@ function logout(){
 window.commons = {
         formatDate : formatDate,
         serialize : serialize,
-        open : open,
+        openWindow : openWindow,
+	closeWindow : closeWindow,
         logout : logout
 }
       
