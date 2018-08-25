@@ -87,7 +87,7 @@ public class TaskServiceImpl implements TaskService{
 			handledParams.put("offset", (currentPage - 1) * pageSize);
 			handledParams.put("limit", pageSize);
 			
-			List<Task> taskList = taskDao.findMainPage(handledParams);
+			List<Task> taskList = taskDao.findAllTaskPage(handledParams);
 			
 			//关联数据
 			List<TaskResponse> taskResponseList = new ArrayList<TaskResponse>();
@@ -105,13 +105,46 @@ public class TaskServiceImpl implements TaskService{
 			}
 			
 			//统计
-			int total = taskDao.countMain(handledParams);
+			int total = taskDao.countAllTask(handledParams);
 			
 			return CallResult.success(new Page<TaskResponse>(taskResponseList,currentPage,pageSize,total));
 			
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "findTaskPage error", e);
 			return CallResult.failure("查找任务失败");
+		}
+	}
+
+	@Override
+	public CallResult<Page<TaskResponse>> findUserTaskPage(int userId, Map<String, Object> searchParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUserTaskPage params : userId = {},searchParams = {},currentPage = {},pageSize = {}", userId,JsonUtils.toJson(searchParams),currentPage,pageSize);
+		
+		try {
+			//查询任务
+			List<Task> taskList = taskDao.findUserTaskPage(userId, searchParams, currentPage, pageSize);
+			
+			//关联数据
+			List<TaskResponse> taskResponseList = new ArrayList<TaskResponse>();
+			if(taskList != null && taskList.size() > 0) {
+				for(Task task : taskList) {
+					TaskResponse taskResponse = new TaskResponse();
+					taskResponse.setTask(task);
+					taskResponse.setUser(userDao.selectById(task.getUserId()));
+					Interview interview = interviewDao.selectById(task.getInterviewId());
+					taskResponse.setInterview(interview);
+					taskResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+					taskResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
+					taskResponseList.add(taskResponse);
+				}
+			}
+			
+			//统计
+			int total = taskDao.countUserTask(userId, searchParams);
+			
+			return CallResult.success(new Page<TaskResponse>(taskResponseList,currentPage,pageSize,total));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "findUserTaskPage errror", e);
+			return CallResult.failure("查找我的任务失败");
 		}
 	}
 

@@ -14,16 +14,32 @@ public interface TaskDao {
 	public void insert(Task task);
 	
 	/**
-	 * 查找
+	 * 查找所有任务
 	 * @param searchParams
 	 * @return
 	 */
-	public List<Task> findMainPage(Map<String,Object> searchParams);
+	public List<Task> findAllTaskPage(Map<String,Object> searchParams);
 	
 	/**
-	 * 统计
+	 * 统计所有任务
 	 * @param searchParams
 	 * @return
 	 */
-	public int countMain(Map<String,Object> searchParams);
+	public int countAllTask(Map<String,Object> searchParams);
+	
+	/**
+	 * 查找用户下任务
+	 * @param userId
+	 * @param searchParams
+	 * @return
+	 */
+	public List<Task> findUserTaskPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
+	
+	/**
+	 * 统计用户下任务
+	 * @param userId
+	 * @param searchParams
+	 * @return
+	 */
+	public int countUserTask(int userId,Map<String,Object> searchParams);
 }

@@ -22,4 +22,12 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<Page<TaskResponse>> findTaskPage(Map<String,String> searchParams);
+	
+	/**
+	 * 查找用户下任务
+	 * @param userId
+	 * @param searchParams
+	 * @return
+	 */
+	public CallResult<Page<TaskResponse>> findUserTaskPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
 }

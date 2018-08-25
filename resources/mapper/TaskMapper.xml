@@ -19,7 +19,7 @@
             values(#{userId},#{interviewId},#{createTime},#{updateTime})
         </insert>
         
-        <select id="findMainPage" parameterType="hashmap" resultMap="allResultMap">
+        <select id="findAllTaskPage" parameterType="hashmap" resultMap="allResultMap">
             select task.id,task.user_id,task.interview_id,task.create_time,task.update_time 
 	    from editor_task task 
 	    inner join editor_user usr on task.user_id = usr.id 
@@ -30,13 +30,35 @@
             limit #{offset},#{limit}
         </select>
         
-        <select id="countMain" parameterType="hashmap" resultType="_int">
+        <select id="countAllTask" parameterType="hashmap" resultType="_int">
             select count(task.id)
 	    from editor_task task 
 	    inner join editor_user usr on task.user_id = usr.id 
 	    <trim prefix="where" prefixOverrides="and">
                    <if test="name != null and name != ''">and usr.name like concat(concat('%',#{name}),'%')</if>
             </trim>
+        </select>
+        
+        <select id="findUserTaskPage" parameterType="hashmap" resultMap="allResultMap">
+            select task.id,task.user_id,task.interview_id,task.create_time,task.update_time 
+	    from editor_task task 
+	    inner join editor_user usr on task.user_id = usr.id 
+	    inner join sysq_interview interview on task.interview_id = interview.id 
+	    inner join sysq_patient patient on interview.patient_id = patient.id 
+	    where task.user_id = #{userId} 
+	    <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
+            order by task.create_time desc 
+            limit #{offset},#{limit}
+        </select>
+        
+        <select id="countUserTask" parameterType="hashmap" resultType="_int">
+            select count(task.id)
+	    from editor_task task 
+	    inner join editor_user usr on task.user_id = usr.id 
+	    inner join sysq_interview interview on task.interview_id = interview.id 
+	    inner join sysq_patient patient on interview.patient_id = patient.id 
+	    where task.user_id = #{userId} 
+	    <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
         </select>
         
 </mapper>  

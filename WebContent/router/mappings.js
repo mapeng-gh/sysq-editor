@@ -30,6 +30,7 @@
                 }
         ];
 	
+	//任务管理
 	var taskManageMappings = [
 		{
                         name : 'taskManageList',
@@ -37,6 +38,17 @@
 			path : '/taskManage/list',
 			meta : {
                                 activeIndex : '/taskManage/list'
+			}
+                }
+	];
+	
+	var myTaskMappings = [
+		{
+                        name : 'myTaskList',
+			component : myTaskListComponent,
+			path : '/myTask/taskList',
+			meta : {
+                                activeIndex : '/myTask/taskList'
 			}
                 }
 	];
@@ -53,6 +65,6 @@
                 }
         ];
         
-        var mappings = _.concat(userManageMappings,taskManageMappings,browseMappings);
+        var mappings = _.concat(userManageMappings,taskManageMappings,myTaskMappings,browseMappings);
 	window.mappings = mappings;
 })();

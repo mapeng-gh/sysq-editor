@@ -37,7 +37,6 @@
                                                         header-cell-class-name="common-table-header"
                                                         style="width: 100%">
 							<el-table-column prop="task.id" label="任务编号" width="100" align="center"></el-table-column>
-                                                        <el-table-column prop="user.name" label="用户姓名" align="center"></el-table-column>
 							<el-table-column prop="interview.id" label="访谈编号" align="center"></el-table-column>
 							<el-table-column prop="interview.type" label="访谈类型" align="center">
 								<template slot-scope="scope">

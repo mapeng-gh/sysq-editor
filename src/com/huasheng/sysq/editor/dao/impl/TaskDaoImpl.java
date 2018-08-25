@@ -1,5 +1,6 @@
 package com.huasheng.sysq.editor.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +20,37 @@ public class TaskDaoImpl extends BaseDao implements TaskDao{
 	}
 
 	@Override
-	public List<Task> findMainPage(Map<String, Object> searchParams) {
-		return this.getSqlSession().selectList(NAMESPACE + ".findMainPage", searchParams);
+	public List<Task> findAllTaskPage(Map<String, Object> searchParams) {
+		return this.getSqlSession().selectList(NAMESPACE + ".findAllTaskPage", searchParams);
 	}
 
 	@Override
-	public int countMain(Map<String, Object> searchParams) {
-		return this.getSqlSession().selectOne(NAMESPACE + ".countMain", searchParams);
+	public int countAllTask(Map<String, Object> searchParams) {
+		return this.getSqlSession().selectOne(NAMESPACE + ".countAllTask", searchParams);
 	}
 
+	@Override
+	public List<Task> findUserTaskPage(int userId, Map<String, Object> searchParams,int currentPage,int pageSize) {
+		if(searchParams == null) {
+			searchParams = new HashMap<String,Object>();
+		}
+		
+		searchParams.put("userId", userId);
+		
+		searchParams.put("offset", (currentPage - 1) * pageSize);
+		searchParams.put("limit", pageSize);
+		
+		return this.getSqlSession().selectList(NAMESPACE + ".findUserTaskPage", searchParams);
+	}
+
+	@Override
+	public int countUserTask(int userId, Map<String, Object> searchParams) {
+		if(searchParams == null) {
+			searchParams = new HashMap<String,Object>();
+		}
+		
+		searchParams.put("userId", userId);
+		
+		return this.getSqlSession().selectOne(NAMESPACE + ".countUserTask", searchParams);
+	}
 }
