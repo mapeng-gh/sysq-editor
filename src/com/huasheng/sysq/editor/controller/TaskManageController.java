@@ -18,7 +18,7 @@ import com.huasheng.sysq.editor.util.Page;
 
 @Controller
 @RequestMapping(value="/taskManage")
-public class TaskController {
+public class TaskManageController {
 	
 	@Autowired
 	private TaskService taskService;

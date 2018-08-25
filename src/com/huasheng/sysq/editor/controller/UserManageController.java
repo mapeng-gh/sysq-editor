@@ -25,7 +25,7 @@ import com.huasheng.sysq.editor.util.Page;
 
 @Controller
 @RequestMapping(value="/userManage")
-public class UserController {
+public class UserManageController {
 	
 	@Autowired
 	private UserService userService;
