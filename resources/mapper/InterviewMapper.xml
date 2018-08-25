@@ -44,7 +44,7 @@
                  select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
 	         from sysq_interview interview 
 	         where interview.id not in (
-	         	select distinct task.sysq_interview_id from editor_task task
+	         	select distinct task.interview_id from editor_task task
 	         )
 	         order by interview.end_time desc
                  limit #{offset},#{limit}
@@ -55,7 +55,7 @@
 	         select count(interview.id) 
 	         from sysq_interview interview 
 	         where interview.id not in (
-	         	select distinct task.sysq_interview_id from editor_task task
+	         	select distinct task.interview_id from editor_task task
 	         )
         </select>
         

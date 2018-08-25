@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,15 +15,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.UnAssignInterviewResponse;
-import com.huasheng.sysq.editor.params.UserCreateRequest;
-import com.huasheng.sysq.editor.params.UserLoginResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
+import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
-import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
 @RequestMapping(value="/userManage")
@@ -35,6 +32,9 @@ public class UserController {
 	
 	@Autowired
 	private InterviewService interviewService;
+	
+	@Autowired
+	private TaskService taskService;
 	
 	/**
 	 * 用户搜索
@@ -108,12 +108,29 @@ public class UserController {
 	 * @param searchRequest
 	 * @return
 	 */
-	@RequestMapping(value="/task.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/taskList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<UnAssignInterviewResponse>> task(@RequestParam(value="currentPage") int currentPage,@RequestParam(value="pageSize") int pageSize) {
+	public CallResult<Page<UnAssignInterviewResponse>> taskList(@RequestParam(value="currentPage") int currentPage,@RequestParam(value="pageSize") int pageSize) {
 		LogUtils.info(this.getClass(), "task params : currentPage = {},pageSize = {}",currentPage,pageSize);
 		CallResult<Page<UnAssignInterviewResponse>> result = interviewService.findUnAssignInterviewPage(null,currentPage,pageSize);
 		LogUtils.info(this.getClass(), "task result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 任务分配
+	 * @param searchRequest
+	 * @return
+	 */
+	@RequestMapping(value="/assignTask.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> assignTask(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "assignTask params : {}",requestJsonStr);
+		JSONObject requestJson = JSON.parseObject(requestJsonStr);
+		int userId = requestJson.getIntValue("userId");
+		String taskIds = requestJson.getString("taskIds");
+		CallResult<Boolean> result = taskService.assignTask(userId, taskIds);
+		LogUtils.info(this.getClass(), "assignTask result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	

@@ -57,5 +57,11 @@ html, body {
 
 .common-list-operate {
   margin-top: 20px;
-  text-align: right;
+  text-align: left;
+}
+
+.bg-warning {
+  background-color: #fcf8e3;
+  padding: 15px;
+  margin-top: 20px;
 }

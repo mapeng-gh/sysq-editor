@@ -5,8 +5,12 @@
 			
 				<div class="common-title">任务分配</div>
 				
+				<div class="bg-warning">
+					温馨提示：暂不支持跨页进行任务分配
+				</div>
+				
 				<div class="common-list-operate">
-					<el-button type="primary">分配</el-button>
+					<el-button type="primary" @click="handleAssignTask">分配</el-button>
 				</div>
 				
 				<div class="common-list">
@@ -14,7 +18,9 @@
 						:data="taskList"
 						border
 						header-cell-class-name="common-table-header"
-						style="width: 100%">
+						style="width: 100%"
+						@select="handleSelect"
+						@select-all="handleSelectAll">
 						<el-table-column type="selection" width="55"></el-table-column>
 						<el-table-column prop="interview.id" label="访谈编号" align="center"></el-table-column>
 						<el-table-column prop="interview.type" label="类型"  align="center">
@@ -55,7 +61,8 @@
 			return {
 				
 				APIS : {
-					UNASSIGN_TASK : '/userManage/task.do'
+					TASK_LIST : '/userManage/taskList.do',
+					ASSIGN_TASK : '/userManage/assignTask.do'
 				},
 				
 				params : {
@@ -68,7 +75,9 @@
 					pageSize : 10,
 					currentPage : 1,
 					total : 0
-                                }
+                                },
+				
+				selectedTaskList : []
 			}
 		},
 		
@@ -81,7 +90,7 @@
 			init : function(){
 				var self = this;
 				
-				this.$request.sendGetRequest(this.APIS.UNASSIGN_TASK,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+				this.$request.sendGetRequest(this.APIS.TASK_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
                                         self.taskList = resultObject.data;
                                         self.paginate.total = resultObject.total;
                                 });
@@ -92,11 +101,12 @@
 				var self = this;
 				this.paginate.currentPage = currentPage;
 				
-				this.$request.sendGetRequest(this.APIS.UNASSIGN_TASK,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+				this.$request.sendGetRequest(this.APIS.TASK_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
 					self.taskList = resultObject.data;
                                         self.paginate.total = resultObject.total;
 				});
 			},
+			
 			
 			//切换大小
 			handleSizeChange : function(currentSize){
@@ -104,9 +114,39 @@
 				this.paginate.currentPage = 1;
 				this.paginate.pageSize = currentSize;
 				 
-				this.$request.sendGetRequest(this.APIS.UNASSIGN_TASK,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+				this.$request.sendGetRequest(this.APIS.TASK_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
 					self.taskList = resultObject.data;
                                         self.paginate.total = resultObject.total;
+				});
+			},
+			
+			//选择任务
+			handleSelect : function(selection,row){
+				this.selectedTaskList = selection;
+			},
+			
+			//全选任务
+			handleSelectAll : function(selection){
+				this.selectedTaskList = selection;
+			},
+			
+			//分配任务
+			handleAssignTask : function(){
+				var self = this;
+				
+				if(this.selectedTaskList.length == 0){
+					this.$message.error('请先选择任务再进行分配');
+					return;
+				}
+				
+				var taskIdArray = this.$lodash.map(this.selectedTaskList,'interview.id');	
+				this.$request.sendPostRequest(this.APIS.ASSIGN_TASK,{userId : this.params.userId , taskIds : taskIdArray.join(',')},(resultObject)=>{
+					self.$message.success('分配成功');
+					
+					self.$request.sendGetRequest(self.APIS.TASK_LIST,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize},function(resultObject){
+						self.taskList = resultObject.data;
+						self.paginate.total = resultObject.total;
+					});
 				});
 			}
 		}
