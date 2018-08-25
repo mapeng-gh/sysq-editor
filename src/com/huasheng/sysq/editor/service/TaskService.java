@@ -1,6 +1,10 @@
 package com.huasheng.sysq.editor.service;
 
+import java.util.Map;
+
+import com.huasheng.sysq.editor.params.TaskResponse;
 import com.huasheng.sysq.editor.util.CallResult;
+import com.huasheng.sysq.editor.util.Page;
 
 public interface TaskService {
 
@@ -11,4 +15,11 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<Boolean> assignTask(int userId , String taskIds);
+	
+	/**
+	 * 查找任务
+	 * @param searchParams
+	 * @return
+	 */
+	public CallResult<Page<TaskResponse>> findTaskPage(Map<String,String> searchParams);
 }

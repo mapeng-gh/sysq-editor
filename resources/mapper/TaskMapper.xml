@@ -6,7 +6,7 @@
             id,user_id,interview_id,create_time,update_time
         </sql>
 	
-	<resultMap id="allResultMap" type="Doctor">
+	<resultMap id="allResultMap" type="Task">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
 		<result column="user_id" property="userId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
@@ -18,5 +18,25 @@
             insert into editor_task(user_id,interview_id,create_time,update_time) 
             values(#{userId},#{interviewId},#{createTime},#{updateTime})
         </insert>
+        
+        <select id="findMainPage" parameterType="hashmap" resultMap="allResultMap">
+            select task.id,task.user_id,task.interview_id,task.create_time,task.update_time 
+	    from editor_task task 
+	    inner join editor_user usr on task.user_id = usr.id 
+	    <trim prefix="where" prefixOverrides="and">
+                   <if test="name != null and name != ''">and usr.name like concat(concat('%',#{name}),'%')</if>
+            </trim>
+            order by task.create_time desc 
+            limit #{offset},#{limit}
+        </select>
+        
+        <select id="countMain" parameterType="hashmap" resultType="_int">
+            select count(task.id)
+	    from editor_task task 
+	    inner join editor_user usr on task.user_id = usr.id 
+	    <trim prefix="where" prefixOverrides="and">
+                   <if test="name != null and name != ''">and usr.name like concat(concat('%',#{name}),'%')</if>
+            </trim>
+        </select>
         
 </mapper>  

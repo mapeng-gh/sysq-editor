@@ -83,7 +83,7 @@
                                                         <el-table-column prop="operate" label="操作" align="center">
                                                                 <template slot-scope="scope">
                                                                         <el-button type="text" size="mini" @click="handleUserDetail(scope)">查看详情</el-button>
-                                                                        <el-button type="text" size="mini" @click="handleAuditDialog(scope)" :disabled="scope.row.userType == $constants.USER_TYPE.enums.ADMIN">账号审核</el-button>
+                                                                        <el-button type="text" size="mini" @click="handleAuditDialog(scope)">账号审核</el-button>
                                                                         <el-button type="text" size="mini" @click="handleAssignTask(scope)" :disabled="scope.row.userType != $constants.USER_TYPE.enums.EDITOR">任务分配</el-button>
                                                                 </template>
                                                         </el-table-column>

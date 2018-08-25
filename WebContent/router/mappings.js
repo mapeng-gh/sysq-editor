@@ -29,6 +29,17 @@
 			}
                 }
         ];
+	
+	var taskManageMappings = [
+		{
+                        name : 'taskManageList',
+			component : taskManageListComponent,
+			path : '/taskManage/list',
+			meta : {
+                                activeIndex : '/taskManage/list'
+			}
+                }
+	];
         
         //访谈浏览
         var browseMappings = [
@@ -42,6 +53,6 @@
                 }
         ];
         
-        var mappings = _.concat(userManageMappings,browseMappings);
+        var mappings = _.concat(userManageMappings,taskManageMappings,browseMappings);
 	window.mappings = mappings;
 })();

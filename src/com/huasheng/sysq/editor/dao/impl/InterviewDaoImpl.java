@@ -74,5 +74,10 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
         	return super.getSqlSession().selectOne(NAMESPACE + ".countUnAssignInterviewList");
 	}
 
+	@Override
+	public Interview selectById(int id) {
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectById", id);
+	}
+
 
 }

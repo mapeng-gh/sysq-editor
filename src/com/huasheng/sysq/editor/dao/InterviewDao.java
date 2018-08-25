@@ -6,6 +6,13 @@ import java.util.Map;
 import com.huasheng.sysq.editor.model.Interview;
 
 public interface InterviewDao {
+	
+	/**
+	 * 主键查找
+	 * @param id
+	 * @return
+	 */
+	public Interview selectById(int id);
 
 	/**
 	 * 查找医生访谈列表
