@@ -73,4 +73,29 @@ public class UsercenterController {
 		
 		return result;
 	}
+	
+	@RequestMapping(value="/modifyPwd.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> modifyPwd(@RequestHeader(value="Authorization") String token,@RequestBody String requestJsonStr) {
+		User loginUser = SessionCache.get(token);
+		LogUtils.info(this.getClass(), "modifyPwd params : loginName = {},content = {}",loginUser.getLoginName(),requestJsonStr);
+		
+		//参数处理
+		String oldPwd = "";
+		String newPwd = "";
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			oldPwd = requestJson.getString("oldPwd");
+			newPwd = requestJson.getString("newPwd");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "modifyPwd error", e);
+			return CallResult.failure("修改密码失败");
+		}
+		
+		//修改信息
+		CallResult<Boolean> result = userService.modifyPwd(loginUser.getId(), oldPwd, newPwd);
+		LogUtils.info(this.getClass(), "modifyPwd result : {}", JsonUtils.toJson(result));
+		
+		return result;
+	}
 }

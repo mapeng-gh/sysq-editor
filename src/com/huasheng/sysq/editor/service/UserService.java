@@ -56,4 +56,13 @@ public interface UserService {
 	 * @return
 	 */
 	public CallResult<Boolean> modifyProfile(int userId , User user);
+	
+	/**
+	 * 修改密码
+	 * @param userId
+	 * @param oldPwd
+	 * @param newPwd
+	 * @return
+	 */
+	public CallResult<Boolean> modifyPwd(int userId,String oldPwd,String newPwd);
 }

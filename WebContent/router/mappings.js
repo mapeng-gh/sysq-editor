@@ -90,6 +90,14 @@
                         meta : {
                                 activeIndex : '/usercenter/profile'
                         }
+		},
+		{
+			name : 'usercenterModifyPwd',
+                        component : usercenterModifyPwdComponent,
+                        path : '/usercenter/modifyPwd',
+                        meta : {
+                                activeIndex : '/usercenter/modifyPwd'
+                        }
 		}
 	];
         

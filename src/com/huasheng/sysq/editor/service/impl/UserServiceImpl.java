@@ -196,4 +196,30 @@ public class UserServiceImpl implements UserService{
 			return CallResult.failure("修改用户信息失败");
 		}
 	}
+
+	@Override
+	public CallResult<Boolean> modifyPwd(int userId, String oldPwd, String newPwd) {
+		LogUtils.info(this.getClass(), "modifyPwd params : userId = {}", userId);
+		
+		//参数校验
+		User user = userDao.selectById(userId);
+		if(!user.getLoginPwd().equals(oldPwd)) {
+			return CallResult.failure("原密码不正确");
+		}
+		
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					user.setLoginPwd(newPwd);
+					userDao.update(user);
+				}
+			});
+			
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "modifyPwd error", e);
+			return CallResult.failure("修改密码失败");
+		}
+	}
 }
