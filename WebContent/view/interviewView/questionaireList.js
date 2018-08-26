@@ -5,7 +5,7 @@
                         
                                 <div class="common-title">问卷列表</div>
                                 
-                               <div class="questionaire" v-for="(item,index) in questionaireList" :key="item.id">
+                               <div class="questionaire" v-for="(item,index) in questionaireList" :key="item.id" @click="handleQuestionList(item.code)">
 					<div class="questionaire-header">[{{index+1}}] {{item.code}} {{item.title}}</div>
 					<div class="questionaire-content">{{item.introduction == '' ? '暂无描述内容' : item.introduction}}</div>
 				</div>
@@ -37,7 +37,12 @@
 				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{type : this.params.type},(resultObject)=>{
 					self.questionaireList = resultObject;
 				});
-                        }
+                        },
+			
+			//问题列表
+			handleQuestionList(questionaireCode){
+				this.$commons.openWindow('#/interviewView/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
+			}
                         
                 },
                 

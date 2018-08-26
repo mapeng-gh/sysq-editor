@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.LoginResponse;
+import com.huasheng.sysq.editor.params.UserResponse;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Page;
 
@@ -23,7 +24,7 @@ public interface UserService {
 	 * @param userId
 	 * @return
 	 */
-	public CallResult<User> viewUser(int userId);
+	public CallResult<UserResponse> viewUser(int userId);
 	
 	/**
 	 * 添加用户
@@ -47,4 +48,12 @@ public interface UserService {
 	 * @return
 	 */
 	public CallResult<Boolean> auditUser(int userId , int auditStatus , String remark);
+	
+	/**
+	 * 修改个人信息
+	 * @param userId
+	 * @param user
+	 * @return
+	 */
+	public CallResult<Boolean> modifyProfile(int userId , User user);
 }

@@ -43,7 +43,7 @@
 			index: '/usercenter',
 			icon: 'fa fa-user-o',
 			sub: [
-				{index : '/usercenter/basic' , name: '个人信息'},
+				{index : '/usercenter/profile' , name: '个人信息'},
 				{index : '/usercenter/modifyPwd' , name: '修改密码'}
 			]
                 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,11 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.LoginResponse;
+import com.huasheng.sysq.editor.params.UserResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Constants;
+import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
 import com.huasheng.sysq.editor.util.SessionCache;
@@ -135,10 +138,16 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public CallResult<User> viewUser(int userId) {
+	public CallResult<UserResponse> viewUser(int userId) {
 		try {
+			//查询用户
 			User user = userDao.selectById(userId);
-			return CallResult.success(user);
+			
+			//删除敏感信息
+			UserResponse userResponse = new UserResponse();
+			BeanUtils.copyProperties(userResponse, user);
+			
+			return CallResult.success(userResponse);
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "viewUser error", e);
 			return CallResult.failure("获取用户失败"); 
@@ -164,5 +173,27 @@ public class UserServiceImpl implements UserService{
 			return CallResult.failure("用户审核失败"); 
 		}
 		return CallResult.success(true);
+	}
+
+	@Override
+	public CallResult<Boolean> modifyProfile(int userId, User user) {
+		LogUtils.info(this.getClass(), "modifyProfile params : userId = {},user = {}", userId,JsonUtils.toJson(user));
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					User modifyUser = userDao.selectById(userId);
+					modifyUser.setName(user.getName());
+					modifyUser.setMobile(user.getMobile());
+					modifyUser.setEmail(user.getEmail());
+					modifyUser.setWorkingPlace(user.getWorkingPlace());
+					userDao.update(modifyUser);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "modifyProfile error", e);
+			return CallResult.failure("修改用户信息失败");
+		}
 	}
 }

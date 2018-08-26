@@ -71,9 +71,28 @@
                         meta : {
                                 activeIndex : '/interviewView/interviewList'
                         }
+                },
+		{
+                        name : 'interviewViewQuestionList',
+                        component : interviewViewQuestionListComponent,
+                        path : '/interviewView/questionList',
+                        meta : {
+                                activeIndex : '/interviewView/interviewList'
+                        }
                 }
         ];
+	
+	var usercenterMappings = [
+		{
+			name : 'usercenterProfile',
+                        component : usercenterProfileComponent,
+                        path : '/usercenter/profile',
+                        meta : {
+                                activeIndex : '/usercenter/profile'
+                        }
+		}
+	];
         
-        var mappings = _.concat(userManageMappings,taskManageMappings,interviewEditMappings,interviewViewMappings);
+        var mappings = _.concat(userManageMappings,taskManageMappings,interviewEditMappings,interviewViewMappings,usercenterMappings);
 	window.mappings = mappings;
 })();

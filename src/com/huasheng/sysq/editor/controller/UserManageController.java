@@ -2,7 +2,6 @@ package com.huasheng.sysq.editor.controller;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.InterviewResponse;
+import com.huasheng.sysq.editor.params.UserResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.service.UserService;
@@ -57,18 +57,10 @@ public class UserManageController {
 	 */
 	@RequestMapping(value="/detail.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<User> detail(@RequestParam("userId") String userId) {
+	public CallResult<UserResponse> detail(@RequestParam("userId") int userId) {
 		LogUtils.info(this.getClass(), "detail params : userId = {}",userId);
 		
-		//参数校验
-		if(StringUtils.isBlank(userId)) {
-			return CallResult.failure("参数不能为空");
-		}
-		if(!StringUtils.isNumeric(userId)) {
-			return CallResult.failure("参数格式不正确");
-		}
-		
-		CallResult<User> result = userService.viewUser(Integer.valueOf(userId));
+		CallResult<UserResponse> result = userService.viewUser(userId);
 		LogUtils.info(this.getClass(), "detail result : {}", JsonUtils.toJson(result));
 		
 		return result;
