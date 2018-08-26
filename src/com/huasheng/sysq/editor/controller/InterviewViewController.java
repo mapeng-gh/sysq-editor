@@ -1,6 +1,7 @@
 package com.huasheng.sysq.editor.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.params.InterviewResponse;
+import com.huasheng.sysq.editor.service.BasicService;
 import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -26,6 +29,9 @@ public class InterviewViewController {
 	
 	@Autowired
 	private InterviewService interviewService;
+	
+	@Autowired
+	private BasicService basicService;
 
 	@RequestMapping(value="/interviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
@@ -53,6 +59,18 @@ public class InterviewViewController {
 		//查询访谈
 		CallResult<Page<InterviewResponse>> result = interviewService.findDoctorInterviewPage(mobile, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	@RequestMapping(value="/currentQuestionaireList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<List<Questionaire>> currentQuestionaireList(@RequestParam(value="type") int type) {
+		LogUtils.info(this.getClass(), "currentQuestionaireList params : type = {}",type);
+		
+		//查询问卷
+		CallResult<List<Questionaire>> result = basicService.findCurrentQuestionaireList(type);
+		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
+		
 		return result;
 	}
 }

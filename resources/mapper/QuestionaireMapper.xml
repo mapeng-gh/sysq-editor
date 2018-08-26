@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.QuestionaireMapper">
+    
+        <sql id="allColumns">
+            id,code,title,introduction,remark,type,seq_num,version_id
+        </sql>
+	
+	<resultMap id="allResultMap" type="Questionaire">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
+		<result column="code" property="code" jdbcType="VARCHAR" javaType="string"/>
+		<result column="title" property="title" jdbcType="VARCHAR" javaType="string"/>
+		<result column="code" property="code" jdbcType="VARCHAR" javaType="string"/>
+		<result column="introduction" property="introduction" jdbcType="VARCHAR" javaType="string"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="string"/>
+		<result column="type" property="type" jdbcType="INTEGER" javaType="_int"/>
+		<result column="seq_num" property="seqNum" jdbcType="INTEGER" javaType="_int"/>
+		<result column="version_id" property="versionId" jdbcType="INTEGER" javaType="_int"/>
+  		
+	</resultMap>
+	
+        <select id="findQuestionaireList" parameterType="hashmap" resultMap="allResultMap">
+	         select <include refid="allColumns"></include> 
+                 from sysq_questionaire
+                 where version_id = #{versionId} and type in (3,#{type})
+                 order by seq_num asc
+        </select>
+        
+</mapper>  

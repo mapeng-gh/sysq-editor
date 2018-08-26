@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.VersionMapper">
+    
+        <sql id="allColumns">
+            id,name,publish_date,remark,is_current
+        </sql>
+	
+	<resultMap id="allResultMap" type="Version">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
+		<result column="name" property="name" jdbcType="VARCHAR" javaType="string"/>
+		<result column="publish_date" property="publishDate" jdbcType="TIMESTAMP" javaType="date" />
+  		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="is_current" property="isCurrent" jdbcType="INTEGER" javaType="_int"/>
+  		
+	</resultMap>
+	
+        <select id="findAll" resultMap="allResultMap">
+	         select <include refid="allColumns"></include> 
+                 from sysq_version
+        </select>
+        
+</mapper>  

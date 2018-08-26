@@ -63,6 +63,14 @@
                         meta : {
                                 activeIndex : '/interviewView/interviewList'
                         }
+                },
+		{
+                        name : 'interviewViewQuestionaireList',
+                        component : interviewViewQuestionaireListComponent,
+                        path : '/interviewView/questionaireList',
+                        meta : {
+                                activeIndex : '/interviewView/interviewList'
+                        }
                 }
         ];
         

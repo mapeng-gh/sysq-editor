@@ -14,6 +14,8 @@
 		<typeAlias type="com.huasheng.sysq.editor.model.Doctor" alias="Doctor"/>
 		<typeAlias type="com.huasheng.sysq.editor.model.Patient" alias="Patient"/>
 		<typeAlias type="com.huasheng.sysq.editor.model.Task" alias="Task"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.Version" alias="Version"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.Questionaire" alias="Questionaire"/>
 	</typeAliases>
     
 	<mappers>
@@ -22,6 +24,8 @@
 		<mapper resource="mapper/DoctorMapper.xml"/>
         	<mapper resource="mapper/PatientMapper.xml"/>
         	<mapper resource="mapper/TaskMapper.xml"/>
+        	<mapper resource="mapper/VersionMapper.xml"/>
+        	<mapper resource="mapper/QuestionaireMapper.xml"/>
 	</mappers>
     
 </configuration>
