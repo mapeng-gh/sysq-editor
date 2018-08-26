@@ -3,7 +3,7 @@ package com.huasheng.sysq.editor.service;
 import java.util.Map;
 
 import com.huasheng.sysq.editor.model.User;
-import com.huasheng.sysq.editor.params.UserLoginResponse;
+import com.huasheng.sysq.editor.params.LoginResponse;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Page;
 
@@ -37,7 +37,7 @@ public interface UserService {
 	 * @param password
 	 * @return
 	 */
-	public CallResult<UserLoginResponse> login(String loginName,String password);
+	public CallResult<LoginResponse> login(String loginName,String password);
 	
 	/**
 	 * 用户审核

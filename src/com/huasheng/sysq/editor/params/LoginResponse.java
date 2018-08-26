@@ -1,6 +1,6 @@
 package com.huasheng.sysq.editor.params;
 
-public class UserLoginResponse {
+public class LoginResponse {
 
 	private String name;
 	private Integer userType;

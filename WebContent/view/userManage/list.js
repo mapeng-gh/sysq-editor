@@ -57,17 +57,14 @@
                                                         :data="userList"
                                                         border
                                                         header-cell-class-name="common-table-header"
-                                                        style="width: 100%"
-							v-loading="isLoading"
-							element-loading-text="正在加载中..."
-							element-loading-spinner="el-icon-loading">
+                                                        style="width: 100%">
                                                         <el-table-column prop="name" label="姓名" width="150" align="center"></el-table-column>
                                                         <el-table-column prop="userType" label="类型" width="150" align="center">
                                                                 <template slot-scope="scope">
                                                                         {{$constants.USER_TYPE.getUserTypeText(scope.row.userType)}}
                                                                 </template>
                                                         </el-table-column>
-                                                        <el-table-column prop="workingPlace" label="工作单位" width="250" align="center" :show-overflow-tooltip="true"></el-table-column>
+                                                        <el-table-column prop="workingPlace" label="工作单位" width="180" align="left" :show-overflow-tooltip="true"></el-table-column>
                                                         <el-table-column prop="createTime" label="创建日期" width="180" align="center">
                                                                 <template slot-scope="scope">
                                                                         {{$commons.formatDate(scope.row.createTime)}}
@@ -155,15 +152,12 @@
                                                 total : 0
                                         },
 					
-					isLoading : false,
-					
 					auditDialog :{
 						visible :false,
 						auditStatusList : this.$lodash.filter(this.$constants.AUDIT_STATUS.getAuditStatusList(),function(item){return item.code != self.$constants.AUDIT_STATUS.enums.ING}),
 						userId : '',
 						auditStatus : '',
-						remark : '',
-						loading : false
+						remark : ''
 					}
 				}
 			},
@@ -176,36 +170,22 @@
                                 
                                 init : function(){
                                         var self = this;
-                                        this.isLoading = true;
 					
-                                        this.$request.sendGetRequest(this.APIS.USER_LIST,
-                                                _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
-                                                function(resultObject){
-							self.isLoading = false;
-							
-                                                        self.userList = resultObject.data;
-                                                        self.paginate.total = resultObject.total;
-                                                
-                                                }
-                                        );
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+						self.userList = resultObject.data;
+						self.paginate.total = resultObject.total;
+                                        });
                                 },
                                 
                                 //搜索
                                 handleSearch : function(){
                                         var self = this;        
                                         this.paginate.currentPage = 1;
-					 this.isLoading = true;
                                         
-                                        this.$request.sendGetRequest(this.APIS.USER_LIST,
-                                                _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
-                                                function(resultObject){
-							 self.isLoading = false;
-							
-                                                        self.userList = resultObject.data;
-                                                        self.paginate.total = resultObject.total;
-                                                
-                                                }
-                                        );
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+						self.userList = resultObject.data;
+						self.paginate.total = resultObject.total;
+                                        });
                                 },
                                 
                                 //重置
@@ -213,29 +193,19 @@
                                         var self = this;
                                         this.search = {name : '',userType : '',auditStatus : ''},
                                         this.paginate.currentPage = 1;
-					this.isLoading = true;
                                         
-                                        this.$request.sendGetRequest(this.APIS.USER_LIST,
-                                                this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
-                                                function(resultObject){
-							self.isLoading = false;
-							
-                                                        self.userList = resultObject.data;
-                                                        self.paginate.total = resultObject.total;
-                                                
-                                                }
-                                        );
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+						self.userList = resultObject.data;
+						self.paginate.total = resultObject.total;
+                                        });
                                 },
                                 
                                  //切换分页
                                 handleCurrentChange : function(currentPage){
                                         var self = this;
                                         this.paginate.currentPage = currentPage;
-					this.isLoading = true;
 					
-                                        this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
-                                                self.isLoading = false;
-						
+                                        this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
 						self.userList = resultObject.data;
                                                 self.paginate.total = resultObject.total;
                                         });
@@ -246,11 +216,8 @@
                                         var self = this;
                                         this.paginate.pageSize = currentSize;
                                         this.paginate.currentPage = 1;
-					this.isLoading = true; 
 					 
-                                         this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
-                                                self.isLoading = false;
-						
+                                         this.$request.sendGetRequest(this.APIS.USER_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
 						self.userList = resultObject.data;
                                                 self.paginate.total = resultObject.total;
                                         });
@@ -284,16 +251,12 @@
 					//发送请求
 					this.auditDialog.loading = true;
 					this.$request.sendPostRequest(this.APIS.USER_AUDIT,{userId : this.auditDialog.userId , auditStatus : this.auditDialog.auditStatus , remark : this.auditDialog.remark},function(resultObject){
-						self.auditDialog.loading = false;
-						
 						//关闭对话框
 						self.auditDialog.visible = false;
 						
 						//刷新列表
 						self.isLoading = true;
-						self.$request.sendGetRequest(self.APIS.USER_LIST,self.$lodash.assignIn({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
-							self.isLoading = false;
-							
+						self.$request.sendGetRequest(self.APIS.USER_LIST,self.$lodash.assign({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
                                                         self.userList = resultObject.data;
                                                         self.paginate.total = resultObject.total;
                                                 });
@@ -303,7 +266,7 @@
 				
 				//任务分配
 				handleAssignTask : function(scope){
-					this.$commons.openWindow('#/userManage/task',{userId : scope.row.id});
+					this.$commons.openWindow('#/userManage/unAssignInterviewList',{userId : scope.row.id});
 				}
                         }
                         

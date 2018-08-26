@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
-import com.huasheng.sysq.editor.params.UserLoginResponse;
+import com.huasheng.sysq.editor.params.LoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -32,7 +32,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/login.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<UserLoginResponse> login(@RequestBody String requestJsonStr) {
+	public CallResult<LoginResponse> login(@RequestBody String requestJsonStr) {
 		LogUtils.info(this.getClass(), "login params : {}",requestJsonStr);
 		
 		//参数处理
@@ -46,7 +46,7 @@ public class LoginController {
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<UserLoginResponse> result = userService.login(loginName,loginPwd);
+		CallResult<LoginResponse> result = userService.login(loginName,loginPwd);
 		LogUtils.info(this.getClass(), "login result : {}", JsonUtils.toJson(result));
 		
 		return result;

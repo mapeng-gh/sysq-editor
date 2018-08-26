@@ -15,7 +15,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.User;
-import com.huasheng.sysq.editor.params.UserLoginResponse;
+import com.huasheng.sysq.editor.params.LoginResponse;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Constants;
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public CallResult<UserLoginResponse> login(String loginName, String loginPwd) {
+	public CallResult<LoginResponse> login(String loginName, String loginPwd) {
 		
 		//参数校验
 		if(StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService{
 		String token = SessionCache.USER_LOGIN_KEY + UUID.randomUUID().toString();
 		SessionCache.add(token, loginUser);
 		
-		UserLoginResponse userLoginResponse = new UserLoginResponse();
+		LoginResponse userLoginResponse = new LoginResponse();
 		userLoginResponse.setName(loginUser.getName());
 		userLoginResponse.setUserType(loginUser.getUserType());
 		userLoginResponse.setToken(token);

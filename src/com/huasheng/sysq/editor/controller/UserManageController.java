@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
-import com.huasheng.sysq.editor.params.UnAssignInterviewResponse;
+import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.service.UserService;
@@ -108,12 +108,24 @@ public class UserManageController {
 	 * @param searchRequest
 	 * @return
 	 */
-	@RequestMapping(value="/taskList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/unAssignInterviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<UnAssignInterviewResponse>> taskList(@RequestParam(value="currentPage") int currentPage,@RequestParam(value="pageSize") int pageSize) {
-		LogUtils.info(this.getClass(), "task params : currentPage = {},pageSize = {}",currentPage,pageSize);
-		CallResult<Page<UnAssignInterviewResponse>> result = interviewService.findUnAssignInterviewPage(null,currentPage,pageSize);
-		LogUtils.info(this.getClass(), "task result : {}", JsonUtils.toJson(result));
+	public CallResult<Page<InterviewResponse>> unAssignInterviewList(@RequestParam Map<String,String> searchParams) {
+		LogUtils.info(this.getClass(), "unAssignInterviewList params : searchParams = {}",JsonUtils.toJson(searchParams));
+		
+		//参数处理
+		int currentPage = 0;
+		int pageSize = 0;
+		try {
+			currentPage = Integer.parseInt(searchParams.get("currentPage"));
+			pageSize = Integer.parseInt(searchParams.get("pageSize"));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "unAssignInterviewList error", e);
+			return CallResult.failure("获取未分配访谈列表失败");
+		}
+		
+		CallResult<Page<InterviewResponse>> result = interviewService.findUnAssignInterviewPage(null,currentPage,pageSize);
+		LogUtils.info(this.getClass(), "unAssignInterviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	
@@ -126,10 +138,21 @@ public class UserManageController {
 	@ResponseBody
 	public CallResult<Boolean> assignTask(@RequestBody String requestJsonStr) {
 		LogUtils.info(this.getClass(), "assignTask params : {}",requestJsonStr);
-		JSONObject requestJson = JSON.parseObject(requestJsonStr);
-		int userId = requestJson.getIntValue("userId");
-		String taskIds = requestJson.getString("taskIds");
-		CallResult<Boolean> result = taskService.assignTask(userId, taskIds);
+		
+		//参数处理
+		int userId = 0;
+		String interviewIds = "";
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			userId = requestJson.getIntValue("userId");
+			interviewIds = requestJson.getString("interviewIds");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "assignTask error", e);
+			return CallResult.failure("分配任务失败");
+		}
+		
+		//分配任务
+		CallResult<Boolean> result = taskService.assignTask(userId, interviewIds);
 		LogUtils.info(this.getClass(), "assignTask result : {}", JsonUtils.toJson(result));
 		return result;
 	}

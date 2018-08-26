@@ -22,35 +22,29 @@
 		where interview.id = #{id}  
 	</select>
 	
-        <select id="findDoctorInterviewList" parameterType="hashmap" resultMap="allResultMap">
+        <select id="findDoctorInterviewPage" parameterType="hashmap" resultMap="allResultMap">
                  select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
 	         from sysq_interview interview 
-	         inner join sysq_patient patient on interview.patient_id = patient.id 
 	         inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
-	         <trim prefix="where" prefixOverrides="and">
-	                 <if test="_parameter != null and doctorMobile != null and doctorMobile != ''">and doctor.mobile = #{doctorMobile}</if>
-                         <if test="_parameter != null and patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
-                         <if test="_parameter != null and interviewType != null and interviewType != ''">and interview.type = #{interviewType}</if>
-                 </trim>
-                 <if test="_parameter != null and offset != null and limit != null">
-                     limit #{offset},#{limit}
-                 </if>
+	         inner join sysq_patient patient on interview.patient_id = patient.id 
+	         where doctor.mobile = #{mobile}
+	         <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
+                 <if test="type != null">and interview.type = #{type}</if>
+                 limit #{offset},#{limit}
 	         
 	</select>
 	 
-        <select id="countDoctorInterviewList" parameterType="hashmap" resultType="_int">
+        <select id="countDoctorInterview" parameterType="hashmap" resultType="_int">
 	         select count(interview.id) 
-                 from sysq_interview interview 
-                 inner join sysq_patient patient on interview.patient_id = patient.id 
-                 inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
-                 <trim prefix="where" prefixOverrides="and">
-                         <if test="_parameter != null and doctorMobile != null and doctorMobile != ''">and doctor.mobile = #{doctorMobile}</if>
-                         <if test="_parameter != null and patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
-                         <if test="_parameter != null and interviewType != null and interviewType != ''">and interview.type = #{interviewType}</if>
-                 </trim>
+	         from sysq_interview interview 
+	         inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
+	         inner join sysq_patient patient on interview.patient_id = patient.id 
+	         where doctor.mobile = #{mobile}
+	         <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
+                 <if test="type != null">and interview.type = #{type}</if>
         </select>
         
-        <select id="findUnAssignInterviewList" parameterType="hashmap" resultMap="allResultMap">
+        <select id="findUnAssignInterviewPage" parameterType="hashmap" resultMap="allResultMap">
                  select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
 	         from sysq_interview interview 
 	         where interview.id not in (
@@ -61,12 +55,32 @@
 	         
 	</select>
 	 
-        <select id="countUnAssignInterviewList" parameterType="hashmap" resultType="_int">
+        <select id="countUnAssignInterview" parameterType="hashmap" resultType="_int">
 	         select count(interview.id) 
 	         from sysq_interview interview 
 	         where interview.id not in (
 	         	select distinct task.interview_id from editor_task task
 	         )
+        </select>
+        
+        <select id="findEditorInterviewPage" parameterType="hashmap" resultMap="allResultMap">
+            	select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
+	         from editor_task task 
+	         inner join sysq_interview interview on task.interview_id = interview.id 
+	         inner join sysq_patient patient on interview.patient_id = patient.id 
+	         where task.user_id = #{userId} 
+	         <if test="name != null and name != ''">and patient.username = #{name}</if>
+	         order by task.create_time desc
+                 limit #{offset},#{limit}
+        </select>
+        
+        <select id="countEditorInterview" parameterType="hashmap" resultType="_int">
+            	select count(interview.id)
+	         from editor_task task 
+	         inner join sysq_interview interview on task.interview_id = interview.id 
+	         inner join sysq_patient patient on interview.patient_id = patient.id 
+	         where task.user_id = #{userId} 
+	         <if test="name != null and name != ''">and patient.username = #{name}</if>
         </select>
         
 </mapper>  

@@ -21,20 +21,20 @@
                 },
 	    
                 {
-			name: '我的任务',
-			index: '/myTask',
+			name: '访谈编辑',
+			index: '/interviewEdit',
 			icon: 'fa fa-edit',
 			sub: [
-				{index : '/myTask/taskList' , name: '任务列表'}
+				{index : '/interviewEdit/interviewList' , name: '访谈列表'}
 			]
                 },
 	    
                 {
 			name: '访谈浏览',
-			index: '/browse',
+			index: '/interviewView',
 			icon: 'fa fa-eye',
 			sub: [
-				{index : '/browse/interviewList' , name: '访谈列表'}
+				{index : '/interviewView/interviewList' , name: '访谈列表'}
 			]
                 },
 	    

@@ -21,9 +21,9 @@
                 },
 		
 		{
-                        name : 'userManageTask',
-			component : userManageTaskComponent,
-			path : '/userManage/task',
+                        name : 'userManageUnAssignInterviewList',
+			component : userManageUnAssignInterviewListComponent,
+			path : '/userManage/unAssignInterviewList',
 			meta : {
                                 activeIndex : '/userManage/list'
 			}
@@ -42,29 +42,30 @@
                 }
 	];
 	
-	var myTaskMappings = [
+	//访谈编辑
+	var interviewEditMappings = [
 		{
-                        name : 'myTaskList',
-			component : myTaskListComponent,
-			path : '/myTask/taskList',
+                        name : 'interviewEditInterviewList',
+			component : interviewEditInterviewListComponent,
+			path : '/interviewEdit/interviewList',
 			meta : {
-                                activeIndex : '/myTask/taskList'
+                                activeIndex : '/interviewEdit/interviewList'
 			}
                 }
 	];
         
         //访谈浏览
-        var browseMappings = [
+        var interviewViewMappings = [
                 {
-                        name : 'browseInterviewList',
-                        component : browseInterviewListComponent,
-                        path : '/browse/interviewList',
+                        name : 'interviewViewInterviewList',
+                        component : interviewViewInterviewListComponent,
+                        path : '/interviewView/interviewList',
                         meta : {
-                                activeIndex : '/browse/interviewList'
+                                activeIndex : '/interviewView/interviewList'
                         }
                 }
         ];
         
-        var mappings = _.concat(userManageMappings,taskManageMappings,myTaskMappings,browseMappings);
+        var mappings = _.concat(userManageMappings,taskManageMappings,interviewEditMappings,interviewViewMappings);
 	window.mappings = mappings;
 })();

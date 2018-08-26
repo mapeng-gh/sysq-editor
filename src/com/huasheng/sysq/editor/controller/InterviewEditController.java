@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.huasheng.sysq.editor.params.TaskResponse;
-import com.huasheng.sysq.editor.service.TaskService;
+import com.huasheng.sysq.editor.params.InterviewResponse;
+import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
@@ -20,16 +20,16 @@ import com.huasheng.sysq.editor.util.Page;
 import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
-@RequestMapping(value="/myTask")
-public class MyTaskController {
+@RequestMapping(value="/interviewEdit")
+public class InterviewEditController {
 
 	@Autowired
-	private TaskService taskService;
+	private InterviewService interviewService;
 
-	@RequestMapping(value="/taskList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/interviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<TaskResponse>> taskList(@RequestHeader(value="Authorization") String token,@RequestParam Map<String,String> searchParams) {
-		LogUtils.info(this.getClass(), "taskList params : {}",JsonUtils.toJson(searchParams));
+	public CallResult<Page<InterviewResponse>> interviewList(@RequestHeader(value="Authorization") String token,@RequestParam Map<String,String> searchParams) {
+		LogUtils.info(this.getClass(), "interviewList params : token = {},searchParams = {}",token,JsonUtils.toJson(searchParams));
 		
 		//参数处理
 		int userId = 0;
@@ -42,12 +42,12 @@ public class MyTaskController {
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
 			handledParams.put("name",searchParams.get("name"));
 		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "taskList error", e);
-			return CallResult.failure("获取我的任务失败");
+			LogUtils.error(this.getClass(), "interviewList error", e);
+			return CallResult.failure("获取我的访谈失败");
 		}
 		
-		CallResult<Page<TaskResponse>> result = taskService.findUserTaskPage(userId, handledParams, currentPage, pageSize);
-		LogUtils.info(this.getClass(), "taskList result : {}", JsonUtils.toJson(result));
+		CallResult<Page<InterviewResponse>> result = interviewService.findEditorInterviewPage(userId, handledParams, currentPage, pageSize);
+		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

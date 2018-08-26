@@ -16,29 +16,51 @@ public interface InterviewDao {
 
 	/**
 	 * 查找医生访谈列表
-	 * @param searchRequest
+	 * @param mobile
+	 * @param searchParams
+	 * @param currentPage
+	 * @param pageSize
 	 * @return
 	 */
-	public List<Interview> findDoctorInterviewList(Map<String,String> searchParams);
+	public List<Interview> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize);
 	
 	/**
-	 * 统计医生访谈列表
-	 * @param searchRequest
+	 * 统计医生访谈
+	 * @param mobile
+	 * @param searchParams
 	 * @return
 	 */
-	public int countDoctorInterviewList(Map<String,String> searchParams);
+	public int countDoctorInterview(String mobile,Map<String,Object> searchParams);
 	
 	/**
 	 * 查找未分配访谈列表
 	 * @param searchParams
 	 * @return
 	 */
-	public List<Interview> findUnAssignInterviewList(Map<String,Object> searchParams,int currentPage,int pageSize);
+	public List<Interview> findUnAssignInterviewPage(Map<String,Object> searchParams,int currentPage,int pageSize);
 	
 	/**
 	 * 统计未分配访谈列表
 	 * @param searchParams
 	 * @return
 	 */
-	public int countUnAssignInterviewList(Map<String,Object> searchParams);
+	public int countUnAssignInterview(Map<String,Object> searchParams);
+	
+	/**
+	 * 查找编辑访谈列表
+	 * @param userId
+	 * @param searchParams
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public List<Interview> findEditorInterviewPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
+	
+	/**
+	 * 统计编辑访谈
+	 * @param userId
+	 * @param searchParams
+	 * @return
+	 */
+	public int countEditorInterview(int userId,Map<String,Object> searchParams);
 }

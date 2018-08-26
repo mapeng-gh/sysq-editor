@@ -11,10 +11,10 @@ public interface TaskService {
 	/**
 	 * 任务分配
 	 * @param userId
-	 * @param taskIds
+	 * @param interviewIds
 	 * @return
 	 */
-	public CallResult<Boolean> assignTask(int userId , String taskIds);
+	public CallResult<Boolean> assignTask(int userId , String interviewIds);
 	
 	/**
 	 * 查找任务

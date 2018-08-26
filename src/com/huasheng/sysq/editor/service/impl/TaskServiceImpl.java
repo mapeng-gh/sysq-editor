@@ -48,19 +48,19 @@ public class TaskServiceImpl implements TaskService{
 	private UserDao userDao;
 
 	@Override
-	public CallResult<Boolean> assignTask(int userId, String taskIds) {
-		LogUtils.info(this.getClass(), "assignTask params : userId = {},taskIds = {}", userId,taskIds);
+	public CallResult<Boolean> assignTask(int userId, String interviewIds) {
+		LogUtils.info(this.getClass(), "assignTask params : userId = {},interviewIds = {}", userId,interviewIds);
 
 		try {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
 				protected void doInTransactionWithoutResult(TransactionStatus status) {
 					
-					String taskIdArray[] = taskIds.split(",");
-					if(taskIdArray != null && taskIdArray.length > 0) {
-						for(String taskId : taskIdArray) {
+					String interviewIdArray[] = interviewIds.split(",");
+					if(interviewIdArray != null && interviewIdArray.length > 0) {
+						for(String interviewId : interviewIdArray) {
 							Date currentTime = new Date();
-							Task task = new Task(userId,Integer.parseInt(taskId),currentTime,currentTime);
+							Task task = new Task(userId,Integer.parseInt(interviewId),currentTime,currentTime);
 							taskDao.insert(task);
 						}
 					}

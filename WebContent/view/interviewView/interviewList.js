@@ -1,7 +1,7 @@
 (function(){
-	var browseInterviewListComponent = {
+	var interviewViewInterviewListComponent = {
                 template : `
-                        <div class="browse-interview-list">
+                        <div class="interview-view-interview-list">
                         
                                 <div class="common-title">访谈列表</div>
                                 
@@ -14,7 +14,7 @@
                                                         <el-col :span="8">
                                                         
                                                                 <el-form-item label="患者姓名">
-                                                                        <el-input v-model="search.patientName" placeholder="请输入患者姓名"></el-input>
+                                                                        <el-input v-model="search.name" placeholder="请输入患者姓名"></el-input>
                                                                 </el-form-item>
                                                         
                                                         </el-col>
@@ -22,7 +22,7 @@
                                                         <el-col :span="8">
                                 
                                                                 <el-form-item label="访谈类型">
-                                                                        <el-select v-model="search.interviewType" style="width:100%;">
+                                                                        <el-select v-model="search.type" style="width:100%;">
                                                                                 <el-option value="" label="全部"></el-option>
                                                                                 <el-option v-for="item in $constants.INTERVIEW_TYPE.getInterviewTypeList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
                                                                         </el-select>
@@ -46,10 +46,7 @@
                                                 :data="interviewList"
                                                 border
                                                 header-cell-class-name="common-table-header"
-                                                style="width: 100%"
-						v-loading="isLoading"
-						element-loading-text="正在加载中..."
-						element-loading-spinner="el-icon-loading">
+                                                style="width: 100%">
                                                 <el-table-column prop="interview.id" label="编号" width="150" align="center"></el-table-column>
 						<el-table-column prop="interview.type" label="访谈类型" width="150" align="center">
                                                         <template slot-scope="scope">
@@ -96,24 +93,21 @@
                         return {
                                 
                                 APIS : {
-                                        INTERVIEW_LIST : '/browse/doctorInterviewList.do'
+                                        INTERVIEW_LIST : '/interviewView/interviewList.do'
                                 },
                                 
                                 interviewList : [],
                                 
                                 search : {
-                                        patientName : '',
-                                        interviewType : ''
+                                        name : '',
+                                        type : ''
                                 },
                                 
                                 paginate : {
                                         pageSize : 10,
                                         currentPage : 1,
                                         total : 0
-                                },
-				
-				isLoading : false
-                                
+                                }
                         }
                 },
                 
@@ -123,67 +117,43 @@
                                 var self = this;
                                 
 				//初始化列表
-				this.isLoading = true;
-                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,
-                                        _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
-                                        function(resultObject){
-						self.isLoading = false;
-						
-                                                self.interviewList = resultObject.data;
-                                                self.paginate.total = resultObject.total;
-                                        
-                                        }
-                                );
+                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+					self.interviewList = resultObject.data;
+					self.paginate.total = resultObject.total;
+                                });
                         },
                         
                         //搜索
                         handleSearch(){
                                 var self = this;
                                 this.paginate.currentPage = 1;
-				this.isLoading = true;
                                 
-                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,
-                                        _.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
-                                        function(resultObject){
-						self.isLoading = false;
-						
-                                                self.interviewList = resultObject.data;
-                                                self.paginate.total = resultObject.total;
-                                        
-                                        }
-                                );
+				this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+					self.interviewList = resultObject.data;
+					self.paginate.total = resultObject.total;
+                                });
                         },
                         
                         //重置
                         handleReset(){
                                 var self = this;
-                                this.search = {patientName : '' , interviewType : ''};
+                                this.search = {name : '' , type : ''};
                                 this.paginate.currentPage = 1;
-				this.isLoading = true;
                                 
-                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,
-                                        this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),
-                                        function(resultObject){
-						self.isLoading = false;
-						
-                                                self.interviewList = resultObject.data;
-                                                self.paginate.total = resultObject.total;
-                                        
-                                        }
-                                );
+                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+					self.interviewList = resultObject.data;
+					self.paginate.total = resultObject.total;
+                                });
                         },
                         
                          //切换分页
                         handleCurrentChange(currentPage){
                                 var self = this;
                                 this.paginate.currentPage = currentPage;
-				this.isLoading = true;
 				
-                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
-                                        self.isLoading = false;
-					
+                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
 					self.interviewList = resultObject.data;
-                                        self.paginate.total = resultObject.total;
+					self.paginate.total = resultObject.total;
                                 });
                         },
                         
@@ -192,13 +162,10 @@
                                 var self = this;
                                 this.paginate.currentPage = 1;
                                 this.paginate.pageSize = currentSize;
-				this.isLoading = true;
 				
-                                this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assignIn({},this.search,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
-                                        self.isLoading = false;
-					
+                               this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
 					self.interviewList = resultObject.data;
-                                        self.paginate.total = resultObject.total;
+					self.paginate.total = resultObject.total;
                                 });
                         },
                         
@@ -212,7 +179,7 @@
                         this.init();
                 }
 	};
-	window.browseInterviewListComponent = browseInterviewListComponent;
+	window.interviewViewInterviewListComponent = interviewViewInterviewListComponent;
 })();
 
 

@@ -4,7 +4,7 @@ import com.huasheng.sysq.editor.model.Doctor;
 import com.huasheng.sysq.editor.model.Interview;
 import com.huasheng.sysq.editor.model.Patient;
 
-public class InterviewWrap {
+public class InterviewResponse {
 
 	private Interview interview;
 	private Patient patient;

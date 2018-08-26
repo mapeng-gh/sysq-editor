@@ -1,7 +1,7 @@
 (function(){
-	var userManageTaskComponent = {
+	var userManageUnAssignInterviewListComponent = {
 		template : `
-			<div class="user-manage-task">
+			<div class="user-manage-unassign-interview-list">
 			
 				<div class="common-title">任务分配</div>
 				
@@ -15,7 +15,7 @@
 				
 				<div class="common-list">
 					<el-table
-						:data="taskList"
+						:data="unAssignInterviewList"
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%"
@@ -61,7 +61,7 @@
 			return {
 				
 				APIS : {
-					TASK_LIST : '/userManage/taskList.do',
+					UNASSIGN_INTERVIEW_LIST : '/userManage/unAssignInterviewList.do',
 					ASSIGN_TASK : '/userManage/assignTask.do'
 				},
 				
@@ -69,7 +69,7 @@
 					userId : this.$route.query.userId	
 				},
 				
-				taskList : [],
+				unAssignInterviewList : [],
 				
 				paginate : {
 					pageSize : 10,
@@ -77,7 +77,7 @@
 					total : 0
                                 },
 				
-				selectedTaskList : []
+				selectedInterviewList : []
 			}
 		},
 		
@@ -90,8 +90,8 @@
 			init : function(){
 				var self = this;
 				
-				this.$request.sendGetRequest(this.APIS.TASK_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
-                                        self.taskList = resultObject.data;
+				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+                                        self.unAssignInterviewList = resultObject.data;
                                         self.paginate.total = resultObject.total;
                                 });
 			},
@@ -101,8 +101,8 @@
 				var self = this;
 				this.paginate.currentPage = currentPage;
 				
-				this.$request.sendGetRequest(this.APIS.TASK_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
-					self.taskList = resultObject.data;
+				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+					self.unAssignInterviewList = resultObject.data;
                                         self.paginate.total = resultObject.total;
 				});
 			},
@@ -114,37 +114,37 @@
 				this.paginate.currentPage = 1;
 				this.paginate.pageSize = currentSize;
 				 
-				this.$request.sendGetRequest(this.APIS.TASK_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
-					self.taskList = resultObject.data;
+				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+					self.unAssignInterviewList = resultObject.data;
                                         self.paginate.total = resultObject.total;
 				});
 			},
 			
 			//选择任务
 			handleSelect : function(selection,row){
-				this.selectedTaskList = selection;
+				this.selectedInterviewList = selection;
 			},
 			
 			//全选任务
 			handleSelectAll : function(selection){
-				this.selectedTaskList = selection;
+				this.selectedInterviewList = selection;
 			},
 			
 			//分配任务
 			handleAssignTask : function(){
 				var self = this;
 				
-				if(this.selectedTaskList.length == 0){
+				if(this.selectedInterviewList.length == 0){
 					this.$message.error('请先选择任务再进行分配');
 					return;
 				}
 				
-				var taskIdArray = this.$lodash.map(this.selectedTaskList,'interview.id');	
-				this.$request.sendPostRequest(this.APIS.ASSIGN_TASK,{userId : this.params.userId , taskIds : taskIdArray.join(',')},(resultObject)=>{
+				var interviewIdArray = this.$lodash.map(this.selectedInterviewList,'interview.id');	
+				this.$request.sendPostRequest(this.APIS.ASSIGN_TASK,{userId : this.params.userId , interviewIds : interviewIdArray.join(',')},(resultObject)=>{
 					self.$message.success('分配成功');
 					
-					self.$request.sendGetRequest(self.APIS.TASK_LIST,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize},function(resultObject){
-						self.taskList = resultObject.data;
+					self.$request.sendGetRequest(self.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize},function(resultObject){
+						self.unAssignInterviewList = resultObject.data;
 						self.paginate.total = resultObject.total;
 					});
 				});
@@ -153,7 +153,7 @@
 		
 		
 	};
-	window.userManageTaskComponent = userManageTaskComponent;
+	window.userManageUnAssignInterviewListComponent = userManageUnAssignInterviewListComponent;
 })();
 
 

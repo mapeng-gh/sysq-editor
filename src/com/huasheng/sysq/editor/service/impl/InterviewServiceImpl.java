@@ -11,8 +11,7 @@ import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.dao.PatientDao;
 import com.huasheng.sysq.editor.model.Interview;
-import com.huasheng.sysq.editor.params.InterviewWrap;
-import com.huasheng.sysq.editor.params.UnAssignInterviewResponse;
+import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -32,67 +31,93 @@ public class InterviewServiceImpl implements InterviewService{
 	private PatientDao patientDao;
 
 	@Override
-	public CallResult<Page<InterviewWrap>> findDoctorInterviewPage(Map<String, String> searchRequest) {
-		LogUtils.info(this.getClass(), "findDoctorInterviewPage params : {}", JsonUtils.toJson(searchRequest));
+	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findDoctorInterviewPage params : mobile = {},searchParams = {},currentPage = {},pageSize = {}",mobile,JsonUtils.toJson(searchParams),currentPage,pageSize);
 		
 		try {
-			//搜索
-			List<Interview> interviewList = interviewDao.findDoctorInterviewList(searchRequest);
+			//查询访谈
+			List<Interview> interviewList = interviewDao.findDoctorInterviewPage(mobile, searchParams, currentPage, pageSize);
 			
-			//获取关联数据
-			List<InterviewWrap> interviewWrapList = new ArrayList<InterviewWrap>(); 
+			//关联数据
+			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
 			if(interviewList != null && interviewList.size() > 0) {
 				for(Interview interview : interviewList) {
-					InterviewWrap interviewWrap = new InterviewWrap();
-					interviewWrap.setInterview(interview);
-					interviewWrap.setDoctor(doctorDao.selectById(interview.getDoctorId()));
-					interviewWrap.setPatient(patientDao.selectById(interview.getPatientId()));
-					interviewWrapList.add(interviewWrap);
+					InterviewResponse interviewResponse = new InterviewResponse();
+					interviewResponse.setInterview(interview);
+					interviewResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
+					interviewResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+					interviewResponseList.add(interviewResponse);
 				}
 			}
 			
 			//统计
-			int total = interviewDao.countDoctorInterviewList(searchRequest);
+			int total = interviewDao.countDoctorInterview(mobile, searchParams);
 			
-			int currentPage = Integer.parseInt(searchRequest.get("currentPage"));
-			int pageSize = Integer.parseInt(searchRequest.get("pageSize"));
-			return CallResult.success(new Page<InterviewWrap>(interviewWrapList,currentPage,pageSize,total));
+			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
 			
 		}catch(Exception e) {
-			LogUtils.error(UserServiceImpl.class, "findInterviewPage error", e);
-			return CallResult.failure("查找医生访谈列表失败");
+			LogUtils.error(UserServiceImpl.class, "findDoctorInterviewPage error", e);
+			return CallResult.failure("查找访谈失败");
 		}
 	}
 
 	@Override
-	public CallResult<Page<UnAssignInterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchRequest,int currentPage,int pageSize) {
-		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : {}", JsonUtils.toJson(searchRequest));
+	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : searchParams = {},currentPage = {},pageSize = {}", JsonUtils.toJson(searchParams),currentPage,pageSize);
 		
 		try {
-			//搜索
-			List<Interview> unAssignInterviewList = interviewDao.findUnAssignInterviewList(null,currentPage,pageSize);
+			//查询访谈
+			List<Interview> interviewList = interviewDao.findUnAssignInterviewPage(searchParams,currentPage,pageSize);
 			
-			//获取关联数据
-			List<UnAssignInterviewResponse> unAssignInterviewResponseList = new ArrayList<UnAssignInterviewResponse>(); 
-			if(unAssignInterviewList != null && unAssignInterviewList.size() > 0) {
-				for(Interview unAssignInterview : unAssignInterviewList) {
-					UnAssignInterviewResponse unAssignInterviewResponse = new UnAssignInterviewResponse();
-					unAssignInterviewResponse.setInterview(unAssignInterview);
-					unAssignInterviewResponse.setDoctor(doctorDao.selectById(unAssignInterview.getDoctorId()));
-					unAssignInterviewResponse.setPatient(patientDao.selectById(unAssignInterview.getPatientId()));
-					unAssignInterviewResponseList.add(unAssignInterviewResponse);
+			//关联数据
+			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
+			if(interviewList != null && interviewList.size() > 0) {
+				for(Interview interview : interviewList) {
+					InterviewResponse interviewResponse = new InterviewResponse();
+					interviewResponse.setInterview(interview);
+					interviewResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
+					interviewResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+					interviewResponseList.add(interviewResponse);
 				}
 			}
 			
 			//统计
-			int total = interviewDao.countUnAssignInterviewList(null);
+			int total = interviewDao.countUnAssignInterview(searchParams);
 			
-			
-			return CallResult.success(new Page<UnAssignInterviewResponse>(unAssignInterviewResponseList,currentPage,pageSize,total));
-			
+			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
 		}catch(Exception e) {
 			LogUtils.error(UserServiceImpl.class, "findUnAssignInterviewPage error", e);
 			return CallResult.failure("查找未分配访谈列表失败");
+		}
+	}
+
+	@Override
+	public CallResult<Page<InterviewResponse>> findEditorInterviewPage(int userId, Map<String, Object> searchParams,int currentPage, int pageSize) {
+		LogUtils.info(this.getClass(), "findEditorInterviewPage params : userId = {},searchParams = {},currentPage = {},pageSize = {}", userId,JsonUtils.toJson(searchParams),currentPage,pageSize);
+		
+		try {
+			//查询访谈
+			List<Interview> interviewList = interviewDao.findEditorInterviewPage(userId, searchParams, currentPage, pageSize);
+			
+			//关联数据
+			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
+			if(interviewList != null && interviewList.size() > 0) {
+				for(Interview interview : interviewList) {
+					InterviewResponse interviewResponse = new InterviewResponse();
+					interviewResponse.setInterview(interview);
+					interviewResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
+					interviewResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+					interviewResponseList.add(interviewResponse);
+				}
+			}
+			
+			//统计
+			int total = interviewDao.countEditorInterview(userId, searchParams);
+			
+			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "findEditorInterviewPage error", e);
+			return CallResult.failure("获取访谈失败");
 		}
 	}
 }
