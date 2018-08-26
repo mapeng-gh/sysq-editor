@@ -9,49 +9,36 @@
 					
 					<el-form label-width="100px">
 						
-						<el-row :gutter="50">
+						<el-row>
 							<el-col :span="12">
 								
 								<el-form-item label="用户姓名">
 									<el-input v-model.trim="form.name" placeholder="请输入用户姓名"></el-input>
 								</el-form-item>
 								
-							</el-col>
-							
-							<el-col :span="12">
-							
 								<el-form-item label="联系电话">
 									<el-input v-model.trim="form.mobile" placeholder="请输入联系电话"></el-input>
 								</el-form-item>
-							
-							</el-col>
-						</el-row>
-						
-						<el-row :gutter="50">
-							<el-col :span="12">
 								
 								<el-form-item label="电子邮箱">
 									<el-input v-model.trim="form.email" placeholder="请输入电子邮箱"></el-input>
 								</el-form-item>
 								
-							</el-col>
-							
-							<el-col :span="12">
-							
 								<el-form-item label="工作单位">
 									<el-input v-model.trim="form.workingPlace" placeholder="请输入工作单位"></el-input>
 								</el-form-item>
-							
+								
+								<div style="text-align:right;">
+									<el-button type="primary" @click="handleModifyProfile">修改</el-button>
+								</div>
+								
 							</el-col>
+							
 						</el-row>
-					
+						
 					</el-form>
 				</div>
 				
-				<div class="common-detail-operate">
-					<el-button plain @click="handleModifyProfile">修改</el-button>
-				</div>
-			
 			</div>
 		`,
 		
