@@ -10,11 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.UserDao;
+import com.huasheng.sysq.editor.model.Doctor;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.LoginResponse;
 import com.huasheng.sysq.editor.params.UserResponse;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserDao userDao;	
+	
+	@Autowired
+	private DoctorDao doctorDao;
 	
 	@Override
 	public CallResult<Page<User>> findUserPage(Map<String,String> searchParams) {
@@ -87,20 +91,44 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public CallResult<Boolean> addUser(final User user) {
-		CallResult<Boolean> result = transactionTemplate.execute(new TransactionCallback<CallResult<Boolean>>(){
-			@Override
-			public CallResult<Boolean> doInTransaction(TransactionStatus transactionStatus) {
-				try {
-					userDao.insert(user);
-					return CallResult.success(true);
-				}catch(Exception e) {
-					LogUtils.error(UserServiceImpl.class, "addUser error", e);
-					return CallResult.failure("添加用户出错");
+	public CallResult<Boolean> registerUser(User registerUser) {
+		LogUtils.info(this.getClass(), "registerUser params : {}", JsonUtils.toJson(registerUser));
+		
+		//账号重复校验
+		List<User> userList = userDao.findAll();
+		if(userList != null && userList.size() > 0) {
+			for(User user : userList) {
+				if(user.getLoginName().equals(registerUser.getLoginName())) {
+					return CallResult.failure("登录账号已存在");
 				}
 			}
-		});
-		return result;
+		}
+		
+		//浏览人员手机号关联
+		if(registerUser.getUserType() == Constants.USER_TYPE_VIEWER) {
+			List<Doctor> doctorList = doctorDao.findByMobile(registerUser.getLoginName());
+			if(doctorList == null || doctorList.size() == 0) {
+				return CallResult.failure("浏览人员登录账号须为App关联的联系电话");
+			}
+		}
+		
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					registerUser.setAuditStatus(Constants.AUDIT_STATUS_ING);
+					Date curDate = new Date();
+					registerUser.setCreateTime(curDate);
+					registerUser.setUpdateTime(curDate);
+					userDao.insert(registerUser);
+				}
+			});
+			
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "registerUser error", e);
+			return CallResult.failure("注册用户失败");
+		}
 	}
 
 	@Override

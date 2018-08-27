@@ -59,7 +59,7 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 
 	@Override
 	public void insert(User newUser) {
-		
+		super.getSqlSession().insert(NAMESPACE + ".insert", newUser);
 	}
 
 	@Override
@@ -75,5 +75,10 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 	@Override
 	public void update(User user) {
 		super.getSqlSession().update(NAMESPACE + ".update",user);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return super.getSqlSession().selectList(NAMESPACE + ".findAll");
 	}
 }

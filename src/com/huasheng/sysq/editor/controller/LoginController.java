@@ -78,4 +78,36 @@ public class LoginController {
 		
 		return CallResult.success(true);
 	}
+	
+	/**
+	 * 用户注册
+	 * @param requestJsonStr
+	 * @return
+	 */
+	@RequestMapping(value="/register.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> register(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "register params : {}",requestJsonStr);
+		
+		//参数处理
+		User registerUser = new User();
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			registerUser.setUserType(requestJson.getIntValue("userType"));
+			registerUser.setLoginName(requestJson.getString("loginName"));
+			registerUser.setLoginPwd(requestJson.getString("loginPwd"));
+			registerUser.setName(requestJson.getString("name"));
+			registerUser.setMobile(requestJson.getString("mobile"));
+			registerUser.setEmail(requestJson.getString("email"));
+			registerUser.setWorkingPlace(requestJson.getString("workingPlace"));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "register error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<Boolean> result = userService.registerUser(registerUser);
+		LogUtils.info(this.getClass(), "register result : {}", JsonUtils.toJson(result));
+		
+		return result;
+	}
 }

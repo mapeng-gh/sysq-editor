@@ -64,5 +64,15 @@
             remark = #{remark},create_time = #{createTime},update_time = #{updateTime}
             where id = #{id}
         </update>
+        
+        <select id="findAll" resultMap="userResultMap">
+            select <include refid="userColumns"></include>  
+            from editor_user
+        </select>
+        
+        <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+            insert into editor_user(login_name,login_pwd,name,user_type,email,working_place,mobile,audit_status,remark,create_time,update_time) 
+            values(#{loginName},#{loginPwd},#{name},#{userType},#{email},#{workingPlace},#{mobile},#{auditStatus},#{remark},#{createTime},#{updateTime})
+        </insert>
 	
 </mapper>  

@@ -39,12 +39,12 @@ public class InterviewViewController {
 		LogUtils.info(this.getClass(), "interviewList params : {}",JsonUtils.toJson(searchParams));
 		
 		//参数处理
-		String mobile = "";
+		String loginName = "";
 		int currentPage = 0;
 		int pageSize = 0;
 		Map<String,Object> handledParams = new HashMap<String,Object>();
 		try {
-			mobile = SessionCache.get(token).getMobile();
+			loginName = SessionCache.get(token).getLoginName();
 			currentPage = Integer.parseInt(searchParams.get("currentPage"));
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
 			handledParams.put("name",searchParams.get("name"));
@@ -57,7 +57,7 @@ public class InterviewViewController {
 		}
 		
 		//查询访谈
-		CallResult<Page<InterviewResponse>> result = interviewService.findDoctorInterviewPage(mobile, handledParams, currentPage, pageSize);
+		CallResult<Page<InterviewResponse>> result = interviewService.findDoctorInterviewPage(loginName, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}

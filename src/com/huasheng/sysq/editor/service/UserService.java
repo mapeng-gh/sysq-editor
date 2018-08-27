@@ -27,10 +27,10 @@ public interface UserService {
 	public CallResult<UserResponse> viewUser(int userId);
 	
 	/**
-	 * 添加用户
+	 * 注册用户
 	 * @param newUser
 	 */
-	public CallResult<Boolean> addUser(User newUser);
+	public CallResult<Boolean> registerUser(User registerUser);
 	
 	/**
 	 * 用户登录

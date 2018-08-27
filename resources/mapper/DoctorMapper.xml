@@ -20,4 +20,10 @@
                  where id = #{id}
         </select>
         
+        <select id="findByMobile" parameterType="string" resultMap="allResultMap">
+            select <include refid="allColumns"></include> 
+            from sysq_doctor 
+            where mobile = #{mobile}
+        </select>
+        
 </mapper>  

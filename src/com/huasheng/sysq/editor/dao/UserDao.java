@@ -46,4 +46,10 @@ public interface UserDao {
 	 * @param user
 	 */
 	public void update(User user);
+	
+	/**
+	 * 查询所有用户
+	 * @return
+	 */
+	public List<User> findAll();
 }

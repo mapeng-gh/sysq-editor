@@ -9,7 +9,7 @@
 					<span class="title">抑郁症数据编辑平台</span>
 				</el-col>
 				
-				<el-col class="right" :span="2" :offset="18">
+				<el-col class="right" :span="3" :offset="17">
 					<i class="fa fa-user-circle"></i>
 					<el-dropdown trigger="click"@command="handleCommand">
 						<span>{{name}}<i class="el-icon-arrow-down"></i></span>
@@ -32,8 +32,15 @@
                 
                 computed : {
 			name : function(){
-				var loginUser = JSON.parse(window.localStorage.getItem('loginUser')) || {};
-				return loginUser.name || '';
+				var loginUserStr = window.localStorage.getItem('loginUser');
+				if(loginUserStr){
+					var name = JSON.parse(loginUserStr).name;
+					if(name.length > 4){
+						name = name.substring(0,4) + '...';
+					}
+					return name;
+				}
+				return '';
 			}
                 },
                 
