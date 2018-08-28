@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huasheng.sysq.editor.params.InterviewResponse;
-import com.huasheng.sysq.editor.service.InterviewService;
+import com.huasheng.sysq.editor.service.InterviewEditService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
@@ -24,7 +24,7 @@ import com.huasheng.sysq.editor.util.SessionCache;
 public class InterviewEditController {
 
 	@Autowired
-	private InterviewService interviewService;
+	private InterviewEditService interviewEditService;
 
 	@RequestMapping(value="/interviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
@@ -46,7 +46,7 @@ public class InterviewEditController {
 			return CallResult.failure("获取我的访谈失败");
 		}
 		
-		CallResult<Page<InterviewResponse>> result = interviewService.findEditorInterviewPage(userId, handledParams, currentPage, pageSize);
+		CallResult<Page<InterviewResponse>> result = interviewEditService.findEditorInterviewPage(userId, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}

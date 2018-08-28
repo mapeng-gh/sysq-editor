@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.SysqResultMapper">
+    
+        <sql id="allColumns">
+            id,questionaire_code,question_code,answer_code,answer_value,interview_id 
+        </sql>
+	
+	<resultMap id="allResultMap" type="SysqResult">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="int"/>
+		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="answer_code" property="answerCode" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="answer_value" property="answerValue" jdbcType="VARCHAR" javaType="string"/>
+  		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
+	</resultMap>
+	
+        <select id="findQuestionaireListByInterviewId" parameterType="_int" resultType="string">
+            select distinct questionaire_code 
+            from sysq_result 
+            where interview_id = #{interviewId}
+        </select>
+        
+</mapper>  

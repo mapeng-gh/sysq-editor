@@ -6,14 +6,7 @@ import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Page;
 
-public interface InterviewService {
-
-	/**
-	 * 查找医生访谈列表
-	 * @param searchParams
-	 * @return
-	 */
-	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize);
+public interface InterviewEditService {
 	
 	/**
 	 * 查找未分配访谈列表
@@ -31,5 +24,7 @@ public interface InterviewService {
  	 * @return
  	 */
  	public CallResult<Page<InterviewResponse>> findEditorInterviewPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
+ 	
+ 	
 }
 

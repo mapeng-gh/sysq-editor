@@ -61,4 +61,10 @@
 	    <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
         </select>
         
+        <select id="findByInterviewId" parameterType="_int" resultMap="allResultMap">
+            select <include refid="allColumns"></include> 
+            from editor_task 
+            where interview_id = #{interviewId}
+        </select>
+        
 </mapper>  

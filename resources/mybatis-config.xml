@@ -16,6 +16,7 @@
 		<typeAlias type="com.huasheng.sysq.editor.model.Task" alias="Task"/>
 		<typeAlias type="com.huasheng.sysq.editor.model.Version" alias="Version"/>
 		<typeAlias type="com.huasheng.sysq.editor.model.Questionaire" alias="Questionaire"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.SysqResult" alias="SysqResult"/>
 	</typeAliases>
     
 	<mappers>
@@ -26,6 +27,7 @@
         	<mapper resource="mapper/TaskMapper.xml"/>
         	<mapper resource="mapper/VersionMapper.xml"/>
         	<mapper resource="mapper/QuestionaireMapper.xml"/>
+        	<mapper resource="mapper/SysqResultMapper.xml"/>
 	</mappers>
     
 </configuration>

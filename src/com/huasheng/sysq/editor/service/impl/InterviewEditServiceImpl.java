@@ -12,14 +12,14 @@ import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.dao.PatientDao;
 import com.huasheng.sysq.editor.model.Interview;
 import com.huasheng.sysq.editor.params.InterviewResponse;
-import com.huasheng.sysq.editor.service.InterviewService;
+import com.huasheng.sysq.editor.service.InterviewEditService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
 
 @Service
-public class InterviewServiceImpl implements InterviewService{
+public class InterviewEditServiceImpl implements InterviewEditService{
 	
 	@Autowired
 	private InterviewDao interviewDao;
@@ -30,37 +30,7 @@ public class InterviewServiceImpl implements InterviewService{
 	@Autowired
 	private PatientDao patientDao;
 
-	@Override
-	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize) {
-		LogUtils.info(this.getClass(), "findDoctorInterviewPage params : mobile = {},searchParams = {},currentPage = {},pageSize = {}",mobile,JsonUtils.toJson(searchParams),currentPage,pageSize);
-		
-		try {
-			//查询访谈
-			List<Interview> interviewList = interviewDao.findDoctorInterviewPage(mobile, searchParams, currentPage, pageSize);
-			
-			//关联数据
-			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
-			if(interviewList != null && interviewList.size() > 0) {
-				for(Interview interview : interviewList) {
-					InterviewResponse interviewResponse = new InterviewResponse();
-					interviewResponse.setInterview(interview);
-					interviewResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
-					interviewResponse.setPatient(patientDao.selectById(interview.getPatientId()));
-					interviewResponseList.add(interviewResponse);
-				}
-			}
-			
-			//统计
-			int total = interviewDao.countDoctorInterview(mobile, searchParams);
-			
-			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
-			
-		}catch(Exception e) {
-			LogUtils.error(UserServiceImpl.class, "findDoctorInterviewPage error", e);
-			return CallResult.failure("查找访谈失败");
-		}
-	}
-
+	
 	@Override
 	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
 		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : searchParams = {},currentPage = {},pageSize = {}", JsonUtils.toJson(searchParams),currentPage,pageSize);

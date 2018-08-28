@@ -42,4 +42,11 @@ public interface TaskDao {
 	 * @return
 	 */
 	public int countUserTask(int userId,Map<String,Object> searchParams);
+	
+	/**
+	 * 根据访谈查询任务
+	 * @param interviewId
+	 * @return
+	 */
+	public List<Task> findByInterviewId(int interviewId);
 }

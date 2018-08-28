@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
 <mapper namespace="mapper.QuestionaireMapper">
     
-        <sql id="allColumns">
-            id,code,title,introduction,remark,type,seq_num,version_id
-        </sql>
+	<sql id="allColumns">
+		id,code,title,introduction,remark,type,seq_num,version_id
+	</sql>
 	
 	<resultMap id="allResultMap" type="Questionaire">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
@@ -20,10 +20,20 @@
 	</resultMap>
 	
         <select id="findQuestionaireList" parameterType="hashmap" resultMap="allResultMap">
-	         select <include refid="allColumns"></include> 
-                 from sysq_questionaire
-                 where version_id = #{versionId} and type in (3,#{type})
+		select <include refid="allColumns"></include> 
+		from sysq_questionaire
+		where version_id = #{versionId} and type in (3,#{type})
                  order by seq_num asc
         </select>
+        
+        <select id="batchFindByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+		select <include refid="allColumns"></include> 
+		from sysq_questionaire 
+		where version_id = #{versionId} and code in 
+		<foreach item="item" index="index" collection="codeList" open="(" separator="," close=")">
+			#{item}
+		</foreach> 
+		order by seq_num asc
+		</select>
         
 </mapper>  

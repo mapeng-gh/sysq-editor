@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.UserResponse;
-import com.huasheng.sysq.editor.service.InterviewService;
+import com.huasheng.sysq.editor.service.InterviewEditService;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -31,7 +31,7 @@ public class UserManageController {
 	private UserService userService;
 	
 	@Autowired
-	private InterviewService interviewService;
+	private InterviewEditService interviewService;
 	
 	@Autowired
 	private TaskService taskService;

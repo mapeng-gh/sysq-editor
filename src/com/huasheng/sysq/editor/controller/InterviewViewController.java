@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.params.InterviewResponse;
-import com.huasheng.sysq.editor.service.BasicService;
-import com.huasheng.sysq.editor.service.InterviewService;
+import com.huasheng.sysq.editor.service.InterviewViewService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
@@ -28,11 +27,8 @@ import com.huasheng.sysq.editor.util.SessionCache;
 public class InterviewViewController {
 	
 	@Autowired
-	private InterviewService interviewService;
+	private InterviewViewService interviewViewService;
 	
-	@Autowired
-	private BasicService basicService;
-
 	@RequestMapping(value="/interviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Page<InterviewResponse>> interviewList(@RequestHeader("Authorization") String token,@RequestParam Map<String,String> searchParams) {
@@ -57,19 +53,19 @@ public class InterviewViewController {
 		}
 		
 		//查询访谈
-		CallResult<Page<InterviewResponse>> result = interviewService.findDoctorInterviewPage(loginName, handledParams, currentPage, pageSize);
+		CallResult<Page<InterviewResponse>> result = interviewViewService.findDoctorInterviewPage(loginName, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	
-	@RequestMapping(value="/currentQuestionaireList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/questionaireList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<List<Questionaire>> currentQuestionaireList(@RequestParam(value="type") int type) {
-		LogUtils.info(this.getClass(), "currentQuestionaireList params : type = {}",type);
+	public CallResult<List<Questionaire>> questionaireList(@RequestParam(value="interviewId") int interviewId) {
+		LogUtils.info(this.getClass(), "questionaireList params : interviewId = {}",interviewId);
 		
 		//查询问卷
-		CallResult<List<Questionaire>> result = basicService.findCurrentQuestionaireList(type);
-		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
+		CallResult<List<Questionaire>> result = interviewViewService.findQuestionaireListByInterviewId(interviewId);
+		LogUtils.info(this.getClass(), "questionaireList result : {}", JsonUtils.toJson(result));
 		
 		return result;
 	}
