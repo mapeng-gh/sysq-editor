@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.dao.PatientDao;
+import com.huasheng.sysq.editor.dao.QuestionaireDao;
+import com.huasheng.sysq.editor.dao.SysqResultDao;
+import com.huasheng.sysq.editor.dao.TaskDao;
 import com.huasheng.sysq.editor.model.Interview;
 import com.huasheng.sysq.editor.model.Questionaire;
+import com.huasheng.sysq.editor.model.Task;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.service.InterviewViewService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -30,6 +34,15 @@ public class InterviewViewServiceImpl implements InterviewViewService{
 	
 	@Autowired
 	private PatientDao patientDao;
+	
+	@Autowired
+	private TaskDao taskDao;
+	
+	@Autowired
+	private SysqResultDao sysqResultDao;
+	
+	@Autowired
+	private QuestionaireDao questionaireDao;
 
 	@Override
 	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize) {
@@ -64,7 +77,27 @@ public class InterviewViewServiceImpl implements InterviewViewService{
 
 	@Override
 	public CallResult<List<Questionaire>> findQuestionaireListByInterviewId(int interviewId) {
-		return null;
+		LogUtils.info(this.getClass(), "findQuestionaireListByInterviewId params : interviewId = {}", interviewId);
+		
+		try {
+			Task task = taskDao.findByInterviewId(interviewId);
+			if(task == null) {//访谈未编辑
+				List<String> questionaireCodeList = sysqResultDao.findQuestionaireListByInterviewId(interviewId);
+				if(questionaireCodeList == null || questionaireCodeList.size() == 0) {
+					return CallResult.success(new ArrayList<Questionaire>());
+				}else {
+					Interview interview = interviewDao.selectById(interviewId);
+					List<Questionaire> questionaireList = questionaireDao.batchFindByVersionAndCode(interview.getVersionId(), questionaireCodeList);
+					return CallResult.success(questionaireList);
+				}
+				
+			}else {//访谈已编辑
+				return CallResult.success(null);
+			}
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "findQuestionaireListByInterviewId error", e);
+			return CallResult.failure("获取问卷列表失败");
+		}
 	}
 
 }

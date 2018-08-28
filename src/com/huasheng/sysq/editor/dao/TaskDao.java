@@ -48,5 +48,5 @@ public interface TaskDao {
 	 * @param interviewId
 	 * @return
 	 */
-	public List<Task> findByInterviewId(int interviewId);
+	public Task findByInterviewId(int interviewId);
 }

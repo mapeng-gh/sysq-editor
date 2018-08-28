@@ -17,12 +17,11 @@
                         return {
                                 
                                 APIS : {
-                                        QUESTIONAIRE_LIST : '/interviewView/currentQuestionaireList.do'
+                                        QUESTIONAIRE_LIST : '/interviewView/questionaireList.do'
                                 },
 				
 				params : {
-					interviewId : this.$route.query.interviewId,
-					type : this.$route.query.type
+					interviewId : this.$route.query.interviewId
 				},
                                 
                                 questionaireList : []
@@ -34,14 +33,14 @@
                         init : function(){
                                 var self = this;
                                 
-				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{type : this.params.type},(resultObject)=>{
+				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{interviewId : this.params.interviewId},(resultObject)=>{
 					self.questionaireList = resultObject;
 				});
                         },
 			
 			//问题列表
 			handleQuestionList(questionaireCode){
-				this.$commons.openWindow('#/interviewView/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
+				//this.$commons.openWindow('#/interviewView/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
 			}
                         
                 },

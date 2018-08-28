@@ -172,7 +172,7 @@
                         
 			//问卷列表
                         handleQuestionaireList(scope){
-				this.$commons.openWindow('#/interviewView/questionaireList',{interviewId : scope.row.interview.id,type : scope.row.interview.type});
+				this.$commons.openWindow('#/interviewView/questionaireList',{interviewId : scope.row.interview.id});
                         }
                 },
                 
