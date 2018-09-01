@@ -3,10 +3,11 @@ package com.huasheng.sysq.editor.model;
 public class SysqResult {
 
 	private int id;
+	private int interviewId;
 	private String questionaireCode;
 	private String questionCode;
 	private String answerCode;
-	private int interviewId;
+	private String answerValue;
 	
 	public int getId() {
 		return id;
@@ -37,5 +38,11 @@ public class SysqResult {
 	}
 	public void setInterviewId(int interviewId) {
 		this.interviewId = interviewId;
+	}
+	public String getAnswerValue() {
+		return answerValue;
+	}
+	public void setAnswerValue(String answerValue) {
+		this.answerValue = answerValue;
 	}
 }

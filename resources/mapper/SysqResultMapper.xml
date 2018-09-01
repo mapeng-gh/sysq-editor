@@ -3,21 +3,39 @@
 <mapper namespace="mapper.SysqResultMapper">
     
         <sql id="allColumns">
-            id,questionaire_code,question_code,answer_code,answer_value,interview_id 
+		id,questionaire_code,question_code,answer_code,answer_value,interview_id 
         </sql>
 	
 	<resultMap id="allResultMap" type="SysqResult">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="int"/>
+  		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
   		<result column="answer_code" property="answerCode" jdbcType="VARCHAR" javaType="string"/>
   		<result column="answer_value" property="answerValue" jdbcType="VARCHAR" javaType="string"/>
-  		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 	</resultMap>
 	
-        <select id="findQuestionaireListByInterviewId" parameterType="_int" resultType="string">
-            select distinct questionaire_code 
-            from sysq_result 
-            where interview_id = #{interviewId}
+        <select id="findQuestionaireList" parameterType="_int" resultType="string">
+		select distinct questionaire_code 
+		from sysq_result 
+		where interview_id = #{interviewId}
+        </select>
+        
+        <select id="findQuestionList" parameterType="hashmap" resultType="string">
+            	select distinct question_code 
+            	from sysq_result 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode}
+        </select>
+        
+        <select id="findAnswerList" parameterType="hashmap" resultType="string">
+            	select distinct answer_code 
+            	from sysq_result 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
+        </select>
+        
+        <select id="findAnswerResult" parameterType="hashmap" resultMap="allResultMap">
+            	select <include refid="allColumns"></include>
+            	from sysq_result 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode} and answer_code = #{answerCode}
         </select>
         
 </mapper>  

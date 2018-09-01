@@ -22,3 +22,30 @@
 		}
 	}
 }
+
+.interview-view-question-list{
+	.question{
+		margin-top : 20px;
+		&:hover{
+			background-color : #eef1f6;
+		}
+		.question-desc{
+			font-size : 14px;
+			color : #48576a;
+			line-height : 200%;
+		}
+		
+		.answer{
+			margin-top : 20px;
+			text-indent:30px;
+			.label{
+				font-size : 14px;
+				color : #48576a;
+			}
+			.value{
+				font-size : 14px;
+				color : #20a0ff;
+			}
+		}
+	}
+}

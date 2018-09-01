@@ -7,16 +7,23 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.huasheng.sysq.editor.dao.AnswerDao;
 import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.dao.PatientDao;
+import com.huasheng.sysq.editor.dao.QuestionDao;
 import com.huasheng.sysq.editor.dao.QuestionaireDao;
 import com.huasheng.sysq.editor.dao.SysqResultDao;
 import com.huasheng.sysq.editor.dao.TaskDao;
+import com.huasheng.sysq.editor.model.Answer;
 import com.huasheng.sysq.editor.model.Interview;
+import com.huasheng.sysq.editor.model.Question;
 import com.huasheng.sysq.editor.model.Questionaire;
+import com.huasheng.sysq.editor.model.SysqResult;
 import com.huasheng.sysq.editor.model.Task;
+import com.huasheng.sysq.editor.params.AnswerResponse;
 import com.huasheng.sysq.editor.params.InterviewResponse;
+import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.service.InterviewViewService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -43,6 +50,12 @@ public class InterviewViewServiceImpl implements InterviewViewService{
 	
 	@Autowired
 	private QuestionaireDao questionaireDao;
+	
+	@Autowired
+	private QuestionDao questionDao;
+	
+	@Autowired
+	private AnswerDao answerDao;
 
 	@Override
 	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize) {
@@ -82,7 +95,7 @@ public class InterviewViewServiceImpl implements InterviewViewService{
 		try {
 			Task task = taskDao.findByInterviewId(interviewId);
 			if(task == null) {//访谈未编辑
-				List<String> questionaireCodeList = sysqResultDao.findQuestionaireListByInterviewId(interviewId);
+				List<String> questionaireCodeList = sysqResultDao.findQuestionaireList(interviewId);
 				if(questionaireCodeList == null || questionaireCodeList.size() == 0) {
 					return CallResult.success(new ArrayList<Questionaire>());
 				}else {
@@ -97,6 +110,60 @@ public class InterviewViewServiceImpl implements InterviewViewService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "findQuestionaireListByInterviewId error", e);
 			return CallResult.failure("获取问卷列表失败");
+		}
+	}
+
+	@Override
+	public CallResult<List<QuestionResponse>> findQuestionListByInterviewIdAndQuestionaireCode(int interviewId,String questionaireCode) {
+		LogUtils.info(this.getClass(), "findQuestionListByInterviewIdAndQuestionaireCode params : interviewId = {},questionaireCode = {}", interviewId,questionaireCode);
+		
+		try {
+			Task task = taskDao.findByInterviewId(interviewId);
+			if(task == null) {//访谈未编辑
+				List<String> questionCodeList = sysqResultDao.findQuestionList(interviewId,questionaireCode);
+				if(questionCodeList == null || questionCodeList.size() == 0) {
+					return CallResult.success(new ArrayList<QuestionResponse>());
+				}else {
+					//获取问题列表
+					Interview interview = interviewDao.selectById(interviewId);
+					List<Question> questionList = questionDao.batchFindByVersionAndCode(interview.getVersionId(), questionCodeList);
+					
+					List<QuestionResponse> questionResponseList = new ArrayList<QuestionResponse>();
+					for(Question question : questionList) {
+						QuestionResponse questionResponse = new QuestionResponse();
+						questionResponse.setQuestion(question);
+						
+						//获取答案列表
+						List<String> answerCodeList = sysqResultDao.findAnswerList(interviewId, questionaireCode, question.getCode());
+						List<Answer> answerList = answerDao.batchFindByVersionAndCode(interview.getVersionId(), answerCodeList);
+						if(answerList == null || answerList.size() == 0) {
+							questionResponse.setAnswerList(new ArrayList<AnswerResponse>());
+						}else {
+							List<AnswerResponse> answerResponseList = new ArrayList<AnswerResponse>();
+							for(Answer answer : answerList) {
+								AnswerResponse answerResponse = new AnswerResponse();
+								answerResponse.setAnswer(answer);
+								
+								//获取结果
+								SysqResult result = sysqResultDao.findAnswerResult(interviewId, questionaireCode, question.getCode(), answer.getCode());
+								answerResponse.setResult(result);
+								
+								answerResponseList.add(answerResponse);
+							}
+							questionResponse.setAnswerList(answerResponseList);
+						}
+						
+						questionResponseList.add(questionResponse);
+					}
+					return CallResult.success(questionResponseList);
+				}
+				
+			}else {//访谈已编辑
+				return CallResult.success(null);
+			}
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "findQuestionListByInterviewIdAndQuestionaireCode error", e);
+			return CallResult.failure("获取问题列表失败");
 		}
 	}
 

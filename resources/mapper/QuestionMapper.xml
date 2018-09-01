@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.QuestionMapper">
+    
+	<sql id="allColumns">
+		id,code,description,remark,is_end,seq_num,questionaire_code,entry_logic,exit_logic,version_id,associate_question_code 
+	</sql>
+	
+	<resultMap id="allResultMap" type="Question">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
+		<result column="code" property="code" jdbcType="VARCHAR" javaType="string"/>
+		<result column="description" property="description" jdbcType="VARCHAR" javaType="string"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="string"/>
+		<result column="is_end" property="isEnd" jdbcType="INTEGER" javaType="_int"/>
+		<result column="seq_num" property="seqNum" jdbcType="INTEGER" javaType="_int"/>
+		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
+		<result column="entry_logic" property="entryLogic" jdbcType="VARCHAR" javaType="string"/>
+		<result column="exit_logic" property="exitLogic" jdbcType="VARCHAR" javaType="string"/>
+		<result column="version_id" property="versionId" jdbcType="INTEGER" javaType="_int"/>
+		<result column="associate_question_code" property="associateQuestionCode" jdbcType="VARCHAR" javaType="string"/>
+  		
+	</resultMap>
+	
+        <select id="batchFindByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+		select <include refid="allColumns"></include> 
+		from sysq_question
+		where version_id = #{versionId} and code in 
+		<foreach item="item" index="index" collection="codeList" open="(" separator="," close=")">
+			#{item}
+		</foreach> 
+		order by seq_num asc
+		</select>
+        
+</mapper>  
