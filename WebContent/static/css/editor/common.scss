@@ -10,13 +10,13 @@ html,body{
 }
 
 .common-title{
-        padding:10px 0;
+    padding:10px;
 	background-color:#eef1f6;
-        font-size:16px;
+    font-size:16px;
 }
 
 .common-list{
-        margin:30px 0 0 0;
+    margin:30px 0 0 0;
 }
 
 .common-table-header{
@@ -26,15 +26,15 @@ html,body{
 }
 
 .common-pagination{
-        margin-top:20px;
-        text-align:right;
+	margin-top:20px;
+	text-align:right;
 }
 
 .common-search{
-        margin:30px 0 0 0;
-        padding: 24px 32px;
+	margin:30px 0 0 0;
+	padding: 24px 32px;
 	background: #eef1f6;
-        border-radius: 2px;
+    border-radius: 2px;
 	
 	.common-search-opt{
 		text-align : right;
@@ -57,8 +57,8 @@ html,body{
 }
 
 .common-list-operate{
-        margin-top:20px;
-        text-align:left;
+	margin-top:20px;
+	text-align:left;
 }
 
 .bg-warning{
