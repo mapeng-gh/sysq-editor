@@ -9,15 +9,22 @@
 	<resultMap id="allResultMap" type="Version">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
 		<result column="name" property="name" jdbcType="VARCHAR" javaType="string"/>
-		<result column="publish_date" property="publishDate" jdbcType="TIMESTAMP" javaType="date" />
+		<result column="publish_date" property="publishDate" jdbcType="DATE" javaType="date" />
   		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="string"/>
   		<result column="is_current" property="isCurrent" jdbcType="INTEGER" javaType="_int"/>
   		
 	</resultMap>
 	
-        <select id="findAll" resultMap="allResultMap">
+        <select id="findVersionPage" resultMap="allResultMap">
 	         select <include refid="allColumns"></include> 
                  from sysq_version
+                 order by id desc 
+                 limit #{offset},#{limit}
+        </select>
+        
+        <select id="countVersion" parameterType="hashmap" resultType="_int">
+            	select count(id) 
+	    	from sysq_version  
         </select>
         
 </mapper>  

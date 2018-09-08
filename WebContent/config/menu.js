@@ -21,8 +21,8 @@
         },
 		
 		{
-			name : '问卷管理',
-			index : 'dataManage',
+			name : '数据管理',
+			index : '/dataManage',
 			icon : 'fa fa-suitcase',
 			sub : [
 				{name : '版本列表' , index : '/dataManage/versionList'}
