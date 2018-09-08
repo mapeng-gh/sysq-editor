@@ -27,7 +27,8 @@
                         </el-table-column>
 						<el-table-column prop="operate" label="操作" align="center">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleViewQuestionaire(scope)">查看问卷</el-button>
+								<el-button type="text" size="mini" @click="handleCaseQuestionaire(scope)">病例问卷</el-button>
+								<el-button type="text" size="mini" @click="handleContrastQuestionaire(scope)">对照问卷</el-button>
 							</template>
 						</el-table-column>
                     </el-table>
@@ -113,12 +114,17 @@
                     self.paginate.total = resultObject.total;
                 });
             },
+			
+			//查看病例问卷
+			handleCaseQuestionaire : function(scope){
+				this.$commons.openWindow('#/dataManage/versionList/questionaireList',{versionId : scope.row.id  , type : this.$constants.INTERVIEW_TYPE.enums.CASE});
+			},
                                 
-			//查看问卷
-            handleViewQuestionaire : function(scope){
-				//this.$commons.openWindow('#/userManage/detail',{userId : scope.row.id});
+			//查看对照问卷
+            handleContrastQuestionaire : function(scope){
+				this.$commons.openWindow('#/dataManage/versionList/questionaireList',{versionId : scope.row.id , type : this.$constants.INTERVIEW_TYPE.enums.CONTRAST});
             }
-				
+			
         }
 	};
 	window.dataManageVersionListComponent = dataManageVersionListComponent;

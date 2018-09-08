@@ -6,7 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.huasheng.sysq.editor.dao.QuestionaireDao;
 import com.huasheng.sysq.editor.dao.VersionDao;
+import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.Version;
 import com.huasheng.sysq.editor.service.DataService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -19,6 +21,9 @@ public class DataSerivceImpl implements DataService{
 	
 	@Autowired
 	private VersionDao versionDao;
+	
+	@Autowired
+	private QuestionaireDao questionaireDao;
 
 	@Override
 	public CallResult<Page<Version>> findVersionPage(Map<String, Object> searchParams, int currentPage,int pageSize) {
@@ -33,6 +38,19 @@ public class DataSerivceImpl implements DataService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "findVersionPage error", e);
 			return CallResult.failure("获取版本列表失败");
+		}
+	}
+
+	@Override
+	public CallResult<List<Questionaire>> getQuestionaireList(int versionId,int type) {
+		LogUtils.info(this.getClass(), "getQuestionaireList params : versionId = {}", versionId);
+		
+		try {
+			List<Questionaire> questionaireList = questionaireDao.findQuestionaireList(versionId, type);
+			return CallResult.success(questionaireList);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "getQuestionaireList error", e);
+			return CallResult.failure("获取问卷列表失败");
 		}
 	}
 	

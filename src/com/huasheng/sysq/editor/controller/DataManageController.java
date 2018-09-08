@@ -1,6 +1,7 @@
 package com.huasheng.sysq.editor.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.Version;
 import com.huasheng.sysq.editor.service.DataService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -24,6 +26,11 @@ public class DataManageController {
 	@Autowired
 	private DataService dataService;
 
+	/**
+	 * 版本列表
+	 * @param searchParams
+	 * @return
+	 */
 	@RequestMapping(value="/versionList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Page<Version>> versionList(@RequestParam Map<String,String> searchParams) {
@@ -44,6 +51,23 @@ public class DataManageController {
 		//查询版本
 		CallResult<Page<Version>> result = dataService.findVersionPage(handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "versionList result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 问卷列表
+	 * @param versionId
+	 * @return
+	 */
+	@RequestMapping(value="/questionaireList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<List<Questionaire>> questionaireList(@RequestParam(value="versionId") int versionId , @RequestParam(value="type") int type) {
+		LogUtils.info(this.getClass(), "questionaireList params : versionId = {}",versionId);
+		
+		//查询问卷
+		CallResult<List<Questionaire>> result = dataService.getQuestionaireList(versionId, type);
+		LogUtils.info(this.getClass(), "questionaireList result : {}", JsonUtils.toJson(result));
+		
 		return result;
 	}
 }

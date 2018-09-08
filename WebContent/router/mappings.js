@@ -111,6 +111,14 @@
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}
+		},
+		{
+			name : 'dataManageQuestionaireList',
+			component : dataManageQuestionaireListComponent,
+			path : 'dataManage/versionList/questionaireList',
+			meta : {
+				activeIndex : '/dataManage/versionList'
+			}
 		}
 	];
         
