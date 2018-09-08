@@ -23,4 +23,13 @@ public class QuestionDaoImpl extends BaseDao implements QuestionDao{
 		return super.getSqlSession().selectList(NAMESPACE + ".batchFindByVersionAndCode", paramMap);
 	}
 
+	@Override
+	public List<Question> findByQuestionaireCode(int versionId, String questionaireCode) {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("versionId", versionId);
+		paramMap.put("questionaireCode", questionaireCode);
+		
+		return super.getSqlSession().selectList(NAMESPACE + ".findByQuestionaireCode", paramMap);
+	}
+
 }

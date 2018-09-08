@@ -44,7 +44,7 @@
 			
 			//问题列表
 			handleQuestionList : function(questionaireCode){
-				//this.$commons.openWindow('#/interviewView/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
+				this.$commons.openWindow('#/dataManage/questionList',{versionId : this.params.versionId,questionaireCode : questionaireCode});
 			}
                         
         },

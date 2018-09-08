@@ -13,4 +13,12 @@ public interface AnswerDao {
 	 * @return
 	 */
 	public List<Answer> batchFindByVersionAndCode(int versionId,List<String> codeList);
+	
+	/**
+	 * 根据问题查询答案
+	 * @param versionId
+	 * @param questionCode
+	 * @return
+	 */
+	public List<Answer> findByQuestionCode(int versionId,String questionCode);
 }

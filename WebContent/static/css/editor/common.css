@@ -70,3 +70,15 @@ html, body {
 .el-table .success-row {
   background: #f0f9eb;
 }
+
+.el-radio-group.vertical .el-radio {
+  display: block;
+  margin-left: 0;
+  margin-bottom: 10px;
+}
+
+.el-checkbox-group.vertical .el-checkbox {
+  display: block;
+  margin-left: 0;
+  margin-bottom: 10px;
+}

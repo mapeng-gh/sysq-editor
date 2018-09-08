@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.Version;
+import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Page;
 
@@ -25,4 +26,13 @@ public interface DataService {
 	 * @return
 	 */
 	public CallResult<List<Questionaire>> getQuestionaireList(int versionId,int type);
+	
+	/**
+	 * 查询问题
+	 * @param versionId
+	 * @param questionaireCode
+	 * @return
+	 */
+	public CallResult<List<QuestionResponse>> getQuestionList(int versionId,String questionaireCode);
 }
+

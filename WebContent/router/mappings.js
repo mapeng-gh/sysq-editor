@@ -115,7 +115,15 @@
 		{
 			name : 'dataManageQuestionaireList',
 			component : dataManageQuestionaireListComponent,
-			path : 'dataManage/versionList/questionaireList',
+			path : '/dataManage/questionaireList',
+			meta : {
+				activeIndex : '/dataManage/versionList'
+			}
+		},
+		{
+			name : 'dataManageQuestionList',
+			component : dataManageQuestionListComponent,
+			path : '/dataManage/questionList',
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}

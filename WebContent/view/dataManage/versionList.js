@@ -117,12 +117,12 @@
 			
 			//查看病例问卷
 			handleCaseQuestionaire : function(scope){
-				this.$commons.openWindow('#/dataManage/versionList/questionaireList',{versionId : scope.row.id  , type : this.$constants.INTERVIEW_TYPE.enums.CASE});
+				this.$commons.openWindow('#/dataManage/questionaireList',{versionId : scope.row.id  , type : this.$constants.INTERVIEW_TYPE.enums.CASE});
 			},
                                 
 			//查看对照问卷
             handleContrastQuestionaire : function(scope){
-				this.$commons.openWindow('#/dataManage/versionList/questionaireList',{versionId : scope.row.id , type : this.$constants.INTERVIEW_TYPE.enums.CONTRAST});
+				this.$commons.openWindow('#/dataManage/questionaireList',{versionId : scope.row.id , type : this.$constants.INTERVIEW_TYPE.enums.CONTRAST});
             }
 			
         }

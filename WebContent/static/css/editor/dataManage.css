@@ -16,3 +16,27 @@
   line-height: 200%;
   text-indent: 30px;
 }
+
+.data-manage-question-list .question {
+  margin-top: 20px;
+  padding: 10px 0;
+}
+.data-manage-question-list .question:hover {
+  background-color: #eef1f6;
+}
+.data-manage-question-list .question .question-desc {
+  font-size: 16px;
+  color: #48576a;
+  line-height: 200%;
+}
+.data-manage-question-list .question .answer {
+  margin-top: 20px;
+  padding-left: 20px;
+}
+.data-manage-question-list .question .answer .answer-label {
+  font-size: 14px;
+  color: #48576a;
+}
+.data-manage-question-list .question .answer .answer-content {
+  margin-top: 10px;
+}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.Version;
+import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.service.DataService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
@@ -67,6 +68,23 @@ public class DataManageController {
 		//查询问卷
 		CallResult<List<Questionaire>> result = dataService.getQuestionaireList(versionId, type);
 		LogUtils.info(this.getClass(), "questionaireList result : {}", JsonUtils.toJson(result));
+		
+		return result;
+	}
+	
+	/**
+	 * 问题列表
+	 * @param versionId
+	 * @return
+	 */
+	@RequestMapping(value="/questionList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<List<QuestionResponse>> questionList(@RequestParam(value="versionId") int versionId , @RequestParam(value="questionaireCode") String questionaireCode) {
+		LogUtils.info(this.getClass(), "questionList params : versionId = {},questionaireCode = {}",versionId,questionaireCode);
+		
+		//查询问题
+		CallResult<List<QuestionResponse>> result = dataService.getQuestionList(versionId, questionaireCode);
+		LogUtils.info(this.getClass(), "questionList result : {}", JsonUtils.toJson(result));
 		
 		return result;
 	}
