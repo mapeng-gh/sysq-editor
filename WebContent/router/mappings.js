@@ -42,10 +42,10 @@
         }
 	];
 	
-	//访谈编辑
+	//我的任务
 	var myTaskMappings = [
 		{
-            name : 'taskList',
+            name : 'myTaskList',
 			component : myTaskListComponent,
 			path : '/myTask/taskList',
 			meta : {

@@ -42,12 +42,6 @@ function goLogin(){
 	router.push({name : 'login'});
 }
 
-//退出登录
-function logout(){
-	window.localStorage.removeItem('loginUser');
-	goLogin();
-}
-
 //获取登录用户信息
 function getLoginUser(){
 	var loginUserStr = window.localStorage.getItem('loginUser');
@@ -57,14 +51,26 @@ function getLoginUser(){
 	return JSON.parse(loginUserStr);
 }
 
+//跳转主页
+function getHomePage(){
+	var userType = getLoginUser().userType;
+	if(userType == constants.USER_TYPE.enums.ADMIN){
+		return {name : 'userManageList'};
+	}else if(userType == constants.USER_TYPE.enums.EDITOR){
+		return {name : 'myTaskList'};
+	}else if(userType == constants.USER_TYPE.enums.VIEWER){
+		return {name : 'interviewViewInterviewList'};
+	}
+}
+
 window.commons = {
 	formatDate : formatDate,
 	serialize : serialize,
 	openWindow : openWindow,
 	closeWindow : closeWindow,
-    logout : logout,
 	getLoginUser : getLoginUser,
-	goLogin : goLogin
+	goLogin : goLogin,
+	getHomePage : getHomePage
 }
       
 })();

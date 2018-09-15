@@ -24,13 +24,13 @@
 		
 		data : function(){
 			return {
-                                APIS : {
-                                        USER_LOGOUT : '/logout.do'
-                                }
+				APIS : {
+						USER_LOGOUT : '/logout.do'
+				}
 			}
 		},
                 
-                computed : {
+        computed : {
 			name : function(){
 				var loginUserStr = window.localStorage.getItem('loginUser');
 				if(loginUserStr){
@@ -42,32 +42,33 @@
 				}
 				return '';
 			}
-                },
+        },
                 
-                methods : {
+        methods : {
                         
-                        //菜单处理
-                        handleCommand(command){
-                                if(command == 'logout'){
-                                        this.handleLogout();
-                                }
-                        },
+			//菜单处理
+			handleCommand(command){
+				if(command == 'logout'){
+					this.handleLogout();
+				}
+			},
                         
-                        //退出登录
-                        handleLogout(){
-                                var self = this;
-                                
-                                this.$confirm('确定退出登录吗？','确认',{
-                                        callback : function(action){
-                                                if(action == 'confirm'){
-                                                        self.$request.sendPostRequest(self.APIS.USER_LOGOUT,{},function(resultObject){
-                                                               self.$commons.logout();
-                                                        });
-                                                }
-                                        }
-                                });
-                        }
-                }
+			//退出登录
+			handleLogout(){
+				var self = this;
+					
+				this.$confirm('确定退出登录吗？','确认',{
+					callback : function(action){
+						if(action == 'confirm'){
+							self.$request.sendPostRequest(self.APIS.USER_LOGOUT,{},function(resultObject){
+									window.localStorage.removeItem('loginUser');
+									self.$commons.goLogin();
+							});
+						}
+					}
+				});
+			}
+        }
 	};
 	Vue.component('sysq-header',headerComponent);
 })();

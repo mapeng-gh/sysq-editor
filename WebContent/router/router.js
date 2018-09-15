@@ -6,7 +6,10 @@
         routes : [
 			{
 				path : '/',
-				redirect : {name : 'usercenterProfile'},
+				redirect : function(to){
+					//根据用户类型跳转页面
+					return commons.getHomePage();
+				},
 				component : layoutComponent,
 				children : mappings
 			},
