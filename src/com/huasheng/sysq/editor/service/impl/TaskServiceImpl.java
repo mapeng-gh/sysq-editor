@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -22,6 +23,7 @@ import com.huasheng.sysq.editor.model.Task;
 import com.huasheng.sysq.editor.params.TaskResponse;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.util.CallResult;
+import com.huasheng.sysq.editor.util.Constants;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
@@ -60,7 +62,7 @@ public class TaskServiceImpl implements TaskService{
 					if(interviewIdArray != null && interviewIdArray.length > 0) {
 						for(String interviewId : interviewIdArray) {
 							Date currentTime = new Date();
-							Task task = new Task(userId,Integer.parseInt(interviewId),currentTime,currentTime);
+							Task task = new Task(userId,Integer.parseInt(interviewId),Constants.TASK_STATUS_ASSIGNED,currentTime,currentTime);
 							taskDao.insert(task);
 						}
 					}
@@ -78,10 +80,14 @@ public class TaskServiceImpl implements TaskService{
 		LogUtils.info(this.getClass(), "findTaskPage params : {}", JsonUtils.toJson(searchParams));
 		
 		try {
-			
 			//参数处理
 			Map<String,Object> handledParams = new HashMap<String,Object>();
-			handledParams.put("name", searchParams.get("name"));
+			handledParams.put("editorName", searchParams.get("editorName"));
+			String taskStatus = searchParams.get("taskStatus");
+			if(!StringUtils.isBlank(taskStatus)) {
+				handledParams.put("taskStatus", Integer.parseInt(taskStatus));
+			}
+			handledParams.put("patientName", searchParams.get("patientName"));
 			int currentPage = Integer.parseInt(searchParams.get("currentPage"));
 			int pageSize = Integer.parseInt(searchParams.get("pageSize"));
 			handledParams.put("offset", (currentPage - 1) * pageSize);

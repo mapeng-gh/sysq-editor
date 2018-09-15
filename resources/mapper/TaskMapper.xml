@@ -3,28 +3,33 @@
 <mapper namespace="mapper.TaskMapper">
     
         <sql id="allColumns">
-            id,user_id,interview_id,create_time,update_time
+            id,user_id,interview_id,stauts,create_time,update_time
         </sql>
 	
 	<resultMap id="allResultMap" type="Task">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
 		<result column="user_id" property="userId" jdbcType="INTEGER" javaType="_int"/>
+		<result column="status" property="status" jdbcType="INTEGER" javaType="_int"/>
 		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="date" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="date" />
 	</resultMap>
 	
         <insert id="insert" parameterType="Task" useGeneratedKeys="true" keyProperty="id">
-            insert into editor_task(user_id,interview_id,create_time,update_time) 
-            values(#{userId},#{interviewId},#{createTime},#{updateTime})
+            insert into editor_task(user_id,interview_id,status,create_time,update_time) 
+            values(#{userId},#{interviewId},#{status},#{createTime},#{updateTime})
         </insert>
         
         <select id="findAllTaskPage" parameterType="hashmap" resultMap="allResultMap">
-            select task.id,task.user_id,task.interview_id,task.create_time,task.update_time 
+            select task.id,task.user_id,task.interview_id,task.status,task.create_time,task.update_time 
 	    from editor_task task 
 	    inner join editor_user usr on task.user_id = usr.id 
+	    inner join sysq_interview interview on task.interview_id = interview.id 
+	    inner join sysq_patient patient on interview.patient_id = patient.id 
 	    <trim prefix="where" prefixOverrides="and">
-                   <if test="name != null and name != ''">and usr.name like concat(concat('%',#{name}),'%')</if>
+                   <if test="editorName != null and editorName != ''">and usr.name like concat(concat('%',#{editorName}),'%')</if>
+                   <if test="taskStatus != null">and task.status = #{taskStatus}</if>
+                   <if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
             </trim>
             order by task.create_time desc 
             limit #{offset},#{limit}
@@ -34,13 +39,17 @@
             select count(task.id)
 	    from editor_task task 
 	    inner join editor_user usr on task.user_id = usr.id 
+	    inner join sysq_interview interview on task.interview_id = interview.id 
+	    inner join sysq_patient patient on interview.patient_id = patient.id 
 	    <trim prefix="where" prefixOverrides="and">
-                   <if test="name != null and name != ''">and usr.name like concat(concat('%',#{name}),'%')</if>
+                   <if test="editorName != null and editorName != ''">and usr.name like concat(concat('%',#{editorName}),'%')</if>
+                   <if test="taskStatus != null">and task.status = #{taskStatus}</if>
+                   <if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
             </trim>
         </select>
         
         <select id="findUserTaskPage" parameterType="hashmap" resultMap="allResultMap">
-            select task.id,task.user_id,task.interview_id,task.create_time,task.update_time 
+            select task.id,task.user_id,task.interview_id,task.status,task.create_time,task.update_time 
 	    from editor_task task 
 	    inner join editor_user usr on task.user_id = usr.id 
 	    inner join sysq_interview interview on task.interview_id = interview.id 

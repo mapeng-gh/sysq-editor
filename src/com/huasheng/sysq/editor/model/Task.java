@@ -7,15 +7,17 @@ public class Task {
 	private int id;
 	private int userId;
 	private int interviewId;
+	private int status;
 	private Date createTime;
 	private Date updateTime;
 	
 	public Task() {
 	}
 	
-	public Task(int userId,int interviewId,Date createTime,Date updateTime) {
+	public Task(int userId,int interviewId,int status,Date createTime,Date updateTime) {
 		this.userId = userId;
 		this.interviewId = interviewId;
+		this.status = status;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
 	}
@@ -49,5 +51,13 @@ public class Task {
 	}
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }

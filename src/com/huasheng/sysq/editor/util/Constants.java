@@ -15,4 +15,10 @@ public class Constants {
 	//访谈类型（1：病例	2、对照）
 	public static final int INTERVIEW_TYPE_CASE = 1;
 	public static final int INTERVIEW_TYPE_CONTRAST = 2;
+	
+	//任务状态（1：已分配 2、编辑中 3、已完成）
+	public static final int TASK_STATUS_ASSIGNED = 1;
+	public static final int TASK_STATUS_EDITING = 2;
+	public static final int TASK_STATUS_FINISHED = 3;
+	
 }

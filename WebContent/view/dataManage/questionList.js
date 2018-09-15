@@ -13,6 +13,7 @@
 					<div class="answer" v-for="answerWrap in questionWrap.answerList" :key="answerWrap.answer.id">
 						<div class="answer-label">{{answerWrap.answer.label? answerWrap.answer.label : answerWrap.answer.code}}</div>
 						<div class="answer-content">
+							
 							<el-input v-if="answerWrap.answer.type == 'text'" type="textarea" :rows="3"></el-input>
 							
 							<el-radio-group v-if="answerWrap.answer.type == 'radiogroup'" :class="{vertical : answerWrap.answer.showType == 'vertical'}" :value="JSON.parse(answerWrap.answer.extra)[0].value">
@@ -47,6 +48,7 @@
 									:value="item.value">
 								</el-option>
 							</el-select>
+							
 						</div>
 						
 					</div>
@@ -69,10 +71,6 @@
 					questionaireCode : this.$route.query.questionaireCode
 				},
 				
-				form : {
-					radio : ''
-				},
-						
 				questionList : []
 			}
 		},
@@ -90,26 +88,6 @@
 			//问题描述处理
 			handleQuestionDesc(desc){
 				return desc.replace(/<para>/g,'<br/>')
-			},
-			
-			//翻译答案值
-			transferAnswerValue(result,answer){
-				var type = answer.type;
-				var extra = answer.extra;
-				var value = result.answerValue;
-				
-				if(['calendar','spinbox','slider','text'].indexOf(type) > -1){
-					return value;
-				}else if(['checkbox','dropdownlist','radiogroup'].indexOf(type) > -1){
-					var extraJson = JSON.parse(extra);
-					for(var i = 0 ; i < extraJson.length ; i++){
-						if(extraJson[i].value == value){
-							return extraJson[i].text;
-						}
-					}
-				}
-				
-				return value;
 			}
 				
 		},
