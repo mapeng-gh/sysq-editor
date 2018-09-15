@@ -1,26 +1,44 @@
  (function(){
 	 
+	var Message = Vue.prototype.$message;
+	 
 	var router = new VueRouter({
-                routes : [
+        routes : [
 			{
 				path : '/',
-				redirect : '/userManage/list',
+				redirect : {name : 'usercenterProfile'},
 				component : layoutComponent,
 				children : mappings
 			},
-                        {
-                                path : '/login',
-                                component : loginComponent
-                        }
+			{
+				name : 'login',
+				path : '/login',
+				component : loginComponent
+			}
 		] 
+	});
+	
+	router.beforeEach(function(to,from,next){
+		if(to.name == 'login'){
+			next();
+			return;
+		}
+		
+		var loginUser = commons.getLoginUser();
+		if(!loginUser || !loginUser.token){
+			Message.error('用户未登录');
+			commons.goLogin();
+			return;
+		}
+		
+		next();
 	});
 	 
 	router.afterEach((to, from) => {
-	        var activeIndex = to.meta.activeIndex;
-	        store.commit('setActiveIndex',activeIndex);
+		var activeIndex = to.meta.activeIndex;
+		store.commit('setActiveIndex',activeIndex);
 	});
 	 
 	window.router = router;
-	 
 })(); 
  
