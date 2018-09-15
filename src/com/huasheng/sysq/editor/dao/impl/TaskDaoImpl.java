@@ -20,12 +20,23 @@ public class TaskDaoImpl extends BaseDao implements TaskDao{
 	}
 
 	@Override
-	public List<Task> findAllTaskPage(Map<String, Object> searchParams) {
+	public List<Task> findAllTaskPage(Map<String, Object> searchParams , int currentPage , int pageSize) {
+		if(searchParams == null) {
+			searchParams = new HashMap<String,Object>();
+		}
+		
+		searchParams.put("offset", (currentPage - 1) * pageSize);
+		searchParams.put("limit", pageSize);
+		
 		return this.getSqlSession().selectList(NAMESPACE + ".findAllTaskPage", searchParams);
 	}
 
 	@Override
 	public int countAllTask(Map<String, Object> searchParams) {
+		if(searchParams == null) {
+			searchParams = new HashMap<String,Object>();
+		}
+		
 		return this.getSqlSession().selectOne(NAMESPACE + ".countAllTask", searchParams);
 	}
 

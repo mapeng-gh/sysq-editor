@@ -30,11 +30,11 @@
 		},
 	    
         {
-			name: '访谈编辑',
-			index: '/interviewEdit',
+			name: '我的任务',
+			index: '/myTask',
 			icon: 'fa fa-edit',
 			sub: [
-				{index : '/interviewEdit/interviewList' , name: '访谈列表'}
+				{index : '/myTask/taskList' , name: '任务列表'}
 			]
         },
 	    

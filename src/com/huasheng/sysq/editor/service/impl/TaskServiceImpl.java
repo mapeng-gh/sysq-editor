@@ -2,11 +2,9 @@ package com.huasheng.sysq.editor.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -76,24 +74,12 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public CallResult<Page<TaskResponse>> findTaskPage(Map<String, String> searchParams) {
+	public CallResult<Page<TaskResponse>> findTaskPage(Map<String, Object> searchParams , int currentPage , int pageSize) {
 		LogUtils.info(this.getClass(), "findTaskPage params : {}", JsonUtils.toJson(searchParams));
 		
 		try {
-			//参数处理
-			Map<String,Object> handledParams = new HashMap<String,Object>();
-			handledParams.put("editorName", searchParams.get("editorName"));
-			String taskStatus = searchParams.get("taskStatus");
-			if(!StringUtils.isBlank(taskStatus)) {
-				handledParams.put("taskStatus", Integer.parseInt(taskStatus));
-			}
-			handledParams.put("patientName", searchParams.get("patientName"));
-			int currentPage = Integer.parseInt(searchParams.get("currentPage"));
-			int pageSize = Integer.parseInt(searchParams.get("pageSize"));
-			handledParams.put("offset", (currentPage - 1) * pageSize);
-			handledParams.put("limit", pageSize);
-			
-			List<Task> taskList = taskDao.findAllTaskPage(handledParams);
+			//查询任务
+			List<Task> taskList = taskDao.findAllTaskPage(searchParams,currentPage,pageSize);
 			
 			//关联数据
 			List<TaskResponse> taskResponseList = new ArrayList<TaskResponse>();
@@ -111,7 +97,7 @@ public class TaskServiceImpl implements TaskService{
 			}
 			
 			//统计
-			int total = taskDao.countAllTask(handledParams);
+			int total = taskDao.countAllTask(searchParams);
 			
 			return CallResult.success(new Page<TaskResponse>(taskResponseList,currentPage,pageSize,total));
 			

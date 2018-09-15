@@ -1,7 +1,9 @@
 package com.huasheng.sysq.editor.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +25,31 @@ public class TaskManageController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(value="/list.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/taskList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<TaskResponse>> list(@RequestParam Map<String,String> searchParams) {
-		LogUtils.info(this.getClass(), "list params : {}",JsonUtils.toJson(searchParams));
-		CallResult<Page<TaskResponse>> result = taskService.findTaskPage(searchParams);
-		LogUtils.info(this.getClass(), "list result : {}", JsonUtils.toJson(result));
+	public CallResult<Page<TaskResponse>> taskList(@RequestParam Map<String,String> searchParams) {
+		LogUtils.info(this.getClass(), "taskList params : searchParams = {}",JsonUtils.toJson(searchParams));
+		
+		//参数处理
+		int currentPage = 0;
+		int pageSize = 0;
+		Map<String,Object> handledParams = new HashMap<String,Object>();
+		try {
+			handledParams.put("editorName",searchParams.get("editorName"));
+			String taskStatus = searchParams.get("taskStatus");
+			if(!StringUtils.isBlank(taskStatus)) {
+				handledParams.put("taskStatus", Integer.parseInt(taskStatus));
+			}
+			handledParams.put("patientName",searchParams.get("patientName"));
+			currentPage = Integer.parseInt(searchParams.get("currentPage"));
+			pageSize = Integer.parseInt(searchParams.get("pageSize"));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "taskList error", e);
+			return CallResult.failure("获取任务列表失败");
+		}
+		
+		CallResult<Page<TaskResponse>> result = taskService.findTaskPage(handledParams, currentPage, pageSize);
+		LogUtils.info(this.getClass(), "taskList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

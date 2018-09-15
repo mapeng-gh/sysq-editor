@@ -43,13 +43,13 @@
 	];
 	
 	//访谈编辑
-	var interviewEditMappings = [
+	var myTaskMappings = [
 		{
-            name : 'interviewEditInterviewList',
-			component : interviewEditInterviewListComponent,
-			path : '/interviewEdit/interviewList',
+            name : 'taskList',
+			component : myTaskListComponent,
+			path : '/myTask/taskList',
 			meta : {
-                activeIndex : '/interviewEdit/interviewList'
+                activeIndex : '/myTask/taskList'
 			}
         }
 	];
@@ -130,6 +130,6 @@
 		}
 	];
         
-    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,interviewEditMappings,interviewViewMappings,usercenterMappings);
+    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,interviewViewMappings,usercenterMappings);
 	window.mappings = mappings;
 })();

@@ -55,7 +55,8 @@
 	    inner join sysq_interview interview on task.interview_id = interview.id 
 	    inner join sysq_patient patient on interview.patient_id = patient.id 
 	    where task.user_id = #{userId} 
-	    <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
+	    <if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
+	    <if test="taskStatus != null">and task.status = #{taskStatus}</if>
             order by task.create_time desc 
             limit #{offset},#{limit}
         </select>
@@ -67,7 +68,8 @@
 	    inner join sysq_interview interview on task.interview_id = interview.id 
 	    inner join sysq_patient patient on interview.patient_id = patient.id 
 	    where task.user_id = #{userId} 
-	    <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
+	    <if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
+	    <if test="taskStatus != null">and task.status = #{taskStatus}</if>
         </select>
         
         <select id="findByInterviewId" parameterType="_int" resultMap="allResultMap">

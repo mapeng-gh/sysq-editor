@@ -17,16 +17,20 @@ public interface TaskService {
 	public CallResult<Boolean> assignTask(int userId , String interviewIds);
 	
 	/**
-	 * 查找任务
+	 * 查询任务
 	 * @param searchParams
+	 * @param currentPage
+	 * @param pageSize
 	 * @return
 	 */
-	public CallResult<Page<TaskResponse>> findTaskPage(Map<String,String> searchParams);
+	public CallResult<Page<TaskResponse>> findTaskPage(Map<String,Object> searchParams , int currentPage , int pageSize);
 	
 	/**
-	 * 查找用户下任务
+	 * 查询用户下任务
 	 * @param userId
 	 * @param searchParams
+	 * @param currentPage
+	 * @param pageSize
 	 * @return
 	 */
 	public CallResult<Page<TaskResponse>> findUserTaskPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
