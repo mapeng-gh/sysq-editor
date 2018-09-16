@@ -1,13 +1,13 @@
 (function(){
-	var userManageUnAssignInterviewListComponent = {
+	var userManage4InterviewListComponent = {
+		
 		template : `
-			<div class="user-manage-unassign-interview-list">
+		
+			<div class="user-manage-interview-list">
 			
 				<div class="common-title">任务分配</div>
 				
-				<div class="bg-warning">
-					温馨提示：暂不支持跨页进行任务分配
-				</div>
+				<div class="bg-warning">温馨提示：暂不支持跨页进行任务分配</div>
 				
 				<div class="common-list-operate">
 					<el-button type="primary" @click="handleAssignTask">分配</el-button>
@@ -15,29 +15,29 @@
 				
 				<div class="common-list">
 					<el-table
-						:data="unAssignInterviewList"
+						:data="interviewList"
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%"
 						@select="handleSelect"
 						@select-all="handleSelectAll">
 						<el-table-column type="selection" width="55"></el-table-column>
-						<el-table-column prop="interview.id" label="访谈编号" align="center"></el-table-column>
-						<el-table-column prop="interview.type" label="类型"  align="center">
+						<el-table-column prop="interview.id" label="访谈编号" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="interview.type" label="类型" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
-                                                                {{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
-                                                        </template>
+                                {{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
+                            </template>
 						</el-table-column>
 						<el-table-column prop="patient.username" label="患者姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="doctor.username" label="医生姓名"  align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.versionId" label="问卷版本"  align="center"></el-table-column>
-						<el-table-column prop="interview.endTime" label="访谈日期" align="center">
+						<el-table-column prop="interview.versionId" label="问卷版本"  align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="interview.endTime" label="访谈日期" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
-                                                                {{$commons.formatDate(scope.row.interview.endTime)}}
-                                                        </template>
+                                {{$commons.formatDate(scope.row.interview.endTime)}}
+                            </template>
 						</el-table-column>
 					</el-table>
-                                </div>
+                </div>
                                         
 				<div class="common-pagination">
 					<el-pagination
@@ -61,7 +61,7 @@
 			return {
 				
 				APIS : {
-					UNASSIGN_INTERVIEW_LIST : '/userManage/unAssignInterviewList.do',
+					UNASSIGN_INTERVIEW_LIST : '/userManage/interviewList.do',
 					ASSIGN_TASK : '/userManage/assignTask.do'
 				},
 				
@@ -69,13 +69,13 @@
 					userId : this.$route.query.userId	
 				},
 				
-				unAssignInterviewList : [],
+				interviewList : [],
 				
 				paginate : {
 					pageSize : 10,
 					currentPage : 1,
 					total : 0
-                                },
+                },
 				
 				selectedInterviewList : []
 			}
@@ -91,9 +91,9 @@
 				var self = this;
 				
 				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
-                                        self.unAssignInterviewList = resultObject.data;
-                                        self.paginate.total = resultObject.total;
-                                });
+					self.interviewList = resultObject.data;
+					self.paginate.total = resultObject.total;
+                });
 			},
 			
 			//切换分页
@@ -102,8 +102,8 @@
 				this.paginate.currentPage = currentPage;
 				
 				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
-					self.unAssignInterviewList = resultObject.data;
-                                        self.paginate.total = resultObject.total;
+					self.interviewList = resultObject.data;
+                    self.paginate.total = resultObject.total;
 				});
 			},
 			
@@ -115,8 +115,8 @@
 				this.paginate.pageSize = currentSize;
 				 
 				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
-					self.unAssignInterviewList = resultObject.data;
-                                        self.paginate.total = resultObject.total;
+					self.interviewList = resultObject.data;
+                    self.paginate.total = resultObject.total;
 				});
 			},
 			
@@ -139,21 +139,31 @@
 					return;
 				}
 				
-				var interviewIdArray = this.$lodash.map(this.selectedInterviewList,'interview.id');	
-				this.$request.sendPostRequest(this.APIS.ASSIGN_TASK,{userId : this.params.userId , interviewIds : interviewIdArray.join(',')},(resultObject)=>{
-					self.$message.success('分配成功');
-					
-					self.$request.sendGetRequest(self.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize},function(resultObject){
-						self.unAssignInterviewList = resultObject.data;
-						self.paginate.total = resultObject.total;
-					});
+				this.$confirm('确定分配任务吗？','确认',{
+					type : 'warning',
+					callback : function(action){
+						if(action == 'confirm'){
+							
+							var interviewIdArray = self.$lodash.map(self.selectedInterviewList,'interview.id');	
+							self.$request.sendPostRequest(self.APIS.ASSIGN_TASK,{userId : self.params.userId , interviewIds : interviewIdArray.join(',')},(resultObject)=>{
+								self.$message.success('分配成功');
+								
+								self.$request.sendGetRequest(self.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize},function(resultObject){
+									self.interviewList = resultObject.data;
+									self.paginate.total = resultObject.total;
+								});
+							});
+						}
+					}
 				});
+				
+				
 			}
 		}
 		
 		
 	};
-	window.userManageUnAssignInterviewListComponent = userManageUnAssignInterviewListComponent;
+	window.userManage4InterviewListComponent = userManage4InterviewListComponent;
 })();
 
 

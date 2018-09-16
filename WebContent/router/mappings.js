@@ -3,29 +3,29 @@
     //用户管理
     var userManageMappings = [
 		{
-            name : 'userManageList',
-			path : '/userManage/list',
-			component : userManageListComponent,
+            name : 'userManage4UserList',
+			path : '/userManage/userList',
+			component : userManage4UserListComponent,
 			meta : {
-                activeIndex : '/userManage/list'
+                activeIndex : '/userManage/userList'
 			}
         },
 		
 		{
-            name : 'userManageDetail',
-			path : '/userManage/detail',
-			component : userManageDetailComponent,
+            name : 'userManage4UserDetail',
+			path : '/userManage/userDetail',
+			component : userManage4UserDetailComponent,
 			meta : {
-                activeIndex : '/userManage/list'
+                activeIndex : '/userManage/userList'
 			}
         },
 		
 		{
-            name : 'userManageUnAssignInterviewList',
-			path : '/userManage/unAssignInterviewList',
-			component : userManageUnAssignInterviewListComponent,
+            name : 'userManage4InterviewList',
+			path : '/userManage/interviewList',
+			component : userManage4InterviewListComponent,
 			meta : {
-                activeIndex : '/userManage/list'
+                activeIndex : '/userManage/userList'
 			}
         }
     ];

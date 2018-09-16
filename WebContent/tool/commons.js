@@ -55,7 +55,7 @@ function getLoginUser(){
 function getHomePage(){
 	var userType = getLoginUser().userType;
 	if(userType == constants.USER_TYPE.enums.ADMIN){
-		return {name : 'userManageList'};
+		return {name : 'userManage4UserList'};
 	}else if(userType == constants.USER_TYPE.enums.EDITOR){
 		return {name : 'myTask4TaskList'};
 	}else if(userType == constants.USER_TYPE.enums.VIEWER){

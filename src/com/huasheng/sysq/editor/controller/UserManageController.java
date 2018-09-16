@@ -37,12 +37,12 @@ public class UserManageController {
 	 * @param searchRequest
 	 * @return
 	 */
-	@RequestMapping(value="/list.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/userList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<User>> list(@RequestParam Map<String,String> searchRequest) {
-		LogUtils.info(this.getClass(), "list params : {}",JsonUtils.toJson(searchRequest));
+	public CallResult<Page<User>> userList(@RequestParam Map<String,String> searchRequest) {
+		LogUtils.info(this.getClass(), "userList params : {}",JsonUtils.toJson(searchRequest));
 		CallResult<Page<User>> result = userService.findUserPage(searchRequest);
-		LogUtils.info(this.getClass(), "list result : {}", JsonUtils.toJson(result));
+		LogUtils.info(this.getClass(), "userList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	
@@ -51,13 +51,13 @@ public class UserManageController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value="/detail.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/userDetail.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<UserResponse> detail(@RequestParam("userId") int userId) {
-		LogUtils.info(this.getClass(), "detail params : userId = {}",userId);
+	public CallResult<UserResponse> userDetail(@RequestParam("userId") int userId) {
+		LogUtils.info(this.getClass(), "userDetail params : userId = {}",userId);
 		
 		CallResult<UserResponse> result = userService.viewUser(userId);
-		LogUtils.info(this.getClass(), "detail result : {}", JsonUtils.toJson(result));
+		LogUtils.info(this.getClass(), "userDetail result : {}", JsonUtils.toJson(result));
 		
 		return result;
 	}
@@ -67,7 +67,7 @@ public class UserManageController {
 	 * @param requestJsonStr
 	 * @return
 	 */
-	@RequestMapping(value="/audit.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/auditUser.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Boolean> auditUser(@RequestBody String requestJsonStr) {
 		LogUtils.info(this.getClass(), "auditUser params : {}", requestJsonStr);
@@ -96,10 +96,10 @@ public class UserManageController {
 	 * @param searchRequest
 	 * @return
 	 */
-	@RequestMapping(value="/unAssignInterviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/interviewList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<InterviewResponse>> unAssignInterviewList(@RequestParam Map<String,String> searchParams) {
-		LogUtils.info(this.getClass(), "unAssignInterviewList params : searchParams = {}",JsonUtils.toJson(searchParams));
+	public CallResult<Page<InterviewResponse>> interviewList(@RequestParam Map<String,String> searchParams) {
+		LogUtils.info(this.getClass(), "interviewList params : searchParams = {}",JsonUtils.toJson(searchParams));
 		
 		//参数处理
 		int currentPage = 0;
@@ -108,12 +108,12 @@ public class UserManageController {
 			currentPage = Integer.parseInt(searchParams.get("currentPage"));
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
 		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "unAssignInterviewList error", e);
+			LogUtils.error(this.getClass(), "interviewList error", e);
 			return CallResult.failure("获取未分配访谈列表失败");
 		}
 		
 		CallResult<Page<InterviewResponse>> result = taskService.findUnAssignInterviewPage(null,currentPage,pageSize);
-		LogUtils.info(this.getClass(), "unAssignInterviewList result : {}", JsonUtils.toJson(result));
+		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	

@@ -7,7 +7,7 @@
 			index: '/userManage',
 			icon: 'fa fa-address-book-o',
 			sub: [
-				{name:'用户列表',index:'/userManage/list'}
+				{name:'用户列表',index:'/userManage/userList'}
 			]
         },
 		

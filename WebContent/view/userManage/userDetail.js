@@ -1,15 +1,11 @@
 (function(){
-	var userManageDetailComponent = {
+	var userManage4UserDetailComponent = {
 		template : `
 			<div class="user-manage-detail">
 			
 				<div class="common-title">用户详情</div>
 				
-				<div 
-					class="common-detail"
-					v-loading="isLoading"
-					element-loading-text="正在加载中..."
-					element-loading-spinner="el-icon-loading">
+				<div class="common-detail">
 					
 					<el-form label-width="100px">
 						
@@ -111,16 +107,14 @@
 			return {
 				
 				APIS : {
-					USER_DETAIL : '/userManage/detail.do'
+					USER_DETAIL : '/userManage/userDetail.do'
 				},
 				
 				params : {
 					userId : this.$route.query.userId	
 				},
 				
-				userDetail : {},
-				
-				isLoading : false
+				userDetail : {}
 			}
 		},
 		
@@ -132,16 +126,10 @@
 			
 			init : function(){
 				var self = this;
-				this.isLoading = true;
 				
-				//获取用户信息
-				this.$request.sendGetRequest(this.APIS.USER_DETAIL,{userId : this.params.userId},
-					function(resultObject){
-						self.isLoading = false;
-						
-						self.userDetail = resultObject;
-					}
-				);
+				this.$request.sendGetRequest(this.APIS.USER_DETAIL,{userId : this.params.userId},function(resultObject){
+					self.userDetail = resultObject;
+				});
 			},
 			
 			//关闭
@@ -152,7 +140,7 @@
 		
 		
 	};
-	window.userManageDetailComponent = userManageDetailComponent;
+	window.userManage4UserDetailComponent = userManage4UserDetailComponent;
 })();
 
 
