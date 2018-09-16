@@ -38,33 +38,33 @@
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="task.id" label="任务编号" align="left" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.id" label="访谈编号" align="left" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.type" label="访谈类型" align="left" :show-overflow-tooltip="true">
+						<el-table-column prop="task.id" label="任务编号" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="interview.id" label="访谈编号" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="interview.type" label="访谈类型" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="interview.versionId" label="问卷版本" align="left" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="patient.username" label="患者姓名" align="left" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.endTime" label="访谈时间" align="left" width="180" :show-overflow-tooltip="true">
+						<el-table-column prop="interview.versionId" label="问卷版本" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="patient.username" label="患者姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="interview.endTime" label="访谈时间" align="center" width="180" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.interview.endTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="task.createTime" label="分配时间" align="left" width="180" :show-overflow-tooltip="true">
+						<el-table-column prop="task.createTime" label="分配时间" align="center" width="180" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.createTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="task.status" label="任务状态" align="left" :show-overflow-tooltip="true">
+						<el-table-column prop="task.status" label="任务状态" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.ASSIGNED" type="info">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.EDITING" type="warning">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED" type="success">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="left" width="120" :show-overflow-tooltip="true">
+						<el-table-column prop="operate" label="操作" align="center" width="120" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">问卷列表</el-button>
 							</template>
