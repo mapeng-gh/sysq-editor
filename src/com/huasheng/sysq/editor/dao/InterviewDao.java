@@ -45,22 +45,4 @@ public interface InterviewDao {
 	 * @return
 	 */
 	public int countUnAssignInterview(Map<String,Object> searchParams);
-	
-	/**
-	 * 查找编辑访谈列表
-	 * @param userId
-	 * @param searchParams
-	 * @param currentPage
-	 * @param pageSize
-	 * @return
-	 */
-	public List<Interview> findEditorInterviewPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
-	
-	/**
-	 * 统计编辑访谈
-	 * @param userId
-	 * @param searchParams
-	 * @return
-	 */
-	public int countEditorInterview(int userId,Map<String,Object> searchParams);
 }

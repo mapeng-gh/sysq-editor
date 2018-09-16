@@ -1,5 +1,5 @@
 (function(){
-	var interviewViewQuestionListComponent = {
+	var myInterview4QuestionListComponent = {
 		
 		template : `
 			<div class="interview-view-question-list">
@@ -25,7 +25,7 @@
 			return {
 						
 				APIS : {
-						QUESTION_LIST : '/interviewView/questionList.do'
+						QUESTION_LIST : '/myInterview/questionList.do'
 				},
 		
 				params : {
@@ -79,7 +79,7 @@
 		}
 	};
 	
-	window.interviewViewQuestionListComponent = interviewViewQuestionListComponent;
+	window.myInterview4QuestionListComponent = myInterview4QuestionListComponent;
 	
 })();
 

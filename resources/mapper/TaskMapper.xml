@@ -3,7 +3,7 @@
 <mapper namespace="mapper.TaskMapper">
     
         <sql id="allColumns">
-            id,user_id,interview_id,stauts,create_time,update_time
+            id,user_id,interview_id,status,create_time,update_time
         </sql>
 	
 	<resultMap id="allResultMap" type="Task">

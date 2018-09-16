@@ -63,24 +63,4 @@
 	         )
         </select>
         
-        <select id="findEditorInterviewPage" parameterType="hashmap" resultMap="allResultMap">
-            	select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
-	         from editor_task task 
-	         inner join sysq_interview interview on task.interview_id = interview.id 
-	         inner join sysq_patient patient on interview.patient_id = patient.id 
-	         where task.user_id = #{userId} 
-	         <if test="name != null and name != ''">and patient.username = #{name}</if>
-	         order by task.create_time desc
-                 limit #{offset},#{limit}
-        </select>
-        
-        <select id="countEditorInterview" parameterType="hashmap" resultType="_int">
-            	select count(interview.id)
-	         from editor_task task 
-	         inner join sysq_interview interview on task.interview_id = interview.id 
-	         inner join sysq_patient patient on interview.patient_id = patient.id 
-	         where task.user_id = #{userId} 
-	         <if test="name != null and name != ''">and patient.username = #{name}</if>
-        </select>
-        
 </mapper>  

@@ -64,29 +64,4 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	public Interview selectById(int id) {
 		return super.getSqlSession().selectOne(NAMESPACE + ".selectById", id);
 	}
-
-	@Override
-	public List<Interview> findEditorInterviewPage(int userId, Map<String, Object> searchParams, int currentPage,int pageSize) {
-		if(searchParams == null) {
-			searchParams = new HashMap<String,Object>();
-		}
-		
-		searchParams.put("userId", userId);
-		
-		searchParams.put("offset", (currentPage - 1) * pageSize);
-		searchParams.put("limit", pageSize);
-		
-		return this.getSqlSession().selectList(NAMESPACE + ".findEditorInterviewPage", searchParams);
-	}
-
-	@Override
-	public int countEditorInterview(int userId, Map<String, Object> searchParams) {
-		if(searchParams == null) {
-			searchParams = new HashMap<String,Object>();
-		}
-		
-		searchParams.put("userId", userId);
-		
-		return this.getSqlSession().selectOne(NAMESPACE + ".countEditorInterview", searchParams);
-	}
 }

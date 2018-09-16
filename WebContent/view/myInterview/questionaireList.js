@@ -1,5 +1,5 @@
 (function(){
-	var interviewViewQuestionaireListComponent = {
+	var myInterview4QuestionaireListComponent = {
 		
         template : `
             <div class="interview-view-questionaire-list">
@@ -20,7 +20,7 @@
             return {
                                 
 				APIS : {
-						QUESTIONAIRE_LIST : '/interviewView/questionaireList.do'
+						QUESTIONAIRE_LIST : '/myInterview/questionaireList.do'
 				},
 				
 				params : {
@@ -43,7 +43,7 @@
 			
 			//问题列表
 			handleQuestionList : function(questionaireCode){
-				this.$commons.openWindow('#/interviewView/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
+				this.$commons.openWindow('#/myInterview/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
 			}
                         
         },
@@ -54,7 +54,7 @@
 		
 	};
 	
-	window.interviewViewQuestionaireListComponent = interviewViewQuestionaireListComponent;
+	window.myInterview4QuestionaireListComponent = myInterview4QuestionaireListComponent;
 	
 })();
 

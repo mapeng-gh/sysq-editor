@@ -54,30 +54,30 @@
         }
 	];
         
-    //访谈浏览
-    var interviewViewMappings = [
+    //我的访谈
+    var myInterviewMappings = [
         {
-			name : 'interviewViewInterviewList',
-			component : interviewViewInterviewListComponent,
-			path : '/interviewView/interviewList',
+			name : 'myInterview4InterviewList',
+			component : myInterview4InterviewListComponent,
+			path : '/myInterview/interviewList',
 			meta : {
-				activeIndex : '/interviewView/interviewList'
+				activeIndex : '/myInterview/interviewList'
 			}
         },
 		{
-			name : 'interviewViewQuestionaireList',
-			component : interviewViewQuestionaireListComponent,
-			path : '/interviewView/questionaireList',
+			name : 'myInterview4QuestionaireList',
+			component : myInterview4QuestionaireListComponent,
+			path : '/myInterview/questionaireList',
 			meta : {
-				activeIndex : '/interviewView/interviewList'
+				activeIndex : '/myInterview/interviewList'
 			}
         },
 		{
-			name : 'interviewViewQuestionList',
-			component : interviewViewQuestionListComponent,
-			path : '/interviewView/questionList',
+			name : 'myInterview4QuestionList',
+			component : myInterview4QuestionListComponent,
+			path : '/myInterview/questionList',
 			meta : {
-				activeIndex : '/interviewView/interviewList'
+				activeIndex : '/myInterview/interviewList'
 			}
         }
     ];
@@ -130,6 +130,6 @@
 		}
 	];
         
-    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,interviewViewMappings,usercenterMappings);
+    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,myInterviewMappings,usercenterMappings);
 	window.mappings = mappings;
 })();

@@ -1,5 +1,5 @@
 (function(){
-	var interviewViewInterviewListComponent = {
+	var myInterview4InterviewListComponent = {
                 template : `
                         <div class="interview-view-interview-list">
                         
@@ -94,7 +94,7 @@
                         return {
                                 
                                 APIS : {
-                                        INTERVIEW_LIST : '/interviewView/interviewList.do'
+                                        INTERVIEW_LIST : '/myInterview/interviewList.do'
                                 },
                                 
                                 interviewList : [],
@@ -172,7 +172,7 @@
                         
 			//问卷列表
                         handleQuestionaireList(scope){
-				this.$commons.openWindow('#/interviewView/questionaireList',{interviewId : scope.row.interview.id});
+				this.$commons.openWindow('#/myInterview/questionaireList',{interviewId : scope.row.interview.id});
                         }
                 },
                 
@@ -180,7 +180,7 @@
                         this.init();
                 }
 	};
-	window.interviewViewInterviewListComponent = interviewViewInterviewListComponent;
+	window.myInterview4InterviewListComponent = myInterview4InterviewListComponent;
 })();
 
 

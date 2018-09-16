@@ -9,7 +9,7 @@ import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.Page;
 
-public interface InterviewViewService {
+public interface InterviewService {
 
 	/**
 	 * 查找访谈列表
@@ -32,4 +32,11 @@ public interface InterviewViewService {
 	 * @return
 	 */
 	public CallResult<List<QuestionResponse>> findQuestionListByInterviewIdAndQuestionaireCode(int interviewId,String questionaireCode);
+	
+	/**
+	 * 查找未分配访谈列表
+	 * @param searchParams
+	 * @return
+	 */
+ 	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String,Object> searchParams,int currentPage,int pageSize);
 }

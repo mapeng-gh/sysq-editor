@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.QuestionResponse;
-import com.huasheng.sysq.editor.service.InterviewViewService;
+import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
@@ -24,11 +24,11 @@ import com.huasheng.sysq.editor.util.Page;
 import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
-@RequestMapping(value="/interviewView")
-public class InterviewViewController {
+@RequestMapping(value="/myInterview")
+public class MyInterviewController {
 	
 	@Autowired
-	private InterviewViewService interviewViewService;
+	private InterviewService interviewService;
 	
 	/**
 	 * 访谈列表
@@ -60,7 +60,7 @@ public class InterviewViewController {
 		}
 		
 		//查询访谈
-		CallResult<Page<InterviewResponse>> result = interviewViewService.findDoctorInterviewPage(loginName, handledParams, currentPage, pageSize);
+		CallResult<Page<InterviewResponse>> result = interviewService.findDoctorInterviewPage(loginName, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
@@ -76,7 +76,7 @@ public class InterviewViewController {
 		LogUtils.info(this.getClass(), "questionaireList params : interviewId = {}",interviewId);
 		
 		//查询问卷
-		CallResult<List<Questionaire>> result = interviewViewService.findQuestionaireListByInterviewId(interviewId);
+		CallResult<List<Questionaire>> result = interviewService.findQuestionaireListByInterviewId(interviewId);
 		LogUtils.info(this.getClass(), "questionaireList result : {}", JsonUtils.toJson(result));
 		
 		return result;
@@ -93,7 +93,7 @@ public class InterviewViewController {
 		LogUtils.info(this.getClass(), "questionList params : interviewId = {} , questionaireCode",interviewId,questionaireCode);
 		
 		//查询问题
-		CallResult<List<QuestionResponse>> result = interviewViewService.findQuestionListByInterviewIdAndQuestionaireCode(interviewId, questionaireCode);
+		CallResult<List<QuestionResponse>> result = interviewService.findQuestionListByInterviewIdAndQuestionaireCode(interviewId, questionaireCode);
 		LogUtils.info(this.getClass(), "questionList result : {}", JsonUtils.toJson(result));
 		
 		return result;
