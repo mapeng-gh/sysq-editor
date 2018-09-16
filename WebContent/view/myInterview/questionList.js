@@ -2,7 +2,7 @@
 	var myInterview4QuestionListComponent = {
 		
 		template : `
-			<div class="interview-view-question-list">
+			<div class="my-interview-question-list">
 			
 				<div class="common-title">问题列表</div>
 					

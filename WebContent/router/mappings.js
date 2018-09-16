@@ -4,8 +4,8 @@
     var userManageMappings = [
 		{
             name : 'userManageList',
-			component : userManageListComponent,
 			path : '/userManage/list',
+			component : userManageListComponent,
 			meta : {
                 activeIndex : '/userManage/list'
 			}
@@ -13,8 +13,8 @@
 		
 		{
             name : 'userManageDetail',
-			component : userManageDetailComponent,
 			path : '/userManage/detail',
+			component : userManageDetailComponent,
 			meta : {
                 activeIndex : '/userManage/list'
 			}
@@ -22,8 +22,8 @@
 		
 		{
             name : 'userManageUnAssignInterviewList',
-			component : userManageUnAssignInterviewListComponent,
 			path : '/userManage/unAssignInterviewList',
+			component : userManageUnAssignInterviewListComponent,
 			meta : {
                 activeIndex : '/userManage/list'
 			}
@@ -34,8 +34,8 @@
 	var taskManageMappings = [
 		{
             name : 'taskManageList',
-			component : taskManageListComponent,
 			path : '/taskManage/list',
+			component : taskManageListComponent,
 			meta : {
                 activeIndex : '/taskManage/list'
 			}
@@ -45,9 +45,17 @@
 	//我的任务
 	var myTaskMappings = [
 		{
-            name : 'myTaskList',
-			component : myTaskListComponent,
+            name : 'myTask4TaskList',
 			path : '/myTask/taskList',
+			component : myTask4TaskListComponent,
+			meta : {
+                activeIndex : '/myTask/taskList'
+			}
+        },
+		{
+            name : 'myTask4QuestionaireList',
+			path : '/myTask/questionaireList',
+			component : myTask4QuestionaireListComponent,
 			meta : {
                 activeIndex : '/myTask/taskList'
 			}
@@ -58,24 +66,24 @@
     var myInterviewMappings = [
         {
 			name : 'myInterview4InterviewList',
-			component : myInterview4InterviewListComponent,
 			path : '/myInterview/interviewList',
+			component : myInterview4InterviewListComponent,
 			meta : {
 				activeIndex : '/myInterview/interviewList'
 			}
         },
 		{
 			name : 'myInterview4QuestionaireList',
-			component : myInterview4QuestionaireListComponent,
 			path : '/myInterview/questionaireList',
+			component : myInterview4QuestionaireListComponent,
 			meta : {
 				activeIndex : '/myInterview/interviewList'
 			}
         },
 		{
 			name : 'myInterview4QuestionList',
-			component : myInterview4QuestionListComponent,
 			path : '/myInterview/questionList',
+			component : myInterview4QuestionListComponent,
 			meta : {
 				activeIndex : '/myInterview/interviewList'
 			}
@@ -86,16 +94,16 @@
 	var usercenterMappings = [
 		{
 			name : 'usercenterProfile',
-			component : usercenterProfileComponent,
 			path : '/usercenter/profile',
+			component : usercenterProfileComponent,
 			meta : {
 				activeIndex : '/usercenter/profile'
 			}
 		},
 		{
 			name : 'usercenterModifyPwd',
-			component : usercenterModifyPwdComponent,
 			path : '/usercenter/modifyPwd',
+			component : usercenterModifyPwdComponent,
 			meta : {
 				activeIndex : '/usercenter/modifyPwd'
 			}
@@ -106,24 +114,24 @@
 	var dataManageMappings = [
 		{
 			name : 'dataManageVersionList',
-			component : dataManageVersionListComponent,
 			path : '/dataManage/versionList',
+			component : dataManageVersionListComponent,
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}
 		},
 		{
 			name : 'dataManageQuestionaireList',
-			component : dataManageQuestionaireListComponent,
 			path : '/dataManage/questionaireList',
+			component : dataManageQuestionaireListComponent,
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}
 		},
 		{
 			name : 'dataManageQuestionList',
-			component : dataManageQuestionListComponent,
 			path : '/dataManage/questionList',
+			component : dataManageQuestionListComponent,
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}

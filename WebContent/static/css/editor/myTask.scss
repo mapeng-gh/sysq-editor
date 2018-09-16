@@ -1,0 +1,24 @@
+.my-task-questionaire-list{
+	.questionaire{
+		margin-top : 20px;
+		cursor : pointer;
+		
+		&:hover{
+			background-color : #eef1f6;
+		}
+		
+		.questionaire-header{
+			font-size : 14px;
+			color : #20a0ff;
+		}
+		
+		.questionaire-content{
+			margin-top : 10px;
+			font-size : 14px;
+			color : #48576a;
+			line-height : 200%;
+			text-indent:30px;
+			
+		}
+	}
+}

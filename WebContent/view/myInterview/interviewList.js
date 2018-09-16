@@ -1,7 +1,7 @@
 (function(){
 	var myInterview4InterviewListComponent = {
                 template : `
-                        <div class="interview-view-interview-list">
+                        <div class="my-interview-interview-list">
                         
                                 <div class="common-title">访谈列表</div>
                                 

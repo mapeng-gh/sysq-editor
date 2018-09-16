@@ -197,10 +197,8 @@ public class TaskServiceImpl implements TaskService{
 	public CallResult<List<Questionaire>> getTaskQuestionaireList(int taskId) {
 		LogUtils.info(this.getClass(), "getTaskQuestionaireList params : taskId = {}", taskId);
 		try {
-			//获取任务
-			Task task = taskDao.selectById(taskId);
-			
 			//获取访谈
+			Task task = taskDao.selectById(taskId);
 			Interview interview = interviewDao.selectById(task.getInterviewId());
 			
 			//获取问卷编码

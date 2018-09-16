@@ -1,5 +1,5 @@
 (function(){
-	var myTaskListComponent = {
+	var myTask4TaskListComponent = {
 		template : `
 			<div class="my-task-task-list">
 			
@@ -176,11 +176,11 @@
 			
 			//问卷列表
 			handleQuestionaireList(scope){
-				
+				this.$commons.openWindow('#/myTask/questionaireList',{taskId : scope.row.task.id});
 			}
 		}
 	};
-	window.myTaskListComponent = myTaskListComponent;
+	window.myTask4TaskListComponent = myTask4TaskListComponent;
 })();
 
 

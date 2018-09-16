@@ -57,7 +57,7 @@ function getHomePage(){
 	if(userType == constants.USER_TYPE.enums.ADMIN){
 		return {name : 'userManageList'};
 	}else if(userType == constants.USER_TYPE.enums.EDITOR){
-		return {name : 'myTaskList'};
+		return {name : 'myTask4TaskList'};
 	}else if(userType == constants.USER_TYPE.enums.VIEWER){
 		return {name : 'myInterview4InterviewList'};
 	}

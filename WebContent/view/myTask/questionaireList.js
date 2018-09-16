@@ -1,8 +1,8 @@
 (function(){
-	var myInterview4QuestionaireListComponent = {
+	var myTask4QuestionaireListComponent = {
 		
         template : `
-            <div class="my-interview-questionaire-list">
+            <div class="my-task-questionaire-list">
                         
                 <div class="common-title">问卷列表</div>
 
@@ -20,11 +20,11 @@
             return {
                                 
 				APIS : {
-						QUESTIONAIRE_LIST : '/myInterview/questionaireList.do'
+						QUESTIONAIRE_LIST : '/myTask/questionaireList.do'
 				},
 				
 				params : {
-					interviewId : this.$route.query.interviewId
+					taskId : this.$route.query.taskId
 				},
                                 
                 questionaireList : []
@@ -36,7 +36,7 @@
 			init : function(){
 				var self = this;
 						
-				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{interviewId : this.params.interviewId},(resultObject)=>{
+				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{taskId : this.params.taskId},(resultObject)=>{
 					self.questionaireList = resultObject;
 				});
 			},
@@ -54,7 +54,7 @@
 		
 	};
 	
-	window.myInterview4QuestionaireListComponent = myInterview4QuestionaireListComponent;
+	window.myTask4QuestionaireListComponent = myTask4QuestionaireListComponent;
 	
 })();
 
