@@ -33,11 +33,11 @@
 	//任务管理
 	var taskManageMappings = [
 		{
-            name : 'taskManageList',
-			path : '/taskManage/list',
-			component : taskManageListComponent,
+            name : 'taskManage4TaskList',
+			path : '/taskManage/taskList',
+			component : taskManage4TaskListComponent,
 			meta : {
-                activeIndex : '/taskManage/list'
+                activeIndex : '/taskManage/taskList'
 			}
         }
 	];

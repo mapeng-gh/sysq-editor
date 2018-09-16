@@ -16,7 +16,7 @@
 			index: '/taskManage',
 			icon: 'fa fa-tasks',
 			sub: [
-				{index : '/taskManage/list' , name: '任务列表'}
+				{index : '/taskManage/taskList' , name: '任务列表'}
 			]
         },
 		
