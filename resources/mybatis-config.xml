@@ -32,6 +32,7 @@
         	<mapper resource="mapper/QuestionMapper.xml"/>
         	<mapper resource="mapper/AnswerMapper.xml"/>
         	<mapper resource="mapper/SysqResultMapper.xml"/>
+        	<mapper resource="mapper/EditorResultMapper.xml"/>
 	</mappers>
     
 </configuration>

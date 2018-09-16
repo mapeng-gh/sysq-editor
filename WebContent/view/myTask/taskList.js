@@ -66,7 +66,7 @@
 						</el-table-column>
 						<el-table-column prop="operate" label="操作" align="left" width="120" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleEditTask(scope)">编辑访谈</el-button>
+								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">问卷列表</el-button>
 							</template>
 						</el-table-column>
                     </el-table>
@@ -174,8 +174,8 @@
 				});
 			},
 			
-			//编辑任务
-			handleEditTask(scope){
+			//问卷列表
+			handleQuestionaireList(scope){
 				
 			}
 		}

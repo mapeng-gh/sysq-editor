@@ -95,7 +95,7 @@ public class InterviewServiceImpl implements InterviewService{
 		try {
 			Task task = taskDao.findByInterviewId(interviewId);
 			if(task == null) {//访谈未编辑
-				List<String> questionaireCodeList = sysqResultDao.findQuestionaireList(interviewId);
+				List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(interviewId);
 				if(questionaireCodeList == null || questionaireCodeList.size() == 0) {
 					return CallResult.success(new ArrayList<Questionaire>());
 				}else {
@@ -120,7 +120,7 @@ public class InterviewServiceImpl implements InterviewService{
 		try {
 			Task task = taskDao.findByInterviewId(interviewId);
 			if(task == null) {//访谈未编辑
-				List<String> questionCodeList = sysqResultDao.findQuestionList(interviewId,questionaireCode);
+				List<String> questionCodeList = sysqResultDao.getQuestionList(interviewId,questionaireCode);
 				if(questionCodeList == null || questionCodeList.size() == 0) {
 					return CallResult.success(new ArrayList<QuestionResponse>());
 				}else {
@@ -134,7 +134,7 @@ public class InterviewServiceImpl implements InterviewService{
 						questionResponse.setQuestion(question);
 						
 						//获取答案列表
-						List<String> answerCodeList = sysqResultDao.findAnswerList(interviewId, questionaireCode, question.getCode());
+						List<String> answerCodeList = sysqResultDao.getAnswerList(interviewId, questionaireCode, question.getCode());
 						List<Answer> answerList = answerDao.batchFindByVersionAndCode(interview.getVersionId(), answerCodeList);
 						if(answerList == null || answerList.size() == 0) {
 							questionResponse.setAnswerList(new ArrayList<AnswerResponse>());
@@ -145,7 +145,7 @@ public class InterviewServiceImpl implements InterviewService{
 								answerResponse.setAnswer(answer);
 								
 								//获取结果
-								SysqResult result = sysqResultDao.findAnswerResult(interviewId, questionaireCode, question.getCode(), answer.getCode());
+								SysqResult result = sysqResultDao.getAnswerResult(interviewId, questionaireCode, question.getCode(), answer.getCode());
 								answerResponse.setResult(result);
 								
 								answerResponseList.add(answerResponse);
@@ -166,35 +166,4 @@ public class InterviewServiceImpl implements InterviewService{
 			return CallResult.failure("获取问题列表失败");
 		}
 	}
-	
-	@Override
-	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
-		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : searchParams = {},currentPage = {},pageSize = {}", JsonUtils.toJson(searchParams),currentPage,pageSize);
-		
-		try {
-			//查询访谈
-			List<Interview> interviewList = interviewDao.findUnAssignInterviewPage(searchParams,currentPage,pageSize);
-			
-			//关联数据
-			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
-			if(interviewList != null && interviewList.size() > 0) {
-				for(Interview interview : interviewList) {
-					InterviewResponse interviewResponse = new InterviewResponse();
-					interviewResponse.setInterview(interview);
-					interviewResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
-					interviewResponse.setPatient(patientDao.selectById(interview.getPatientId()));
-					interviewResponseList.add(interviewResponse);
-				}
-			}
-			
-			//统计
-			int total = interviewDao.countUnAssignInterview(searchParams);
-			
-			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
-		}catch(Exception e) {
-			LogUtils.error(UserServiceImpl.class, "findUnAssignInterviewPage error", e);
-			return CallResult.failure("查找未分配访谈列表失败");
-		}
-	}
-
 }

@@ -6,6 +6,13 @@ import java.util.Map;
 import com.huasheng.sysq.editor.model.Task;
 
 public interface TaskDao {
+	
+	/**
+	 * 主键查找
+	 * @param id
+	 * @return
+	 */
+	public Task selectById(int id);
 
 	/**
 	 * 插入

@@ -15,7 +15,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.UserResponse;
-import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -29,9 +28,6 @@ public class UserManageController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private InterviewService interviewService;
 	
 	@Autowired
 	private TaskService taskService;
@@ -116,7 +112,7 @@ public class UserManageController {
 			return CallResult.failure("获取未分配访谈列表失败");
 		}
 		
-		CallResult<Page<InterviewResponse>> result = interviewService.findUnAssignInterviewPage(null,currentPage,pageSize);
+		CallResult<Page<InterviewResponse>> result = taskService.findUnAssignInterviewPage(null,currentPage,pageSize);
 		LogUtils.info(this.getClass(), "unAssignInterviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}

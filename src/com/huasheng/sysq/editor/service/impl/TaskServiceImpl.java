@@ -12,12 +12,18 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.huasheng.sysq.editor.dao.DoctorDao;
+import com.huasheng.sysq.editor.dao.EditorResultDao;
 import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.dao.PatientDao;
+import com.huasheng.sysq.editor.dao.QuestionaireDao;
+import com.huasheng.sysq.editor.dao.SysqResultDao;
 import com.huasheng.sysq.editor.dao.TaskDao;
 import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.Interview;
+import com.huasheng.sysq.editor.model.Questionaire;
+import com.huasheng.sysq.editor.model.SysqResult;
 import com.huasheng.sysq.editor.model.Task;
+import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.TaskResponse;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -46,6 +52,45 @@ public class TaskServiceImpl implements TaskService{
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private EditorResultDao editorResultDao;
+	
+	@Autowired
+	private QuestionaireDao questionaireDao;
+	
+	@Autowired
+	private SysqResultDao sysqResultDao;
+	
+	@Override
+	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : searchParams = {},currentPage = {},pageSize = {}", JsonUtils.toJson(searchParams),currentPage,pageSize);
+		
+		try {
+			//查询访谈
+			List<Interview> interviewList = interviewDao.findUnAssignInterviewPage(searchParams,currentPage,pageSize);
+			
+			//关联数据
+			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
+			if(interviewList != null && interviewList.size() > 0) {
+				for(Interview interview : interviewList) {
+					InterviewResponse interviewResponse = new InterviewResponse();
+					interviewResponse.setInterview(interview);
+					interviewResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
+					interviewResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+					interviewResponseList.add(interviewResponse);
+				}
+			}
+			
+			//统计
+			int total = interviewDao.countUnAssignInterview(searchParams);
+			
+			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
+		}catch(Exception e) {
+			LogUtils.error(UserServiceImpl.class, "findUnAssignInterviewPage error", e);
+			return CallResult.failure("查找未分配访谈列表失败");
+		}
+	}
 
 	@Override
 	public CallResult<Boolean> assignTask(int userId, String interviewIds) {
@@ -59,9 +104,17 @@ public class TaskServiceImpl implements TaskService{
 					String interviewIdArray[] = interviewIds.split(",");
 					if(interviewIdArray != null && interviewIdArray.length > 0) {
 						for(String interviewId : interviewIdArray) {
+							
+							//创建任务
 							Date currentTime = new Date();
 							Task task = new Task(userId,Integer.parseInt(interviewId),Constants.TASK_STATUS_ASSIGNED,currentTime,currentTime);
 							taskDao.insert(task);
+							
+							//初始化答案
+							List<SysqResult> resultList = sysqResultDao.getAllAnswerResult(Integer.parseInt(interviewId));
+							if(resultList != null && resultList.size() > 0) {
+								editorResultDao.batchInsert(resultList);
+							}
 						}
 					}
 				}
@@ -137,6 +190,29 @@ public class TaskServiceImpl implements TaskService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "findUserTaskPage errror", e);
 			return CallResult.failure("查找我的任务失败");
+		}
+	}
+
+	@Override
+	public CallResult<List<Questionaire>> getTaskQuestionaireList(int taskId) {
+		LogUtils.info(this.getClass(), "getTaskQuestionaireList params : taskId = {}", taskId);
+		try {
+			//获取任务
+			Task task = taskDao.selectById(taskId);
+			
+			//获取访谈
+			Interview interview = interviewDao.selectById(task.getInterviewId());
+			
+			//获取问卷编码
+			List<String> questionaireCodeList = editorResultDao.getQuestionaireList(task.getInterviewId());
+			
+			//获取问卷
+			List<Questionaire> questionaireList = questionaireDao.batchFindByVersionAndCode(interview.getVersionId(), questionaireCodeList);
+			
+			return CallResult.success(questionaireList);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "getTaskQuestionaireList error", e);
+			return CallResult.failure("获取问卷列表出错");
 		}
 	}
 

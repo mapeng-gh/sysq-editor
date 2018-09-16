@@ -13,6 +13,11 @@ import com.huasheng.sysq.editor.model.Task;
 public class TaskDaoImpl extends BaseDao implements TaskDao{
 	
 	private static String NAMESPACE = "mapper.TaskMapper";
+	
+	@Override
+	public Task selectById(int id) {
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectById", id);
+	}
 
 	@Override
 	public void insert(Task task) {

@@ -6,13 +6,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.huasheng.sysq.editor.dao.SysqResultDao;
+import com.huasheng.sysq.editor.dao.EditorResultDao;
 import com.huasheng.sysq.editor.model.SysqResult;
 
 @Repository
-public class SysqResultDaoImpl extends BaseDao implements SysqResultDao{
+public class EditorResultDaoImpl extends BaseDao implements EditorResultDao{
 	
-	private static String NAMESPACE = "mapper.SysqResultMapper";
+	private static String NAMESPACE = "mapper.EditorResultMapper";
 
 	@Override
 	public List<String> getQuestionaireList(int interviewId) {
@@ -52,6 +52,11 @@ public class SysqResultDaoImpl extends BaseDao implements SysqResultDao{
 	@Override
 	public List<SysqResult> getAllAnswerResult(int interviewId) {
 		return super.getSqlSession().selectList(NAMESPACE + ".getAllAnswerResult", interviewId);
+	}
+
+	@Override
+	public void batchInsert(List<SysqResult> resultList) {
+		super.getSqlSession().insert(NAMESPACE + ".batchInsert", resultList);
 	}
 
 }

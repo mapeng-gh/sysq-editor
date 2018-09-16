@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.huasheng.sysq.editor.model.SysqResult;
 
-public interface SysqResultDao {
+public interface EditorResultDao {
 
 	/**
 	 * 查询问卷集合
@@ -46,4 +46,10 @@ public interface SysqResultDao {
 	 * @return
 	 */
 	public List<SysqResult> getAllAnswerResult(int interviewId);
+	
+	/**
+	 * 批量插入
+	 * @param resultList
+	 */
+	public void batchInsert(List<SysqResult> resultList);
 }
