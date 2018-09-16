@@ -1,5 +1,5 @@
 (function(){
-	var dataManageVersionListComponent = {
+	var dataManage4VersionListComponent = {
 		template : `
             <div class="userManageList">
                                 
@@ -13,19 +13,19 @@
 						header-cell-class-name="common-table-header"
 						style="width: 100%"
 						:row-class-name="tableRowClassName">
-                        <el-table-column prop="id" label="编号" align="left" width="80"></el-table-column>
-                        <el-table-column prop="name" label="名称" align="left"  :show-overflow-tooltip="true"></el-table-column>
-                        <el-table-column prop="publishDate" label="发布时间" align="left">
+                        <el-table-column prop="id" label="编号" align="center" :show-overflow-tooltip="true"></el-table-column>
+                        <el-table-column prop="name" label="名称" align="center"  :show-overflow-tooltip="true"></el-table-column>
+                        <el-table-column prop="publishDate" label="发布时间" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.publishDate,'YYYY-MM-DD')}}
 							</template>
 						</el-table-column>
-                        <el-table-column prop="isCurrent" label="当前版本" align="left">
+                        <el-table-column prop="isCurrent" label="当前版本" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{scope.row.isCurrent == 1?'是':'否'}}
 							</template>
                         </el-table-column>
-						<el-table-column prop="operate" label="操作" align="center">
+						<el-table-column prop="operate" label="操作" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleCaseQuestionaire(scope)">病例问卷</el-button>
 								<el-button type="text" size="mini" @click="handleContrastQuestionaire(scope)">对照问卷</el-button>
@@ -127,7 +127,7 @@
 			
         }
 	};
-	window.dataManageVersionListComponent = dataManageVersionListComponent;
+	window.dataManage4VersionListComponent = dataManage4VersionListComponent;
 })();
 
 

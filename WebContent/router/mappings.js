@@ -113,25 +113,25 @@
 	//数据管理
 	var dataManageMappings = [
 		{
-			name : 'dataManageVersionList',
+			name : 'dataManage4VersionList',
 			path : '/dataManage/versionList',
-			component : dataManageVersionListComponent,
+			component : dataManage4VersionListComponent,
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}
 		},
 		{
-			name : 'dataManageQuestionaireList',
+			name : 'dataManage4QuestionaireList',
 			path : '/dataManage/questionaireList',
-			component : dataManageQuestionaireListComponent,
+			component : dataManage4QuestionaireListComponent,
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}
 		},
 		{
-			name : 'dataManageQuestionList',
+			name : 'dataManage4QuestionList',
 			path : '/dataManage/questionList',
-			component : dataManageQuestionListComponent,
+			component : dataManage4QuestionListComponent,
 			meta : {
 				activeIndex : '/dataManage/versionList'
 			}

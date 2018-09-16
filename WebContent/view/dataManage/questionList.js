@@ -1,5 +1,5 @@
 (function(){
-	var dataManageQuestionListComponent = {
+	var dataManage4QuestionListComponent = {
 		
 		template : `
 			<div class="data-manage-question-list">
@@ -97,7 +97,7 @@
 		}
 	};
 	
-	window.dataManageQuestionListComponent = dataManageQuestionListComponent;
+	window.dataManage4QuestionListComponent = dataManage4QuestionListComponent;
 	
 })();
 
