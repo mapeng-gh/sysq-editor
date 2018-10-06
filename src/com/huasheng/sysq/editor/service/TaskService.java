@@ -45,6 +45,13 @@ public interface TaskService {
 	 */
 	public CallResult<Page<TaskResponse>> findUserTaskPage(int userId,Map<String,Object> searchParams,int currentPage,int pageSize);
 	
+	/**
+	 * 获取任务详情
+	 * @param taskId
+	 * @return
+	 */
+	public CallResult<TaskResponse> getTaskDetail(int taskId);
+	
 	//获取任务问卷列表
 	public CallResult<List<Questionaire>> getTaskQuestionaireList(int taskId);
 }

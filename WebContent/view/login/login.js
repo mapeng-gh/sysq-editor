@@ -3,7 +3,6 @@
     var loginComponent = {
 			
 		template : `
-                        
             <div class="login">
 		
 				<div class="header">
@@ -112,15 +111,15 @@
 		`,
 		
 		data : function(){
-			
 			return {
 				
 				APIS : {
-					REGISTER_USER : '/register.do'
+					USER_LOGIN : '/login.do',
+					USER_REGISTE : '/register.do'
 				},
 				
-				loginName : '18110879836',
-                loginPwd : '123456',
+				loginName : '',
+                loginPwd : '',
 				
 				registerDialog : {
 					visible : false
@@ -139,12 +138,11 @@
 		},
                 
         methods: {
-        	
             //登录
 			login : function(){
                 var self = this;
                                 
-				this.$request.sendPostRequest('/login.do',{loginName : this.loginName,loginPwd : this.loginPwd},function(resultObject){
+				this.$request.sendPostRequest(this.APIS.USER_LOGIN,{loginName : this.loginName,loginPwd : this.loginPwd},function(resultObject){
 					window.localStorage.setItem('loginUser',JSON.stringify(resultObject));
                     
 					//根据用户类型跳转页面
@@ -234,7 +232,7 @@
                         if(action == 'confirm'){
                                                        
 							//提交数据
-							self.$request.sendPostRequest(self.APIS.REGISTER_USER,self.register,(resultObject)=>{
+							self.$request.sendPostRequest(self.APIS.USER_REGISTE,self.register,(resultObject)=>{
 								self.$message.success('注册成功');
 								self.registerDialog.visible = false;
 							});
@@ -245,6 +243,6 @@
         }
                 
 	};
+	
 	window.loginComponent = loginComponent;
-      
 })();

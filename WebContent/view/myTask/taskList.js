@@ -1,5 +1,6 @@
 (function(){
 	var myTask4TaskListComponent = {
+		
 		template : `
 			<div class="my-task-task-list">
 			
@@ -45,16 +46,15 @@
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="interview.versionId" label="问卷版本" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="patient.username" label="患者姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.endTime" label="访谈时间" align="center" width="180" :show-overflow-tooltip="true">
-							<template slot-scope="scope">
-								{{$commons.formatDate(scope.row.interview.endTime)}}
-							</template>
-						</el-table-column>
-						<el-table-column prop="task.createTime" label="分配时间" align="center" width="180" :show-overflow-tooltip="true">
+						<el-table-column prop="task.createTime" label="创建时间" align="center" width="180" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.createTime)}}
+							</template>
+						</el-table-column>
+						<el-table-column prop="task.updateTime" label="更新时间" align="center" width="180" :show-overflow-tooltip="true">
+							<template slot-scope="scope">
+								{{$commons.formatDate(scope.row.task.updateTime)}}
 							</template>
 						</el-table-column>
 						<el-table-column prop="task.status" label="任务状态" align="center" :show-overflow-tooltip="true">
@@ -64,9 +64,11 @@
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED" type="success">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" width="120" :show-overflow-tooltip="true">
+						<el-table-column prop="operate" label="操作" align="center" width="200" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">问卷列表</el-button>
+								<el-button type="text" size="mini" @click="handleTaskDetail(scope)">任务详情</el-button>
+								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">编辑访谈</el-button>
+								<el-button type="text" size="mini" @click="handleFinishTask(scope)">任务完成</el-button>
 							</template>
 						</el-table-column>
                     </el-table>
@@ -92,7 +94,6 @@
 			var self = this;
 			
 			return {
-				
 				APIS : {
 					TASK_LIST : '/myTask/taskList.do'
 				},
@@ -174,12 +175,18 @@
 				});
 			},
 			
+			//任务详情
+			handleTaskDetail(scope){
+				this.$commons.openWindow('#/myTask/taskDetail',{taskId : scope.row.task.id});
+			},
+			
 			//问卷列表
 			handleQuestionaireList(scope){
-				this.$commons.openWindow('#/myTask/questionaireList',{taskId : scope.row.task.id});
+				this.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : scope.row.task.id}});
 			}
 		}
 	};
+	
 	window.myTask4TaskListComponent = myTask4TaskListComponent;
 })();
 

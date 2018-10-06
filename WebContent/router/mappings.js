@@ -53,6 +53,14 @@
 			}
         },
 		{
+			name : 'myTask4TaskDetail',
+			path : '/myTask/taskDetail',
+			component : myTask4TaskDetailComponent,
+			meta : {
+				activeIndex : '/myTask/taskList'
+			}
+		},
+		{
             name : 'myTask4QuestionaireList',
 			path : '/myTask/questionaireList',
 			component : myTask4QuestionaireListComponent,

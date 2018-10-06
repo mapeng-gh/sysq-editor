@@ -65,6 +65,21 @@ public class MyTaskController {
 	}
 	
 	/**
+	 * 任务详情
+	 * @param taskId
+	 * @return
+	 */
+	@RequestMapping(value="/taskDetail.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<TaskResponse> taskDetail(@RequestParam(value="taskId") int taskId) {
+		LogUtils.info(this.getClass(), "taskDetail params : taskId = {}",taskId);
+		
+		CallResult<TaskResponse> result = taskService.getTaskDetail(taskId);
+		LogUtils.info(this.getClass(), "taskDetail result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
 	 * 问卷列表
 	 * @param taskIdStr
 	 * @return

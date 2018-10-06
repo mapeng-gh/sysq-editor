@@ -174,11 +174,9 @@ public class TaskServiceImpl implements TaskService{
 				for(Task task : taskList) {
 					TaskResponse taskResponse = new TaskResponse();
 					taskResponse.setTask(task);
-					taskResponse.setUser(userDao.selectById(task.getUserId()));
 					Interview interview = interviewDao.selectById(task.getInterviewId());
 					taskResponse.setInterview(interview);
 					taskResponse.setPatient(patientDao.selectById(interview.getPatientId()));
-					taskResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
 					taskResponseList.add(taskResponse);
 				}
 			}
@@ -210,7 +208,30 @@ public class TaskServiceImpl implements TaskService{
 			return CallResult.success(questionaireList);
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "getTaskQuestionaireList error", e);
-			return CallResult.failure("获取问卷列表出错");
+			return CallResult.failure("获取问卷列表失败");
+		}
+	}
+
+	@Override
+	public CallResult<TaskResponse> getTaskDetail(int taskId) {
+		LogUtils.info(this.getClass(), "getTaskDetail params : taskId = {}", taskId);
+		try {
+			TaskResponse taskResponse = new TaskResponse();
+			
+			//获取任务
+			Task task = taskDao.selectById(taskId);
+			taskResponse.setTask(task);
+			
+			//关联数据
+			Interview interview = interviewDao.selectById(task.getInterviewId());
+			taskResponse.setInterview(interview);
+			taskResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+			taskResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
+			
+			return CallResult.success(taskResponse);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "getTaskDetail error", e);
+			return CallResult.failure("获取任务详情失败");
 		}
 	}
 
