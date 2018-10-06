@@ -52,6 +52,13 @@ public interface TaskService {
 	 */
 	public CallResult<TaskResponse> getTaskDetail(int taskId);
 	
+	/**
+	 * 完成任务
+	 * @param taskId
+	 * @return
+	 */
+	public CallResult<Boolean> finishTask(int taskId);
+	
 	//获取任务问卷列表
 	public CallResult<List<Questionaire>> getTaskQuestionaireList(int taskId);
 }

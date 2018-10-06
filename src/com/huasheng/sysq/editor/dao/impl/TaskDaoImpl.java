@@ -74,4 +74,9 @@ public class TaskDaoImpl extends BaseDao implements TaskDao{
 	public Task findByInterviewId(int interviewId) {
 		return super.getSqlSession().selectOne(NAMESPACE + ".findByInterviewId",interviewId);
 	}
+
+	@Override
+	public void update(Task task) {
+		this.getSqlSession().update(NAMESPACE + ".update", task);
+	}
 }

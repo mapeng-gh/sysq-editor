@@ -26,6 +26,11 @@
             	values(#{userId},#{interviewId},#{status},#{createTime},#{updateTime})
         </insert>
         
+        <update id="update" parameterType="Task">
+            	update editor_task set user_id = #{userId},interview_id = #{interviewId},status = #{status},create_time = #{createTime},update_time = #{updateTime} 
+            	where id = #{id}
+        </update>
+        
         <select id="findAllTaskPage" parameterType="hashmap" resultMap="allResultMap">
             	select task.id,task.user_id,task.interview_id,task.status,task.create_time,task.update_time 
 	    	from editor_task task 

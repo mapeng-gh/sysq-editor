@@ -53,6 +53,12 @@ public interface TaskDao {
 	public int countUserTask(int userId,Map<String,Object> searchParams);
 	
 	/**
+	 * 更新任务
+	 * @param task
+	 */
+	public void update(Task task);
+	
+	/**
 	 * 根据访谈查询任务
 	 * @param interviewId
 	 * @return

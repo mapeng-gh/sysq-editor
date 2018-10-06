@@ -235,4 +235,25 @@ public class TaskServiceImpl implements TaskService{
 		}
 	}
 
+	@Override
+	public CallResult<Boolean> finishTask(int taskId) {
+		LogUtils.info(this.getClass(), "finishTask params : taskId = {}", taskId);
+		
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Task task = taskDao.selectById(taskId);
+					task.setStatus(Constants.TASK_STATUS_FINISHED);
+					task.setUpdateTime(new Date());
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "finishTask error", e);
+			return CallResult.failure("完成任务失败");
+		}
+	}
+
 }

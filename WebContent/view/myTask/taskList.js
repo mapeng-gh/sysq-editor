@@ -95,7 +95,8 @@
 			
 			return {
 				APIS : {
-					TASK_LIST : '/myTask/taskList.do'
+					TASK_LIST : '/myTask/taskList.do',
+					FINISH_TASK : '/myTask/finishTask.do'
 				},
 				
 				search : {
@@ -183,6 +184,32 @@
 			//问卷列表
 			handleQuestionaireList(scope){
 				this.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : scope.row.task.id}});
+			},
+			
+			//任务完成
+			handleFinishTask(scope){
+				var self = this;
+				
+				this.$confirm('请确定该任务是否已经编辑完成？','确认',{
+					type : 'warning',
+					closeOnClickModal : false,
+					closeOnPressEscape : false,
+					callback : function(action){
+						if(action == 'confirm'){
+							
+							//提交请求
+							self.$request.sendPostRequest(self.APIS.FINISH_TASK,{taskId : scope.row.task.id},(resultObject)=>{
+								self.$message.success('操作成功');
+								
+								//刷新列表
+								self.$request.sendGetRequest(self.APIS.TASK_LIST,self.$lodash.assign({},self.search,{currentPage : self.paginate.currentPage,pageSize:self.paginate.pageSize}),(resultObject)=>{
+									self.taskList = resultObject.data;
+									self.paginate.total = resultObject.total;
+								});
+							});
+						}
+					}
+				});
 			}
 		}
 	};
