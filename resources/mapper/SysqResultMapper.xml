@@ -33,6 +33,12 @@
             	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
         </select>
         
+        <select id="getAnswerResultByQuestion" parameterType="hashmap" resultMap="allResultMap">
+            	select <include refid="allColumns"></include>
+            	from sysq_result 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
+        </select>
+        
         <select id="getAnswerResult" parameterType="hashmap" resultMap="allResultMap">
             	select <include refid="allColumns"></include>
             	from sysq_result 

@@ -6,9 +6,9 @@
                         
                 <div class="common-title">问卷列表</div>
 
-                    <div class="questionaire" v-for="(item,index) in questionaireList" :key="item.id" @click="handleQuestionList(item.code)">
-						<div class="questionaire-header">[{{index+1}}] {{item.code}} {{item.title}}</div>
-						<div class="questionaire-content">{{item.introduction == '' ? '暂无描述内容' : item.introduction}}</div>
+                    <div class="questionaire" v-for="(item,index) in questionaireList" :key="item.questionaire.code" @click="handleQuestionList(item.questionaire.code)">
+						<div class="questionaire-header">[{{index+1}}] {{item.questionaire.code}} {{item.questionaire.title}}</div>
+						<div class="questionaire-content">{{item.questionaire.introduction == '' ? '暂无描述内容' : item.questionaire.introduction}}</div>
 					</div>
                                 
                 </div>
@@ -20,7 +20,7 @@
             return {
                                 
 				APIS : {
-						QUESTIONAIRE_LIST : '/myTask/questionaireList.do'
+					QUESTIONAIRE_LIST : '/myTask/questionaireList.do'
 				},
 				
 				params : {

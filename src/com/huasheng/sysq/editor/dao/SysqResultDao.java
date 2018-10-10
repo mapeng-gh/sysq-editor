@@ -31,6 +31,15 @@ public interface SysqResultDao {
 	public List<String> getAnswerList(int interviewId,String questionaireCode,String questionCode);
 	
 	/**
+	 * 获取问题下所有结果
+	 * @param interviewId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @return
+	 */
+	public List<SysqResult> getAnswerResultByQuestion(int interviewId,String questionaireCode,String questionCode);
+	
+	/**
 	 * 查找结果
 	 * @param interviewId
 	 * @param questionaireCode

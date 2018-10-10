@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.EditorQuestionaireMapper">
+    
+	<sql id="allColumns">
+		id,interview_id,questionaire_code,status,create_time,update_time,seq_num   
+	</sql>
+	
+	<resultMap id="allResultMap" type="EditorQuestionaire">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
+		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
+		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
+		<result column="status" property="status" jdbcType="INTEGER" javaType="_int"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="date" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="date" />
+		<result column="seq_num" property="seqNum" jdbcType="INTEGER" javaType="_int"/>
+  		
+	</resultMap>
+	
+        <select id="getListByInterviewId" parameterType="_int" resultMap="allResultMap">
+            	select <include refid="allColumns"></include>
+            	from editor_questionaire  
+            	where interview_id = #{interviewId}
+            	order by seq_num asc
+        </select>
+        
+        <insert id="insert" parameterType="EditorQuestionaire" useGeneratedKeys="true" keyProperty="id">
+            	insert editor_questionaire(interview_id,questionaire_code,status,create_time,update_time,seq_num) 
+            	values(#{interviewId},#{questionaireCode},#{status},#{createTime},#{updateTime},#{seqNum})
+        </insert>
+        
+</mapper>  

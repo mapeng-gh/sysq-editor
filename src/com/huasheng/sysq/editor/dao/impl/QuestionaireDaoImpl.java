@@ -30,4 +30,13 @@ public class QuestionaireDaoImpl extends BaseDao implements QuestionaireDao{
 		return super.getSqlSession().selectList(NAMESPACE + ".batchFindByVersionAndCode", sqlParams);
 	}
 
+	@Override
+	public Questionaire findByVersionAndCode(int versionId, String code) {
+		Map<String,Object> sqlParams = new HashMap<String,Object>();
+		sqlParams.put("versionId", versionId);
+		sqlParams.put("code", code);
+		
+		return super.getSqlSession().selectOne(NAMESPACE + ".findByVersionAndCode", sqlParams);
+	}
+
 }

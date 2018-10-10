@@ -3,7 +3,7 @@
 <mapper namespace="mapper.EditorResultMapper">
     
         <sql id="allColumns">
-		id,questionaire_code,question_code,answer_code,answer_value,interview_id 
+		id,interview_id,questionaire_code,question_code,answer_code,answer_value 
         </sql>
 	
 	<resultMap id="allResultMap" type="SysqResult">
@@ -14,43 +14,9 @@
   		<result column="answer_value" property="answerValue" jdbcType="VARCHAR" javaType="string"/>
 	</resultMap>
 	
-        <select id="getQuestionaireList" parameterType="_int" resultType="string">
-		select distinct questionaire_code 
-		from editor_result 
-		where interview_id = #{interviewId}
-        </select>
-        
-        <select id="getQuestionList" parameterType="hashmap" resultType="string">
-            	select distinct question_code 
-            	from editor_result 
-            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode}
-        </select>
-        
-        <select id="getAnswerList" parameterType="hashmap" resultType="string">
-            	select distinct answer_code 
-            	from editor_result 
-            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
-        </select>
-        
-        <select id="getAnswerResult" parameterType="hashmap" resultMap="allResultMap">
-            	select <include refid="allColumns"></include>
-            	from editor_result 
-            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode} and answer_code = #{answerCode}
-        </select>
-        
-        <select id="getAllAnswerResult" parameterType="_int" resultMap="allResultMap">
-		select <include refid="allColumns"></include>
-            	from editor_result 
-            	where interview_id = #{interviewId}
-        </select>
-        
-        <insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyProperty="id">
-            	insert into editor_result(questionaire_code,question_code,answer_code,answer_value,interview_id) 
-            	values
-		<foreach item="item" index="index" collection="list" separator=",">
-			(#{item.questionaireCode},#{item.questionCode},#{item.answerCode},#{item.answerValue},#{item.interviewId})
-		</foreach> 
-            
-        </insert>
-        
+	<insert id="insert" parameterType="SysqResult" useGeneratedKeys="true" keyProperty="id">
+	    	insert editor_result(interview_id,questionaire_code,question_code,answer_code,answer_value) 
+	    	values(#{interviewId},#{questionaireCode},#{questionCode},#{answerCode},#{answerValue})
+	</insert>
+	
 </mapper>  

@@ -21,4 +21,11 @@ public class Constants {
 	public static final int TASK_STATUS_EDITING = 2;
 	public static final int TASK_STATUS_FINISHED = 3;
 	
+	//编辑问卷状态（1：有效 0 ：无效）
+	public static final int EDIT_QUESTIONAIRE_STATUS_VALID= 1;
+	public static final int EDIT_QUESTIONAIRE_STATUS_INVALID= 0;
+	
+	//编辑问题状态（1：有效 0 ：无效）
+	public static final int EDIT_QUESTION_STATUS_VALID= 1;
+	public static final int EDIT_QUESTION_STATUS_INVALID= 0;
 }

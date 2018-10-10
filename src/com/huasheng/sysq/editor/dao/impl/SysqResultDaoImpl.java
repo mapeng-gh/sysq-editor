@@ -54,4 +54,14 @@ public class SysqResultDaoImpl extends BaseDao implements SysqResultDao{
 		return super.getSqlSession().selectList(NAMESPACE + ".getAllAnswerResult", interviewId);
 	}
 
+	@Override
+	public List<SysqResult> getAnswerResultByQuestion(int interviewId, String questionaireCode, String questionCode) {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("interviewId", interviewId);
+		paramMap.put("questionaireCode", questionaireCode);
+		paramMap.put("questionCode", questionCode);
+		
+		return super.getSqlSession().selectList(NAMESPACE + ".getAnswerResultByQuestion", paramMap);
+	}
+
 }

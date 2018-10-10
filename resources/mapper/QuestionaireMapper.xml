@@ -34,6 +34,12 @@
 			#{item}
 		</foreach> 
 		order by seq_num asc
-		</select>
+	</select>
+	
+        <select id="findByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+		select <include refid="allColumns"></include> 
+		from sysq_questionaire 
+		where version_id = #{versionId} and code = #{code}
+	</select>
         
 </mapper>  

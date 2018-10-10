@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.huasheng.sysq.editor.model.Questionaire;
+import com.huasheng.sysq.editor.params.EditorQuestionaireResponse;
 import com.huasheng.sysq.editor.params.TaskResponse;
 import com.huasheng.sysq.editor.service.TaskService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -113,19 +113,10 @@ public class MyTaskController {
 	 */
 	@RequestMapping(value="/questionaireList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<List<Questionaire>> questionaireList(@RequestParam(value="taskId") String taskIdStr) {
-		LogUtils.info(this.getClass(), "questionaireList params : taskId = {}",taskIdStr);
+	public CallResult<List<EditorQuestionaireResponse>> questionaireList(@RequestParam(value="taskId") int taskId) {
+		LogUtils.info(this.getClass(), "questionaireList params : taskId = {}",taskId);
 		
-		//参数处理
-		int taskId = 0;
-		try {
-			taskId = Integer.parseInt(taskIdStr);
-		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "questionaireList error", e);
-			return CallResult.failure("获取问卷列表");
-		}
-		
-		CallResult<List<Questionaire>> result = taskService.getTaskQuestionaireList(taskId);
+		CallResult<List<EditorQuestionaireResponse>> result = taskService.getTaskQuestionaireList(taskId);
 		LogUtils.info(this.getClass(), "questionaireList result : {}", JsonUtils.toJson(result));
 		return result;
 	}

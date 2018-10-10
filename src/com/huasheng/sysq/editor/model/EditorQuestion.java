@@ -11,7 +11,7 @@ public class EditorQuestion {
 	private int status;
 	private Date createTime;
 	private Date updateTime;
-	private int versionId;
+	private int seqNum;
 	
 	public int getId() {
 		return id;
@@ -55,11 +55,11 @@ public class EditorQuestion {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	public int getVersionId() {
-		return versionId;
+	public int getSeqNum() {
+		return seqNum;
 	}
-	public void setVersionId(int versionId) {
-		this.versionId = versionId;
+	public void setSeqNum(int seqNum) {
+		this.seqNum = seqNum;
 	}
 	
 }
