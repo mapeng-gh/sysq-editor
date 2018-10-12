@@ -1,10 +1,21 @@
+.my-task-task-detail{
+	.task-title{
+		font-size : 14px;
+		color : #606266;
+	}
+}
+
 .my-task-questionaire-list{
 	.questionaire{
 		margin-top : 20px;
-		cursor : pointer;
 		
 		&:hover{
 			background-color : #eef1f6;
+		}
+		
+		.questionaire-operate{
+			text-align:right;
+			padding-right:10px;
 		}
 		
 		.questionaire-header{
@@ -21,11 +32,7 @@
 			
 		}
 	}
-}
-
-.my-task-task-detail{
-	.task-title{
-		font-size : 14px;
-		color : #606266;
+	.invalid{
+		background-color: #fcf8e3;
 	}
 }

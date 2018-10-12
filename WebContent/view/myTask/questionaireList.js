@@ -5,11 +5,18 @@
             <div class="my-task-questionaire-list">
                         
                 <div class="common-title">问卷列表</div>
-
-                    <div class="questionaire" v-for="(item,index) in questionaireList" :key="item.questionaire.code" @click="handleQuestionList(item.questionaire.code)">
-						<div class="questionaire-header">[{{index+1}}] {{item.questionaire.code}} {{item.questionaire.title}}</div>
-						<div class="questionaire-content">{{item.questionaire.introduction == '' ? '暂无描述内容' : item.questionaire.introduction}}</div>
+				
+				<div :class="{'questionaire' : true , 'invalid' : item.editorQuestionaire.status == 0}" v-for="(item,index) in questionaireList" :key="item.questionaire.code" @mouseover="handleMouseover(item,$event)" @mouseout="handleMouseout(item,$event)">
+					<div class="questionaire-operate hidden">
+						<el-button type="primary" plain size="small" :class="{'hidden' : item.editorQuestionaire.status == 0}" @click="handleQuestionList(item)"">问题列表</el-button>
+						<el-button type="primary" plain size="small" :class="{'hidden' : item.editorQuestionaire.status == 1}" @click="enableQuestionaire(item)">启用</el-button>
+						<el-tooltip class="item" effect="dark" content="禁用问卷意味着访谈不包含该问卷" placement="top-start">
+							<el-button type="primary" plain size="small" :class="{'hidden' : item.editorQuestionaire.status == 0}" @click="disableQuestionaire(item)">禁用<i class="el-icon-question"></i></el-button>
+						</el-tooltip>
 					</div>
+					<div class="questionaire-header">[{{index+1}}] {{item.questionaire.code}} {{item.questionaire.title}}</div>
+					<div class="questionaire-content">{{item.questionaire.introduction == '' ? '暂无描述内容' : item.questionaire.introduction}}</div>
+				</div>
                                 
                 </div>
 			</div>
@@ -41,11 +48,35 @@
 				});
 			},
 			
+			//显示操作
+			handleMouseover : function(item,$event){
+				var questionDom = $event.currentTarget.firstChild;
+				questionDom.classList.remove('hidden');
+			},
+			
+			//隐藏操作
+			handleMouseout : function(item,$event){
+				var questionDom = $event.currentTarget.firstChild;
+				questionDom.classList.add('hidden');
+			},
+			
+			//启用问卷
+			enableQuestionaire : function(item){
+				this.$message.info('enable');
+			},
+			
+			//禁用问卷
+			disableQuestionaire : function(item){
+				this.$message.info('disabled');
+			},
+			
 			//问题列表
-			handleQuestionList : function(questionaireCode){
-				this.$commons.openWindow('#/myInterview/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
+			handleQuestionList : function(item,$event){
+				this.$message.info('question');
+				
+				// this.$commons.openWindow('#/myInterview/questionList',{interviewId : this.params.interviewId,questionaireCode : questionaireCode});
 			}
-                        
+			
         },
                 
 		mounted : function(){
@@ -55,7 +86,6 @@
 	};
 	
 	window.myTask4QuestionaireListComponent = myTask4QuestionaireListComponent;
-	
 })();
 
 
