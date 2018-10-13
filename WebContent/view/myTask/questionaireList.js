@@ -27,7 +27,9 @@
             return {
                                 
 				APIS : {
-					QUESTIONAIRE_LIST : '/myTask/questionaireList.do'
+					QUESTIONAIRE_LIST : '/myTask/questionaireList.do',
+					ENABLE_QUESTIONAIRE : '/myTask/enableQuestionaire.do',
+					DISABLE_QUESTIONAIRE : '/myTask/disableQuestionaire.do'
 				},
 				
 				params : {
@@ -43,7 +45,7 @@
 			init : function(){
 				var self = this;
 						
-				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{taskId : this.params.taskId},(resultObject)=>{
+				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{taskId : this.params.taskId},function(resultObject){
 					self.questionaireList = resultObject;
 				});
 			},
@@ -62,12 +64,32 @@
 			
 			//启用问卷
 			enableQuestionaire : function(item){
-				this.$message.info('enable');
+				var self = this;
+				this.$commons.confirm('确定启用该问卷吗？','确认',function(){
+					self.$request.sendPostRequest(self.APIS.ENABLE_QUESTIONAIRE,{taskId : self.params.taskId , questionaireCode : item.questionaire.code},function(resultObject){
+						self.$message.success('启用成功');
+						
+						//刷新问卷
+						self.$request.sendGetRequest(self.APIS.QUESTIONAIRE_LIST,{taskId : self.params.taskId},function(resultObject){
+							self.questionaireList = resultObject;
+						});
+					});
+				});
 			},
 			
 			//禁用问卷
 			disableQuestionaire : function(item){
-				this.$message.info('disabled');
+				var self = this;
+				this.$commons.confirm('确定禁用该问卷吗？','确认',function(){
+					self.$request.sendPostRequest(self.APIS.DISABLE_QUESTIONAIRE,{taskId : self.params.taskId , questionaireCode : item.questionaire.code},function(resultObject){
+						self.$message.success('禁用成功');
+						
+						//刷新问卷
+						self.$request.sendGetRequest(self.APIS.QUESTIONAIRE_LIST,{taskId : self.params.taskId},function(resultObject){
+							self.questionaireList = resultObject;
+						});
+					});
+				});
 			},
 			
 			//问题列表

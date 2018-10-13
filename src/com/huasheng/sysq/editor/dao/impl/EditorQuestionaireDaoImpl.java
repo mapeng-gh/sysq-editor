@@ -1,6 +1,8 @@
 package com.huasheng.sysq.editor.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +22,20 @@ public class EditorQuestionaireDaoImpl extends BaseDao implements EditorQuestion
 	@Override
 	public void insert(EditorQuestionaire editorQuestionaire) {
 		super.getSqlSession().insert(NAMESPACE + ".insert", editorQuestionaire);
+	}
+
+	@Override
+	public EditorQuestionaire selectByInterviewAndQuestionaire(int interviewId, String questionaireCode) {
+		Map<String ,Object> paramsMap = new HashMap<String,Object>();
+		paramsMap.put("interviewId", interviewId);
+		paramsMap.put("questionaireCode", questionaireCode);
+		
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectByInterviewAndQuestionaire", paramsMap);
+	}
+
+	@Override
+	public void update(EditorQuestionaire editorQuestionaire) {
+		super.getSqlSession().update(NAMESPACE + ".update", editorQuestionaire);
 	}
 
 }

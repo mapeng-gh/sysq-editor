@@ -63,6 +63,21 @@ function getHomePage(){
 	}
 }
 
+//确认对话框
+function confirm(content,title,confirmCallback){
+	Vue.prototype.$confirm(content,title,{
+		type : 'warning',
+		dangerouslyUseHTMLString : true,
+		closeOnClickModal : false,
+		closeOnPressEscape : false,
+		callback : function(action){
+			if(action == 'confirm'){
+				confirmCallback();
+			}
+		}
+	});
+}
+
 window.commons = {
 	formatDate : formatDate,
 	serialize : serialize,
@@ -70,7 +85,8 @@ window.commons = {
 	closeWindow : closeWindow,
 	getLoginUser : getLoginUser,
 	goLogin : goLogin,
-	getHomePage : getHomePage
+	getHomePage : getHomePage,
+	confirm : confirm
 }
       
 })();

@@ -29,4 +29,16 @@
             	values(#{interviewId},#{questionaireCode},#{status},#{createTime},#{updateTime},#{seqNum})
         </insert>
         
+        <select id="selectByInterviewAndQuestionaire" parameterType="hashmap" resultMap="allResultMap">
+            	select <include refid="allColumns"></include> 
+            	from editor_questionaire 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode}
+        </select>
+        
+        <update id="update" parameterType="EditorQuestionaire">
+            	update editor_questionaire 
+            	set interview_id = #{interviewId},questionaire_code = #{questionaireCode},status = #{status},create_time = #{createTime},update_time = #{updateTime},seq_num = #{seqNum}
+            	where id = #{id}
+        </update>
+        
 </mapper>  

@@ -373,4 +373,56 @@ public class TaskServiceImpl implements TaskService{
 		}
 	}
 
+	@Override
+	public CallResult<Boolean> enableQuestionaire(int taskId, String questionaireCode) {
+		LogUtils.info(this.getClass(), "enableQuestionaire params : taskId = {},questionaireCode = {}", taskId,questionaireCode);
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Task task = taskDao.selectById(taskId);
+					EditorQuestionaire editorQuestionaire = editorQuestionaireDao.selectByInterviewAndQuestionaire(task.getInterviewId(), questionaireCode);
+					editorQuestionaire.setStatus(Constants.EDIT_QUESTIONAIRE_STATUS_VALID);
+					Date curTime = new Date();
+					editorQuestionaire.setUpdateTime(curTime);
+					editorQuestionaireDao.update(editorQuestionaire);
+					
+					//更新任务
+					task.setUpdateTime(curTime);
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "enableQuestionaire error", e);
+			return CallResult.failure("启用问卷失败");
+		}
+	}
+
+	@Override
+	public CallResult<Boolean> disableQuestionaire(int taskId, String questionaireCode) {
+		LogUtils.info(this.getClass(), "disableQuestionaire params : taskId = {},questionaireCode = {}", taskId,questionaireCode);
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Task task = taskDao.selectById(taskId);
+					EditorQuestionaire editorQuestionaire = editorQuestionaireDao.selectByInterviewAndQuestionaire(task.getInterviewId(), questionaireCode);
+					editorQuestionaire.setStatus(Constants.EDIT_QUESTIONAIRE_STATUS_INVALID);
+					Date curTime = new Date();
+					editorQuestionaire.setUpdateTime(curTime);
+					editorQuestionaireDao.update(editorQuestionaire);
+					
+					//更新任务
+					task.setUpdateTime(curTime);
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "disableQuestionaire error", e);
+			return CallResult.failure("禁用问卷失败");
+		}
+	}
+
 }

@@ -59,6 +59,26 @@ public interface TaskService {
 	 */
 	public CallResult<Boolean> finishTask(int taskId);
 	
-	//获取任务问卷
+	/**
+	 * 获取任务问卷列表
+	 * @param taskId
+	 * @return
+	 */
 	public CallResult<List<EditorQuestionaireResponse>> getTaskQuestionaireList(int taskId);
+	
+	/**
+	 * 启用问卷
+	 * @param taskId
+	 * @param questionaireCode
+	 * @return
+	 */
+	public CallResult<Boolean> enableQuestionaire(int taskId,String questionaireCode);
+	
+	/**
+	 * 禁用问卷
+	 * @param taskId
+	 * @param questionaireCode
+	 * @return
+	 */
+	public CallResult<Boolean> disableQuestionaire(int taskId,String questionaireCode);
 }

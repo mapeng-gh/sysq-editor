@@ -18,4 +18,18 @@ public interface EditorQuestionaireDao {
 	 * @param editorQuestionaire
 	 */
 	public void insert(EditorQuestionaire editorQuestionaire);
+	
+	/**
+	 * 根据访谈和问卷查询
+	 * @param interviewId
+	 * @param questionaireCode
+	 * @return
+	 */
+	public EditorQuestionaire selectByInterviewAndQuestionaire(int interviewId,String questionaireCode);
+	
+	/**
+	 * 更新
+	 * @param editorQuestionaire
+	 */
+	public void update(EditorQuestionaire editorQuestionaire);
 }
