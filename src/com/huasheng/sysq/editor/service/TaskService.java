@@ -90,4 +90,22 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<List<EditorQuestionResponse>> getTaskQuestionList(int taskId,String questionaireCode);
+	
+	/**
+	 * 启用问题
+	 * @param taskId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @return
+	 */
+	public CallResult<Boolean> enableQuestion(int taskId,String questionaireCode,String questionCode);
+	
+	/**
+	 * 禁用问题
+	 * @param taskId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @return
+	 */
+	public CallResult<Boolean> disableQuestion(int taskId,String questionaireCode,String questionCode);
 }

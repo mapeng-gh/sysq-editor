@@ -8,28 +8,23 @@
 .my-task-questionaire-list{
 	.questionaire{
 		margin-top : 20px;
-		
 		&:hover{
 			background-color : #eef1f6;
 		}
-		
 		.questionaire-operate{
 			text-align:right;
 			padding-right:10px;
 		}
-		
 		.questionaire-header{
 			font-size : 14px;
 			color : #20a0ff;
 		}
-		
 		.questionaire-content{
 			margin-top : 10px;
 			font-size : 14px;
 			color : #48576a;
 			line-height : 200%;
 			text-indent:30px;
-			
 		}
 	}
 	.invalid{
@@ -40,15 +35,19 @@
 .my-task-question-list{
 	.question{
 		margin-top : 20px;
+		padding : 10px;
 		&:hover{
 			background-color : #eef1f6;
+		}
+		.question-operate{
+			text-align:right;
+			padding-right:10px;
 		}
 		.question-desc{
 			font-size : 14px;
 			color : #48576a;
 			line-height : 200%;
 		}
-		
 		.answer{
 			margin-top : 20px;
 			text-indent:30px;
@@ -62,7 +61,6 @@
 			}
 		}
 	}
-	
 	.invalid{
 		background-color: #fcf8e3;
 	}

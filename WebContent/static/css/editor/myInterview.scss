@@ -1,6 +1,7 @@
 .my-interview-questionaire-list{
 	.questionaire{
 		margin-top : 20px;
+		padding : 10px;
 		cursor : pointer;
 		
 		&:hover{
@@ -26,6 +27,7 @@
 .my-interview-question-list{
 	.question{
 		margin-top : 20px;
+		padding : 10px;
 		&:hover{
 			background-color : #eef1f6;
 		}

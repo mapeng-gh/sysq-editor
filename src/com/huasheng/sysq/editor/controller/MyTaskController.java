@@ -188,4 +188,60 @@ public class MyTaskController {
 		LogUtils.info(this.getClass(), "questionList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
+	
+	/**
+	 * 启用问题
+	 * @param requestJsonStr
+	 * @return
+	 */
+	@RequestMapping(value="/enableQuestion.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> enableQuestion(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "enableQuestion params : {}",requestJsonStr);
+		
+		int taskId;
+		String questionaireCode;
+		String questionCode;
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			taskId = requestJson.getIntValue("taskId");
+			questionaireCode = requestJson.getString("questionaireCode");
+			questionCode = requestJson.getString("questionCode");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "enableQuestion error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<Boolean> result = taskService.enableQuestion(taskId, questionaireCode, questionCode);
+		LogUtils.info(this.getClass(), "enableQuestion result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 禁用问题
+	 * @param requestJsonStr
+	 * @return
+	 */
+	@RequestMapping(value="/disableQuestion.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> disableQuestion(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "disableQuestion params : {}",requestJsonStr);
+		
+		int taskId;
+		String questionaireCode;
+		String questionCode;
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			taskId = requestJson.getIntValue("taskId");
+			questionaireCode = requestJson.getString("questionaireCode");
+			questionCode = requestJson.getString("questionCode");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "disableQuestion error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<Boolean> result = taskService.disableQuestion(taskId, questionaireCode, questionCode);
+		LogUtils.info(this.getClass(), "disableQuestion result : {}", JsonUtils.toJson(result));
+		return result;
+	}
 }

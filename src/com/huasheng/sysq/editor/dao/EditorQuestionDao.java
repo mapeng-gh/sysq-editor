@@ -18,5 +18,20 @@ public interface EditorQuestionDao {
 	 * @param questionaireCode
 	 * @return
 	 */
-	public List<EditorQuestion> selectListByInterviewAndQuestionaire(int interviewId,String questionaireCode);
+	public List<EditorQuestion> selectListByQuestionaire(int interviewId,String questionaireCode);
+	
+	/**
+	 * 根据编码查询
+	 * @param interviewId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @return
+	 */
+	public EditorQuestion selectByCode(int interviewId,String questionaireCode,String questionCode);
+	
+	/**
+	 * 更新
+	 * @param editorQuestion
+	 */
+	public void update(EditorQuestion editorQuestion);
 }

@@ -35,10 +35,16 @@
 
 .my-task-question-list .question {
   margin-top: 20px;
+  padding: 10px;
 }
 
 .my-task-question-list .question:hover {
   background-color: #eef1f6;
+}
+
+.my-task-question-list .question .question-operate {
+  text-align: right;
+  padding-right: 10px;
 }
 
 .my-task-question-list .question .question-desc {

@@ -440,7 +440,7 @@ public class TaskServiceImpl implements TaskService{
 			//获取任务问题
 			Task task = taskDao.selectById(taskId);
 			Interview interview = interviewDao.selectById(task.getInterviewId());
-			List<EditorQuestion> editorQuestionList = editorQuestionDao.selectListByInterviewAndQuestionaire(task.getInterviewId(), questionaireCode);
+			List<EditorQuestion> editorQuestionList = editorQuestionDao.selectListByQuestionaire(task.getInterviewId(), questionaireCode);
 			
 			List<EditorQuestionResponse> editorQuestionResponseList = new ArrayList<EditorQuestionResponse>();
 			
@@ -477,6 +477,58 @@ public class TaskServiceImpl implements TaskService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "getTaskQuestionList error", e);
 			return CallResult.failure("获取问题列表失败");
+		}
+	}
+
+	@Override
+	public CallResult<Boolean> enableQuestion(int taskId, String questionaireCode, String questionCode) {
+		LogUtils.info(this.getClass(), "enableQuestion params : taskId = {} , questionaireCode = {} , questionCode = {}", taskId,questionaireCode,questionCode);
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Task task = taskDao.selectById(taskId);
+					EditorQuestion editorQuestion = editorQuestionDao.selectByCode(task.getInterviewId(), questionaireCode, questionCode);
+					editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_VALID);
+					Date curTime = new Date();
+					editorQuestion.setUpdateTime(curTime);
+					editorQuestionDao.update(editorQuestion);
+					
+					//更新任务
+					task.setUpdateTime(curTime);
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "enableQuestion error", e);
+			return CallResult.failure("启动问题失败");
+		}
+	}
+
+	@Override
+	public CallResult<Boolean> disableQuestion(int taskId, String questionaireCode, String questionCode) {
+		LogUtils.info(this.getClass(), "disableQuestion params : taskId = {} , questionaireCode = {} , questionCode = {}", taskId,questionaireCode,questionCode);
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Task task = taskDao.selectById(taskId);
+					EditorQuestion editorQuestion = editorQuestionDao.selectByCode(task.getInterviewId(), questionaireCode, questionCode);
+					editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_INVALID);
+					Date curTime = new Date();
+					editorQuestion.setUpdateTime(curTime);
+					editorQuestionDao.update(editorQuestion);
+					
+					//更新任务
+					task.setUpdateTime(curTime);
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "disableQuestion error", e);
+			return CallResult.failure("禁用问题失败");
 		}
 	}
 

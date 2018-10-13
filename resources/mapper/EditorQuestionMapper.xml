@@ -23,10 +23,23 @@
             	values(#{interviewId},#{questionaireCode},#{questionCode},#{status},#{createTime},#{updateTime},#{seqNum})
         </insert>
         
-        <select id="selectListByInterviewAndQuestionaire" parameterType="hashmap" resultMap="allResultMap">
+        <select id="selectListByQuestionaire" parameterType="hashmap" resultMap="allResultMap">
             	select <include refid="allColumns"></include> 
             	from editor_question 
-            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode}
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} 
+            	order by seq_num asc
         </select>
+        
+        <select id="selectByCode" parameterType="hashmap" resultMap="allResultMap">
+            	select <include refid="allColumns"></include> 
+            	from editor_question 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
+        </select>
+        
+        <update id="update" parameterType="EditorQuestion">
+            	update editor_question 
+            	set interview_id = #{interviewId} , questionaire_code = #{questionaireCode} , question_code = #{questionCode} , status = #{status} , create_time = #{createTime} , update_time = #{updateTime} , seq_num = #{seqNum} 
+        	where id = #{id}
+        </update>
         
 </mapper>  

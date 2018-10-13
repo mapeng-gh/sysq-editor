@@ -20,12 +20,27 @@ public class EditorQuestionDaoImpl extends BaseDao implements EditorQuestionDao{
 	}
 
 	@Override
-	public List<EditorQuestion> selectListByInterviewAndQuestionaire(int interviewId, String questionaireCode) {
-		Map<String,Object> paramsMap = new HashMap<String,Object>();
-		paramsMap.put("interviewId", interviewId);
-		paramsMap.put("questionaireCode", questionaireCode);
+	public List<EditorQuestion> selectListByQuestionaire(int interviewId, String questionaireCode) {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("interviewId", interviewId);
+		paramMap.put("questionaireCode", questionaireCode);
 		
-		return super.getSqlSession().selectList(NAMESPACE + ".selectListByInterviewAndQuestionaire", paramsMap);
+		return super.getSqlSession().selectList(NAMESPACE + ".selectListByQuestionaire", paramMap);
+	}
+
+	@Override
+	public EditorQuestion selectByCode(int interviewId, String questionaireCode, String questionCode) {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("interviewId", interviewId);
+		paramMap.put("questionaireCode", questionaireCode);
+		paramMap.put("questionCode", questionCode);
+		
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectByCode", paramMap);
+	}
+
+	@Override
+	public void update(EditorQuestion editorQuestion) {
+		super.getSqlSession().update(NAMESPACE + ".update", editorQuestion);
 	}
 
 }
