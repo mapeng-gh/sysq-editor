@@ -22,7 +22,7 @@
   		
 	</resultMap>
 	
-        <select id="batchFindByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+        <select id="batchSelectByCode" parameterType="hashmap" resultMap="allResultMap">
 		select <include refid="allColumns"></include> 
 		from sysq_answer 
 		where version_id = #{versionId} and code in 
@@ -32,7 +32,7 @@
 		order by seq_num asc
 	</select>
 	
-        <select id="findByQuestionCode" parameterType="hashmap" resultMap="allResultMap">
+        <select id="selectListByQuestion" parameterType="hashmap" resultMap="allResultMap">
             	select <include refid="allColumns"></include>
             	from sysq_answer 
             	where version_id = #{versionId} and question_code = #{questionCode} 

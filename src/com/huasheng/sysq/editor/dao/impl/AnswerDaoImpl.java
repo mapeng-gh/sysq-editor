@@ -15,21 +15,21 @@ public class AnswerDaoImpl extends BaseDao implements AnswerDao{
 	private static String NAMESPACE = "mapper.AnswerMapper";
 
 	@Override
-	public List<Answer> batchFindByVersionAndCode(int versionId, List<String> codeList) {
+	public List<Answer> batchSelectByCode(int versionId,List<String> codeList) {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		paramMap.put("versionId", versionId);
 		paramMap.put("codeList", codeList);
 		
-		return super.getSqlSession().selectList(NAMESPACE + ".batchFindByVersionAndCode", paramMap);
+		return super.getSqlSession().selectList(NAMESPACE + ".batchSelectByCode", paramMap);
 	}
 
 	@Override
-	public List<Answer> findByQuestionCode(int versionId, String questionCode) {
+	public List<Answer> selectListByQuestion(int versionId, String questionCode) {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		paramMap.put("versionId", versionId);
 		paramMap.put("questionCode", questionCode);
 		
-		return super.getSqlSession().selectList(NAMESPACE + ".findByQuestionCode",paramMap);
+		return super.getSqlSession().selectList(NAMESPACE + ".selectListByQuestion",paramMap);
 	}
 
 }

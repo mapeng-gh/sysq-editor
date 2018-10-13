@@ -59,7 +59,7 @@ public class DataSerivceImpl implements DataService{
 		LogUtils.info(this.getClass(), "getQuestionaireList params : versionId = {}", versionId);
 		
 		try {
-			List<Questionaire> questionaireList = questionaireDao.findQuestionaireList(versionId, type);
+			List<Questionaire> questionaireList = questionaireDao.selectListByType(versionId, type);
 			return CallResult.success(questionaireList);
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "getQuestionaireList error", e);
@@ -73,7 +73,7 @@ public class DataSerivceImpl implements DataService{
 		
 		try {
 			//查询问题
-			List<Question> questionList = questionDao.findByQuestionaireCode(versionId, questionaireCode);
+			List<Question> questionList = questionDao.selectListByQuestionaire(versionId, questionaireCode);
 			if(questionList == null || questionList.size() == 0) {
 				return CallResult.success(new ArrayList<QuestionResponse>());
 			}
@@ -84,7 +84,7 @@ public class DataSerivceImpl implements DataService{
 				questionResponse.setQuestion(question);
 				
 				//获取答案
-				List<Answer> answerList = answerDao.findByQuestionCode(versionId, question.getCode());
+				List<Answer> answerList = answerDao.selectListByQuestion(versionId,question.getCode());
 				if(answerList == null || answerList.size() == 0) {
 					questionResponse.setAnswerList(new ArrayList<AnswerResponse>());
 				}else {

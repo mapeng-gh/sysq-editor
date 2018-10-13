@@ -1,22 +1,11 @@
 (function(){
-	var myTask4QuestionaireListComponent = {
+	var myTask4QuestionListComponent = {
 		
         template : `
-            <div class="my-task-questionaire-list">
+            <div class="my-task-question-list">
                         
-                <div class="common-title">问卷列表</div>
+                <div class="common-title">问题列表</div>
 				
-				<div :class="{'questionaire' : true , 'invalid' : item.editorQuestionaire.status == 0}" v-for="(item,index) in questionaireList" :key="item.questionaire.code" @mouseover="handleMouseover(item,$event)" @mouseout="handleMouseout(item,$event)">
-					<div class="questionaire-operate hidden">
-						<el-button type="primary" plain size="small" :class="{'hidden' : item.editorQuestionaire.status == 0}" @click="handleQuestionList(item)"">问题列表</el-button>
-						<el-button type="primary" plain size="small" :class="{'hidden' : item.editorQuestionaire.status == 1}" @click="enableQuestionaire(item)">启用</el-button>
-						<el-tooltip class="item" effect="dark" content="禁用问卷意味着访谈不包含该问卷" placement="top-start">
-							<el-button type="primary" plain size="small" :class="{'hidden' : item.editorQuestionaire.status == 0}" @click="disableQuestionaire(item)">禁用<i class="el-icon-question"></i></el-button>
-						</el-tooltip>
-					</div>
-					<div class="questionaire-header">[{{index+1}}] {{item.questionaire.code}} {{item.questionaire.title}}</div>
-					<div class="questionaire-content">{{item.questionaire.introduction == '' ? '暂无描述内容' : item.questionaire.introduction}}</div>
-				</div>
                                 
 			</div>
         `,
@@ -26,16 +15,15 @@
             return {
                                 
 				APIS : {
-					QUESTIONAIRE_LIST : '/myTask/questionaireList.do',
-					ENABLE_QUESTIONAIRE : '/myTask/enableQuestionaire.do',
-					DISABLE_QUESTIONAIRE : '/myTask/disableQuestionaire.do'
+					QUESTION_LIST : '/myTask/questionList.do'
 				},
 				
 				params : {
-					taskId : this.$route.query.taskId
+					taskId : this.$route.query.taskId,
+					questionaireCode : this.$route.query.questionaireCode
 				},
                                 
-                questionaireList : []
+                questionList : []
             }
         },
                 
@@ -44,8 +32,8 @@
 			init : function(){
 				var self = this;
 						
-				this.$request.sendGetRequest(this.APIS.QUESTIONAIRE_LIST,{taskId : this.params.taskId},function(resultObject){
-					self.questionaireList = resultObject;
+				this.$request.sendGetRequest(this.APIS.QUESTION_LIST,{taskId : this.params.taskId , questionaireCode : this.params.questionaireCode},function(resultObject){
+					self.questionList = resultObject;
 				});
 			},
 			
@@ -93,7 +81,7 @@
 			
 			//问题列表
 			handleQuestionList : function(item,$event){
-				this.$commons.openWindow('#/myTask/questionList',{taskId : this.params.taskId , questionaireCode : item.questionaire.code});
+				this.$commons.openWindow('#/myTask/questionList',{taskId : this.params.taskId , questionaireCode : item.questionaire.questionaireCode});
 			}
 			
         },
@@ -104,7 +92,7 @@
 		
 	};
 	
-	window.myTask4QuestionaireListComponent = myTask4QuestionaireListComponent;
+	window.myTask4QuestionListComponent = myTask4QuestionListComponent;
 })();
 
 

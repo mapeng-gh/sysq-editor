@@ -12,6 +12,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.huasheng.sysq.editor.dao.AnswerDao;
 import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.EditorQuestionDao;
 import com.huasheng.sysq.editor.dao.EditorQuestionaireDao;
@@ -23,6 +24,7 @@ import com.huasheng.sysq.editor.dao.QuestionaireDao;
 import com.huasheng.sysq.editor.dao.SysqResultDao;
 import com.huasheng.sysq.editor.dao.TaskDao;
 import com.huasheng.sysq.editor.dao.UserDao;
+import com.huasheng.sysq.editor.model.Answer;
 import com.huasheng.sysq.editor.model.EditorQuestion;
 import com.huasheng.sysq.editor.model.EditorQuestionaire;
 import com.huasheng.sysq.editor.model.Interview;
@@ -30,6 +32,8 @@ import com.huasheng.sysq.editor.model.Question;
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.SysqResult;
 import com.huasheng.sysq.editor.model.Task;
+import com.huasheng.sysq.editor.params.AnswerResponse;
+import com.huasheng.sysq.editor.params.EditorQuestionResponse;
 import com.huasheng.sysq.editor.params.EditorQuestionaireResponse;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.TaskResponse;
@@ -78,6 +82,9 @@ public class TaskServiceImpl implements TaskService{
 	
 	@Autowired
 	private EditorQuestionDao editorQuestionDao;
+	
+	@Autowired
+	private AnswerDao answerDao;
 	
 	@Override
 	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
@@ -226,7 +233,7 @@ public class TaskServiceImpl implements TaskService{
 			for(EditorQuestionaire editorQuestionaire : editorQuestionaireList) {
 				EditorQuestionaireResponse editorQuestionaireResponse = new EditorQuestionaireResponse();
 				editorQuestionaireResponse.setEditorQuestionaire(editorQuestionaire);
-				Questionaire questionaire = questionaireDao.findByVersionAndCode(interview.getVersionId(), editorQuestionaire.getQuestionaireCode());
+				Questionaire questionaire = questionaireDao.selectByCode(interview.getVersionId(), editorQuestionaire.getQuestionaireCode());
 				editorQuestionaireResponse.setQuestionaire(questionaire);
 				editorQuestionaireResponseList.add(editorQuestionaireResponse);
 			}
@@ -246,7 +253,7 @@ public class TaskServiceImpl implements TaskService{
 		
 		//获取所有问卷
 		Interview interview = interviewDao.selectById(task.getInterviewId());
-		List<Questionaire> questionaireList = questionaireDao.findQuestionaireList(interview.getVersionId(), interview.getType());
+		List<Questionaire> questionaireList = questionaireDao.selectListByType(interview.getVersionId(), interview.getType());
 		
 		if(questionaireList != null && questionaireList.size() > 0) {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
@@ -275,7 +282,7 @@ public class TaskServiceImpl implements TaskService{
 						editorQuestionaireDao.insert(editorQuestionaire);
 						
 						//添加问题
-						List<Question> questionList = questionDao.findByQuestionaireCode(interview.getVersionId(), questionaire.getCode());
+						List<Question> questionList = questionDao.selectListByQuestionaire(interview.getVersionId(), questionaire.getCode());
 						if(questionList != null && questionList.size() > 0) {
 							for(Question question : questionList) {
 								EditorQuestion editorQuestion = new EditorQuestion();
@@ -422,6 +429,54 @@ public class TaskServiceImpl implements TaskService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "disableQuestionaire error", e);
 			return CallResult.failure("禁用问卷失败");
+		}
+	}
+
+	@Override
+	public CallResult<List<EditorQuestionResponse>> getTaskQuestionList(int taskId, String questionaireCode) {
+		LogUtils.info(this.getClass(), "getTaskQuestionList params : taskId = {},questionaireCode = {}", taskId,questionaireCode);
+		
+		try {
+			//获取任务问题
+			Task task = taskDao.selectById(taskId);
+			Interview interview = interviewDao.selectById(task.getInterviewId());
+			List<EditorQuestion> editorQuestionList = editorQuestionDao.selectListByInterviewAndQuestionaire(task.getInterviewId(), questionaireCode);
+			
+			List<EditorQuestionResponse> editorQuestionResponseList = new ArrayList<EditorQuestionResponse>();
+			
+			//数据封装
+			if(editorQuestionList != null && editorQuestionList.size() > 0) {
+				for(EditorQuestion editorQuestion : editorQuestionList) {
+					EditorQuestionResponse editorQuestionResponse = new EditorQuestionResponse();
+					editorQuestionResponse.setEditorQuestion(editorQuestion);
+					
+					//设置问题
+					Question question = questionDao.selectByCode(interview.getVersionId(),editorQuestion.getQuestionCode());
+					editorQuestionResponse.setQuestion(question);
+					
+					//设置答案
+					List<AnswerResponse> answerResponseList = new ArrayList<AnswerResponse>();
+					List<Answer> answerList = answerDao.selectListByQuestion(interview.getVersionId(),editorQuestion.getQuestionCode());
+					if(answerList != null && answerList.size() > 0) {
+						for(Answer answer : answerList) {
+							AnswerResponse answerResponse = new AnswerResponse();
+							answerResponse.setAnswer(answer);
+							SysqResult editorResult = editorResultDao.selectByAnswerCode(interview.getId(), questionaireCode, editorQuestion.getQuestionCode(), answer.getCode());
+							answerResponse.setResult(editorResult);
+							answerResponseList.add(answerResponse);
+						}
+					}
+					
+					editorQuestionResponse.setAnswerResponseList(answerResponseList);
+					
+					editorQuestionResponseList.add(editorQuestionResponse);
+				}
+			}
+			
+			return CallResult.success(editorQuestionResponseList);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "getTaskQuestionList error", e);
+			return CallResult.failure("获取问题列表失败");
 		}
 	}
 

@@ -21,7 +21,13 @@
   		
 	</resultMap>
 	
-        <select id="batchFindByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+	<select id="selectByCode" parameterType="hashmap" resultMap="allResultMap">
+	    	select <include refid="allColumns"></include> 
+	    	from sysq_question 
+	    	where version_id = #{versionId} and code = #{code}
+	</select>
+	
+        <select id="batchSelectByCode" parameterType="hashmap" resultMap="allResultMap">
 		select <include refid="allColumns"></include> 
 		from sysq_question
 		where version_id = #{versionId} and code in 
@@ -31,7 +37,7 @@
 		order by seq_num asc
 	</select>
 	
-        <select id="findByQuestionaireCode" parameterType="hashmap" resultMap="allResultMap">
+        <select id="selectListByQuestionaire" parameterType="hashmap" resultMap="allResultMap">
             	select <include refid="allColumns"></include> 
             	from sysq_question 
             	where version_id = #{versionId} and questionaire_code = #{questionaireCode} 

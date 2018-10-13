@@ -7,18 +7,18 @@ import com.huasheng.sysq.editor.model.Answer;
 public interface AnswerDao {
 
 	/**
-	 * 根据编码批量查询答案
+	 * 根据编码批量查询
 	 * @param versionId
 	 * @param codeList
 	 * @return
 	 */
-	public List<Answer> batchFindByVersionAndCode(int versionId,List<String> codeList);
+	public List<Answer> batchSelectByCode(int versionId,List<String> codeList);
 	
 	/**
-	 * 根据问题查询答案
+	 * 根据问题查询
 	 * @param versionId
 	 * @param questionCode
 	 * @return
 	 */
-	public List<Answer> findByQuestionCode(int versionId,String questionCode);
+	public List<Answer> selectListByQuestion(int versionId,String questionCode);
 }

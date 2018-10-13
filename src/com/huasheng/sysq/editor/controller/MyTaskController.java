@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.huasheng.sysq.editor.params.EditorQuestionResponse;
 import com.huasheng.sysq.editor.params.EditorQuestionaireResponse;
 import com.huasheng.sysq.editor.params.TaskResponse;
 import com.huasheng.sysq.editor.service.TaskService;
@@ -170,6 +171,21 @@ public class MyTaskController {
 		
 		CallResult<Boolean> result = taskService.disableQuestionaire(taskId, questionaireCode);
 		LogUtils.info(this.getClass(), "disableQuestionaire result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 问题列表
+	 * @param taskIdStr
+	 * @return
+	 */
+	@RequestMapping(value="/questionList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<List<EditorQuestionResponse>> questionList(@RequestParam(value="taskId") int taskId,@RequestParam(value="questionaireCode") String questionaireCode) {
+		LogUtils.info(this.getClass(), "questionList params : taskId = {},questionaireCode = {}",taskId,questionaireCode);
+		
+		CallResult<List<EditorQuestionResponse>> result = taskService.getTaskQuestionList(taskId, questionaireCode);
+		LogUtils.info(this.getClass(), "questionList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

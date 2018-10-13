@@ -3,6 +3,7 @@ package com.huasheng.sysq.editor.service;
 import java.util.List;
 import java.util.Map;
 
+import com.huasheng.sysq.editor.params.EditorQuestionResponse;
 import com.huasheng.sysq.editor.params.EditorQuestionaireResponse;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.TaskResponse;
@@ -81,4 +82,12 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<Boolean> disableQuestionaire(int taskId,String questionaireCode);
+	
+	/**
+	 * 获取任务问题列表
+	 * @param taskId
+	 * @param questionaireCode
+	 * @return
+	 */
+	public CallResult<List<EditorQuestionResponse>> getTaskQuestionList(int taskId,String questionaireCode);
 }

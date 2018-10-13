@@ -10,6 +10,7 @@
 		<id column="id" property="id" jdbcType="INTEGER" javaType="int"/>
   		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
+		<result column="question_code" property="questionCode" jdbcType="VARCHAR" javaType="string"/>
   		<result column="answer_code" property="answerCode" jdbcType="VARCHAR" javaType="string"/>
   		<result column="answer_value" property="answerValue" jdbcType="VARCHAR" javaType="string"/>
 	</resultMap>
@@ -18,5 +19,11 @@
 	    	insert editor_result(interview_id,questionaire_code,question_code,answer_code,answer_value) 
 	    	values(#{interviewId},#{questionaireCode},#{questionCode},#{answerCode},#{answerValue})
 	</insert>
+	
+	<select id="selectByAnswerCode" parameterType="hashmap" resultMap="allResultMap">
+	    	select <include refid="allColumns"></include> 
+	    	from editor_result 
+	    	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode} and answer_code = #{answerCode}
+	</select>
 	
 </mapper>  

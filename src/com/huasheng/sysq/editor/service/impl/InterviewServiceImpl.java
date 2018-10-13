@@ -100,7 +100,7 @@ public class InterviewServiceImpl implements InterviewService{
 					return CallResult.success(new ArrayList<Questionaire>());
 				}else {
 					Interview interview = interviewDao.selectById(interviewId);
-					List<Questionaire> questionaireList = questionaireDao.batchFindByVersionAndCode(interview.getVersionId(), questionaireCodeList);
+					List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
 					return CallResult.success(questionaireList);
 				}
 				
@@ -126,7 +126,7 @@ public class InterviewServiceImpl implements InterviewService{
 				}else {
 					//获取问题列表
 					Interview interview = interviewDao.selectById(interviewId);
-					List<Question> questionList = questionDao.batchFindByVersionAndCode(interview.getVersionId(), questionCodeList);
+					List<Question> questionList = questionDao.batchSelectByCode(interview.getVersionId(),questionCodeList);
 					
 					List<QuestionResponse> questionResponseList = new ArrayList<QuestionResponse>();
 					for(Question question : questionList) {
@@ -135,7 +135,7 @@ public class InterviewServiceImpl implements InterviewService{
 						
 						//获取答案列表
 						List<String> answerCodeList = sysqResultDao.getAnswerList(interviewId, questionaireCode, question.getCode());
-						List<Answer> answerList = answerDao.batchFindByVersionAndCode(interview.getVersionId(), answerCodeList);
+						List<Answer> answerList = answerDao.batchSelectByCode(interview.getVersionId(),answerCodeList);
 						if(answerList == null || answerList.size() == 0) {
 							questionResponse.setAnswerList(new ArrayList<AnswerResponse>());
 						}else {

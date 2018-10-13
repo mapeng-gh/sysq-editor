@@ -19,14 +19,14 @@
   		
 	</resultMap>
 	
-        <select id="findQuestionaireList" parameterType="hashmap" resultMap="allResultMap">
+        <select id="selectListByType" parameterType="hashmap" resultMap="allResultMap">
 		select <include refid="allColumns"></include> 
 		from sysq_questionaire
 		where version_id = #{versionId} and type in (3,#{type})
                  order by seq_num asc
         </select>
         
-        <select id="batchFindByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+        <select id="batchSelectByCode" parameterType="hashmap" resultMap="allResultMap">
 		select <include refid="allColumns"></include> 
 		from sysq_questionaire 
 		where version_id = #{versionId} and code in 
@@ -36,7 +36,7 @@
 		order by seq_num asc
 	</select>
 	
-        <select id="findByVersionAndCode" parameterType="hashmap" resultMap="allResultMap">
+        <select id="selectByCode" parameterType="hashmap" resultMap="allResultMap">
 		select <include refid="allColumns"></include> 
 		from sysq_questionaire 
 		where version_id = #{versionId} and code = #{code}

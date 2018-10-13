@@ -67,7 +67,15 @@
 			meta : {
                 activeIndex : '/myTask/taskList'
 			}
-        }
+        },
+		{
+			name : 'myTask4QuestionList',
+			path : '/myTask/questionList',
+			component : myTask4QuestionListComponent,
+			meta : {
+				activeIndex : '/myTask/taskList'
+			}
+		}
 	];
         
     //我的访谈
