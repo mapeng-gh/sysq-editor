@@ -12,6 +12,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.alibaba.fastjson.JSONArray;
 import com.huasheng.sysq.editor.dao.AnswerDao;
 import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.EditorQuestionDao;
@@ -529,6 +530,42 @@ public class TaskServiceImpl implements TaskService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "disableQuestion error", e);
 			return CallResult.failure("禁用问题失败");
+		}
+	}
+
+	@Override
+	public CallResult<Boolean> editQuestion(int taskId, String questionaireCode, String questionCode,String editorResults) {
+		LogUtils.info(this.getClass(), "editQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , editorResults = {}", taskId,questionaireCode,questionCode,editorResults);
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					
+					//删除旧值
+					Task task = taskDao.selectById(taskId);
+					editorResultDao.deleteByQuestion(task.getInterviewId(), questionaireCode, questionCode);
+					
+					//插入新值
+					JSONArray jsonArray = JSONArray.parseArray(editorResults);
+					for(int i = 0 ; i < jsonArray.size() ; i++) {
+						SysqResult editorResult = new SysqResult();
+						editorResult.setInterviewId(task.getInterviewId());
+						editorResult.setQuestionaireCode(questionaireCode);
+						editorResult.setQuestionCode(questionCode);
+						editorResult.setAnswerCode(jsonArray.getJSONObject(i).getString("answerCode"));
+						editorResult.setAnswerValue(jsonArray.getJSONObject(i).getString("answerValue"));
+						editorResultDao.insert(editorResult);
+					}
+					
+					//更新任务
+					task.setUpdateTime(new Date());
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "editQuestion error", e);
+			return CallResult.failure("编辑问题失败");
 		}
 	}
 

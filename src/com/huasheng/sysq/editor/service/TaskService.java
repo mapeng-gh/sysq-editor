@@ -108,4 +108,7 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<Boolean> disableQuestion(int taskId,String questionaireCode,String questionCode);
+	
+	//编辑问题
+	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String editorResults);
 }

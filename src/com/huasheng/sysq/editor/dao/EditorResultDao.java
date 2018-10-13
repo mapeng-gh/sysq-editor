@@ -19,5 +19,13 @@ public interface EditorResultDao {
 	 * @return
 	 */
 	public SysqResult selectByAnswerCode(int interviewId,String questionaireCode,String questionCode,String answerCode);
+	
+	/**
+	 * 根据问题删除
+	 * @param interviewId
+	 * @param questionaireCode
+	 * @param questionCode
+	 */
+	public void deleteByQuestion(int interviewId,String questionaireCode,String questionCode);
 
 }

@@ -244,4 +244,34 @@ public class MyTaskController {
 		LogUtils.info(this.getClass(), "disableQuestion result : {}", JsonUtils.toJson(result));
 		return result;
 	}
+	
+	/**
+	 * 编辑问题
+	 * @param requestJsonStr
+	 * @return
+	 */
+	@RequestMapping(value="/editQuestion.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> editQuestion(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "editQuestion params : {}",requestJsonStr);
+		
+		int taskId;
+		String questionaireCode;
+		String questionCode;
+		String editorResults;
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			taskId = requestJson.getIntValue("taskId");
+			questionaireCode = requestJson.getString("questionaireCode");
+			questionCode = requestJson.getString("questionCode");
+			editorResults = requestJson.getString("editorResults");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "editQuestion error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<Boolean> result = taskService.editQuestion(taskId, questionaireCode, questionCode, editorResults);
+		LogUtils.info(this.getClass(), "editQuestion result : {}", JsonUtils.toJson(result));
+		return result;
+	}
 }

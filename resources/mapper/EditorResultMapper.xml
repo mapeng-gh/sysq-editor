@@ -26,4 +26,8 @@
 	    	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode} and answer_code = #{answerCode}
 	</select>
 	
+	<delete id="deleteByQuestion" parameterType="hashmap">
+	    	delete from editor_result where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
+	</delete>
+	
 </mapper>  

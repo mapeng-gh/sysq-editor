@@ -71,3 +71,15 @@
 .my-task-question-list .invalid {
   background-color: #fcf8e3;
 }
+
+.my-task-question-list .edit-question .question-desc {
+  line-height: 200%;
+}
+
+.my-task-question-list .edit-question .answer {
+  margin: 20px 0 0 20px;
+}
+
+.my-task-question-list .edit-question .answer .answer-content {
+  margin-top: 10px;
+}

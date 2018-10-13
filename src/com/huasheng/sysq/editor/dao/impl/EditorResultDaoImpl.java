@@ -28,4 +28,14 @@ public class EditorResultDaoImpl extends BaseDao implements EditorResultDao{
 		
 		return super.getSqlSession().selectOne(NAMESPACE + ".selectByAnswerCode", paramMap);
 	}
+
+	@Override
+	public void deleteByQuestion(int interviewId, String questionaireCode, String questionCode) {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("interviewId", interviewId);
+		paramMap.put("questionaireCode", questionaireCode);
+		paramMap.put("questionCode", questionCode);
+
+		super.getSqlSession().delete(NAMESPACE + ".deleteByQuestion", paramMap);
+	}
 }
