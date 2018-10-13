@@ -6,7 +6,7 @@
 		id,interview_id,questionaire_code,question_code,status,create_time,update_time,seq_num   
 	</sql>
 	
-	<resultMap id="allResultMap" type="EditorQuestionaire">
+	<resultMap id="allResultMap" type="EditorQuestion">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
 		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>

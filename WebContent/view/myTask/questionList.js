@@ -6,6 +6,13 @@
                         
                 <div class="common-title">问题列表</div>
 				
+				<div :class="{'question' : true , 'invalid' : questionResponse.editorQuestion.status == 0}" v-for="questionResponse in questionList" :key="questionResponse.question.code">
+					<div class="question-desc" v-html="questionResponse.question.description == '' ? '暂无描述内容' : handleQuestionDesc(questionResponse.question.description)"></div>
+					<div class="answer" v-for="answerResponse in questionResponse.answerResponseList" v-if="answerResponse.result" :key="answerResponse.answer.code">
+						<span class="label">{{answerResponse.answer.label? answerResponse.answer.label : answerResponse.answer.code}}</span>
+						<span class="value">{{transferAnswerValue(answerResponse.result,answerResponse.answer)}}</span>
+					</div>
+				</div>
                                 
 			</div>
         `,
@@ -35,6 +42,31 @@
 				this.$request.sendGetRequest(this.APIS.QUESTION_LIST,{taskId : this.params.taskId , questionaireCode : this.params.questionaireCode},function(resultObject){
 					self.questionList = resultObject;
 				});
+			},
+			
+			//问题描述处理
+			handleQuestionDesc(desc){
+				return desc.replace(/<para>/g,'<br/>')
+			},
+			
+			//翻译答案值
+			transferAnswerValue(result,answer){
+				var type = answer.type;
+				var extra = answer.extra;
+				var value = result.answerValue;
+				
+				if(['calendar','spinbox','slider','text'].indexOf(type) > -1){
+					return value;
+				}else if(['checkbox','dropdownlist','radiogroup'].indexOf(type) > -1){
+					var extraJson = JSON.parse(extra);
+					for(var i = 0 ; i < extraJson.length ; i++){
+						if(extraJson[i].value == value){
+							return extraJson[i].text;
+						}
+					}
+				}
+				
+				return value;
 			},
 			
 			//显示操作
