@@ -1,6 +1,7 @@
 package com.huasheng.sysq.editor.dao.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,11 @@ public class EditorResultDaoImpl extends BaseDao implements EditorResultDao{
 	@Override
 	public void insert(SysqResult editorSysqResult) {
 		super.getSqlSession().insert(NAMESPACE + ".insert", editorSysqResult);
+	}
+	
+	@Override
+	public void batchInsert(List<SysqResult> editorResultList) {
+		super.getSqlSession().insert(NAMESPACE + ".batchInsert", editorResultList);
 	}
 
 	@Override

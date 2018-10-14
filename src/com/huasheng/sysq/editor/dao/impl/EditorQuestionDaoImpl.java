@@ -18,6 +18,11 @@ public class EditorQuestionDaoImpl extends BaseDao implements EditorQuestionDao{
 	public void insert(EditorQuestion editorQuestion) {
 		super.getSqlSession().insert(NAMESPACE + ".insert", editorQuestion);
 	}
+	
+	@Override
+	public void batchInsert(List<EditorQuestion> editorQuestionList) {
+		super.getSqlSession().insert(NAMESPACE + ".batchInsert", editorQuestionList);
+	}
 
 	@Override
 	public List<EditorQuestion> selectListByQuestionaire(int interviewId, String questionaireCode) {
@@ -42,5 +47,7 @@ public class EditorQuestionDaoImpl extends BaseDao implements EditorQuestionDao{
 	public void update(EditorQuestion editorQuestion) {
 		super.getSqlSession().update(NAMESPACE + ".update", editorQuestion);
 	}
+
+	
 
 }

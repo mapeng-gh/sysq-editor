@@ -1,5 +1,7 @@
 package com.huasheng.sysq.editor.dao;
 
+import java.util.List;
+
 import com.huasheng.sysq.editor.model.SysqResult;
 
 public interface EditorResultDao {
@@ -9,6 +11,12 @@ public interface EditorResultDao {
 	 * @param editSysqResult
 	 */
 	public void insert(SysqResult editorSysqResult);
+	
+	/**
+	 * 批量插入
+	 * @param editorResultList
+	 */
+	public void batchInsert(List<SysqResult> editorResultList);
 	
 	/**
 	 * 根据编码查询

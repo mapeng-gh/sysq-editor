@@ -261,6 +261,10 @@ public class TaskServiceImpl implements TaskService{
 					List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
 					Date curTime = new Date();
 					
+					List<EditorQuestionaire> editorQuestionaireList = new ArrayList<EditorQuestionaire>();
+					List<EditorQuestion> editorQuestionList = new ArrayList<EditorQuestion>();
+					List<SysqResult> editorResultList = new ArrayList<SysqResult>();
+					
 					//添加问卷
 					for(Questionaire questionaire : questionaireList) {
 						EditorQuestionaire editorQuestionaire = new EditorQuestionaire();
@@ -269,7 +273,7 @@ public class TaskServiceImpl implements TaskService{
 						editorQuestionaire.setSeqNum(questionaire.getSeqNum());
 						editorQuestionaire.setCreateTime(curTime);
 						editorQuestionaire.setUpdateTime(curTime);
-						editorQuestionaireDao.insert(editorQuestionaire);
+						editorQuestionaireList.add(editorQuestionaire);
 						
 						//添加问题
 						List<Question> questionList = questionDao.selectListByQuestionaire(interview.getVersionId(), questionaire.getCode());
@@ -291,20 +295,25 @@ public class TaskServiceImpl implements TaskService{
 										editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_VALID);
 									}
 								}
-								editorQuestionDao.insert(editorQuestion);
+								editorQuestionList.add(editorQuestion);
 								
 								//添加答案（有效问题）
 								if(editorQuestion.getStatus() == Constants.EDIT_QUESTION_STATUS_VALID) {
 									List<SysqResult> sysqResultList = sysqResultDao.getAnswerResultByQuestion(interview.getId(), questionaire.getCode(), question.getCode());
 									if(sysqResultList != null && sysqResultList.size() > 0) {
 										for(SysqResult sysqResult : sysqResultList) {
-											editorResultDao.insert(sysqResult);
+											editorResultList.add(sysqResult);
 										}
 									}
 								}
 							}
 						}
 					}
+					
+					//批量插入
+					editorQuestionaireDao.batchInsert(editorQuestionaireList);
+					editorQuestionDao.batchInsert(editorQuestionList);
+					editorResultDao.batchInsert(editorResultList);
 					LogUtils.info(this.getClass(), "initTask : init success");
 					
 					//修改任务状态

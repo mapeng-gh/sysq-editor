@@ -13,6 +13,12 @@ public interface EditorQuestionDao {
 	public void insert(EditorQuestion editorQuestion);
 	
 	/**
+	 * 批量插入
+	 * @param editorQuestionList
+	 */
+	public void batchInsert(List<EditorQuestion> editorQuestionList);
+	
+	/**
 	 * 根据访谈和问卷获取问题列表
 	 * @param interviewId
 	 * @param questionaireCode

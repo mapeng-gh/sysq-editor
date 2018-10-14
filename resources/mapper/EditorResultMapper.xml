@@ -16,8 +16,16 @@
 	</resultMap>
 	
 	<insert id="insert" parameterType="SysqResult" useGeneratedKeys="true" keyProperty="id">
-	    	insert editor_result(interview_id,questionaire_code,question_code,answer_code,answer_value) 
+	    	insert into editor_result(interview_id,questionaire_code,question_code,answer_code,answer_value) 
 	    	values(#{interviewId},#{questionaireCode},#{questionCode},#{answerCode},#{answerValue})
+	</insert>
+	
+	<insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+	    	insert into editor_result(interview_id,questionaire_code,question_code,answer_code,answer_value) 
+	    	values
+	    	<foreach collection="list" item="editorResult" separator=",">
+	    	    	(#{editorResult.interviewId},#{editorResult.questionaireCode},#{editorResult.questionCode},#{editorResult.answerCode},#{editorResult.answerValue})
+	    	</foreach>
 	</insert>
 	
 	<select id="selectByAnswerCode" parameterType="hashmap" resultMap="allResultMap">

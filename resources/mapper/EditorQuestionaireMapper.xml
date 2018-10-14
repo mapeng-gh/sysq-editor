@@ -10,9 +10,9 @@
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
 		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
+		<result column="seq_num" property="seqNum" jdbcType="INTEGER" javaType="_int"/>
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="date" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="date" />
-		<result column="seq_num" property="seqNum" jdbcType="INTEGER" javaType="_int"/>
   		
 	</resultMap>
 	
@@ -24,8 +24,16 @@
         </select>
         
         <insert id="insert" parameterType="EditorQuestionaire" useGeneratedKeys="true" keyProperty="id">
-            	insert editor_questionaire(interview_id,questionaire_code,create_time,update_time,seq_num) 
+            	insert into editor_questionaire(interview_id,questionaire_code,create_time,update_time,seq_num) 
             	values(#{interviewId},#{questionaireCode},#{createTime},#{updateTime},#{seqNum})
+        </insert>
+        
+        <insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+            	insert into editor_questionaire(interview_id,questionaire_code,seq_num,create_time,update_time) 
+            	values
+            	<foreach collection="list" item="editorQuestionaire" separator=",">
+            	    	(#{editorQuestionaire.interviewId},#{editorQuestionaire.questionaireCode},#{editorQuestionaire.seqNum},#{editorQuestionaire.createTime},#{editorQuestionaire.updateTime})
+            	</foreach>
         </insert>
         
         <select id="selectByInterviewAndQuestionaire" parameterType="hashmap" resultMap="allResultMap">
