@@ -123,58 +123,6 @@ public class MyTaskController {
 	}
 	
 	/**
-	 * 启用问卷
-	 * @param requestJsonStr
-	 * @return
-	 */
-	@RequestMapping(value="/enableQuestionaire.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
-	@ResponseBody
-	public CallResult<Boolean> enableQuestionaire(@RequestBody String requestJsonStr) {
-		LogUtils.info(this.getClass(), "enableQuestionaire params : {}",requestJsonStr);
-		
-		int taskId;
-		String questionaireCode;
-		try {
-			JSONObject requestJson = JSON.parseObject(requestJsonStr);
-			taskId = requestJson.getIntValue("taskId");
-			questionaireCode = requestJson.getString("questionaireCode");
-		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "enableQuestionaire error", e);
-			return CallResult.failure("参数格式不正确");
-		}
-		
-		CallResult<Boolean> result = taskService.enableQuestionaire(taskId, questionaireCode);
-		LogUtils.info(this.getClass(), "enableQuestionaire result : {}", JsonUtils.toJson(result));
-		return result;
-	}
-	
-	/**
-	 * 禁用问卷
-	 * @param requestJsonStr
-	 * @return
-	 */
-	@RequestMapping(value="/disableQuestionaire.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
-	@ResponseBody
-	public CallResult<Boolean> disableQuestionaire(@RequestBody String requestJsonStr) {
-		LogUtils.info(this.getClass(), "disableQuestionaire params : {}",requestJsonStr);
-		
-		int taskId;
-		String questionaireCode;
-		try {
-			JSONObject requestJson = JSON.parseObject(requestJsonStr);
-			taskId = requestJson.getIntValue("taskId");
-			questionaireCode = requestJson.getString("questionaireCode");
-		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "disableQuestionaire error", e);
-			return CallResult.failure("参数格式不正确");
-		}
-		
-		CallResult<Boolean> result = taskService.disableQuestionaire(taskId, questionaireCode);
-		LogUtils.info(this.getClass(), "disableQuestionaire result : {}", JsonUtils.toJson(result));
-		return result;
-	}
-	
-	/**
 	 * 问题列表
 	 * @param taskIdStr
 	 * @return

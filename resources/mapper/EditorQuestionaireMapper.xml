@@ -3,14 +3,13 @@
 <mapper namespace="mapper.EditorQuestionaireMapper">
     
 	<sql id="allColumns">
-		id,interview_id,questionaire_code,status,create_time,update_time,seq_num   
+		id,interview_id,questionaire_code,create_time,update_time,seq_num   
 	</sql>
 	
 	<resultMap id="allResultMap" type="EditorQuestionaire">
 		<id column="id" property="id" jdbcType="INTEGER" javaType="_int"/>
 		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
 		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="string"/>
-		<result column="status" property="status" jdbcType="INTEGER" javaType="_int"/>
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="date" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="date" />
 		<result column="seq_num" property="seqNum" jdbcType="INTEGER" javaType="_int"/>
@@ -25,8 +24,8 @@
         </select>
         
         <insert id="insert" parameterType="EditorQuestionaire" useGeneratedKeys="true" keyProperty="id">
-            	insert editor_questionaire(interview_id,questionaire_code,status,create_time,update_time,seq_num) 
-            	values(#{interviewId},#{questionaireCode},#{status},#{createTime},#{updateTime},#{seqNum})
+            	insert editor_questionaire(interview_id,questionaire_code,create_time,update_time,seq_num) 
+            	values(#{interviewId},#{questionaireCode},#{createTime},#{updateTime},#{seqNum})
         </insert>
         
         <select id="selectByInterviewAndQuestionaire" parameterType="hashmap" resultMap="allResultMap">
@@ -37,7 +36,7 @@
         
         <update id="update" parameterType="EditorQuestionaire">
             	update editor_questionaire 
-            	set interview_id = #{interviewId},questionaire_code = #{questionaireCode},status = #{status},create_time = #{createTime},update_time = #{updateTime},seq_num = #{seqNum}
+            	set interview_id = #{interviewId},questionaire_code = #{questionaireCode},create_time = #{createTime},update_time = #{updateTime},seq_num = #{seqNum}
             	where id = #{id}
         </update>
         

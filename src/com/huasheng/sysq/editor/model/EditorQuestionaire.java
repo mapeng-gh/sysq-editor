@@ -7,7 +7,6 @@ public class EditorQuestionaire {
 	private int id;
 	private int interviewId;
 	private String questionaireCode;
-	private int status;
 	private Date createTime;
 	private Date updateTime;
 	private int seqNum;
@@ -29,12 +28,6 @@ public class EditorQuestionaire {
 	}
 	public void setQuestionaireCode(String questionaireCode) {
 		this.questionaireCode = questionaireCode;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
 	}
 	public Date getCreateTime() {
 		return createTime;

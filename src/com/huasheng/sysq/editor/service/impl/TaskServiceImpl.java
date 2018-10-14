@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -252,34 +251,24 @@ public class TaskServiceImpl implements TaskService{
 	 */
 	private void initTask(Task task) {
 		
-		//获取所有问卷
-		Interview interview = interviewDao.selectById(task.getInterviewId());
-		List<Questionaire> questionaireList = questionaireDao.selectListByType(interview.getVersionId(), interview.getType());
-		
-		if(questionaireList != null && questionaireList.size() > 0) {
+		//获取访谈过的问卷
+		List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(task.getInterviewId());
+		if(questionaireCodeList != null && questionaireCodeList.size() > 0) {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
 				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Interview interview = interviewDao.selectById(task.getInterviewId());
+					List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
+					Date curTime = new Date();
 					
 					//添加问卷
 					for(Questionaire questionaire : questionaireList) {
 						EditorQuestionaire editorQuestionaire = new EditorQuestionaire();
-						editorQuestionaire.setInterviewId(interview.getId());
+						editorQuestionaire.setInterviewId(task.getInterviewId());
 						editorQuestionaire.setQuestionaireCode(questionaire.getCode());
 						editorQuestionaire.setSeqNum(questionaire.getSeqNum());
-						Date curQuestionaireTime = new Date();
-						editorQuestionaire.setCreateTime(curQuestionaireTime);
-						editorQuestionaire.setUpdateTime(curQuestionaireTime);
-						
-						//设置状态
-						editorQuestionaire.setStatus(Constants.EDIT_QUESTIONAIRE_STATUS_INVALID);
-						List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(interview.getId());
-						if(questionaireCodeList != null && questionaireCodeList.size() > 0) {
-							if(questionaireCodeList.contains(questionaire.getCode())){
-								editorQuestionaire.setStatus(Constants.EDIT_QUESTIONAIRE_STATUS_VALID);
-							}
-						}
-						
+						editorQuestionaire.setCreateTime(curTime);
+						editorQuestionaire.setUpdateTime(curTime);
 						editorQuestionaireDao.insert(editorQuestionaire);
 						
 						//添加问题
@@ -290,9 +279,8 @@ public class TaskServiceImpl implements TaskService{
 								editorQuestion.setInterviewId(interview.getId());
 								editorQuestion.setQuestionaireCode(questionaire.getCode());
 								editorQuestion.setQuestionCode(question.getCode());
-								Date curQuestionTime = new Date();
-								editorQuestion.setCreateTime(curQuestionTime);
-								editorQuestion.setUpdateTime(curQuestionTime);
+								editorQuestion.setCreateTime(curTime);
+								editorQuestion.setUpdateTime(curTime);
 								editorQuestion.setSeqNum(question.getSeqNum());
 								
 								//设置状态
@@ -303,7 +291,6 @@ public class TaskServiceImpl implements TaskService{
 										editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_VALID);
 									}
 								}
-								
 								editorQuestionDao.insert(editorQuestion);
 								
 								//添加答案（有效问题）
@@ -311,14 +298,7 @@ public class TaskServiceImpl implements TaskService{
 									List<SysqResult> sysqResultList = sysqResultDao.getAnswerResultByQuestion(interview.getId(), questionaire.getCode(), question.getCode());
 									if(sysqResultList != null && sysqResultList.size() > 0) {
 										for(SysqResult sysqResult : sysqResultList) {
-											SysqResult editorSysqResult = new SysqResult();
-											try {
-												BeanUtils.copyProperties(editorSysqResult, sysqResult);
-												editorResultDao.insert(editorSysqResult);
-											}catch(Exception e) {
-												throw new RuntimeException(e);
-											}
-											
+											editorResultDao.insert(sysqResult);
 										}
 									}
 								}
@@ -329,7 +309,7 @@ public class TaskServiceImpl implements TaskService{
 					
 					//修改任务状态
 					task.setStatus(Constants.TASK_STATUS_EDITING);
-					task.setUpdateTime(new Date());
+					task.setUpdateTime(curTime);
 					taskDao.update(task);
 					LogUtils.info(this.getClass(), "initTask : update task status success");
 				}
@@ -378,58 +358,6 @@ public class TaskServiceImpl implements TaskService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "finishTask error", e);
 			return CallResult.failure("完成任务失败");
-		}
-	}
-
-	@Override
-	public CallResult<Boolean> enableQuestionaire(int taskId, String questionaireCode) {
-		LogUtils.info(this.getClass(), "enableQuestionaire params : taskId = {},questionaireCode = {}", taskId,questionaireCode);
-		try {
-			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-				@Override
-				protected void doInTransactionWithoutResult(TransactionStatus status) {
-					Task task = taskDao.selectById(taskId);
-					EditorQuestionaire editorQuestionaire = editorQuestionaireDao.selectByInterviewAndQuestionaire(task.getInterviewId(), questionaireCode);
-					editorQuestionaire.setStatus(Constants.EDIT_QUESTIONAIRE_STATUS_VALID);
-					Date curTime = new Date();
-					editorQuestionaire.setUpdateTime(curTime);
-					editorQuestionaireDao.update(editorQuestionaire);
-					
-					//更新任务
-					task.setUpdateTime(curTime);
-					taskDao.update(task);
-				}
-			});
-			return CallResult.success(true);
-		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "enableQuestionaire error", e);
-			return CallResult.failure("启用问卷失败");
-		}
-	}
-
-	@Override
-	public CallResult<Boolean> disableQuestionaire(int taskId, String questionaireCode) {
-		LogUtils.info(this.getClass(), "disableQuestionaire params : taskId = {},questionaireCode = {}", taskId,questionaireCode);
-		try {
-			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-				@Override
-				protected void doInTransactionWithoutResult(TransactionStatus status) {
-					Task task = taskDao.selectById(taskId);
-					EditorQuestionaire editorQuestionaire = editorQuestionaireDao.selectByInterviewAndQuestionaire(task.getInterviewId(), questionaireCode);
-					editorQuestionaire.setStatus(Constants.EDIT_QUESTIONAIRE_STATUS_INVALID);
-					Date curTime = new Date();
-					editorQuestionaire.setUpdateTime(curTime);
-					editorQuestionaireDao.update(editorQuestionaire);
-					
-					//更新任务
-					task.setUpdateTime(curTime);
-					taskDao.update(task);
-				}
-			});
-			return CallResult.success(true);
-		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "disableQuestionaire error", e);
-			return CallResult.failure("禁用问卷失败");
 		}
 	}
 

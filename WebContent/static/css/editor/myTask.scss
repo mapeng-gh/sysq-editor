@@ -10,10 +10,7 @@
 		margin-top : 20px;
 		&:hover{
 			background-color : #eef1f6;
-		}
-		.questionaire-operate{
-			text-align:right;
-			padding-right:10px;
+			cursor : pointer;
 		}
 		.questionaire-header{
 			font-size : 14px;
@@ -26,9 +23,6 @@
 			line-height : 200%;
 			text-indent:30px;
 		}
-	}
-	.invalid{
-		background-color: #fcf8e3;
 	}
 }
 

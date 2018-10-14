@@ -68,22 +68,6 @@ public interface TaskService {
 	public CallResult<List<EditorQuestionaireResponse>> getTaskQuestionaireList(int taskId);
 	
 	/**
-	 * 启用问卷
-	 * @param taskId
-	 * @param questionaireCode
-	 * @return
-	 */
-	public CallResult<Boolean> enableQuestionaire(int taskId,String questionaireCode);
-	
-	/**
-	 * 禁用问卷
-	 * @param taskId
-	 * @param questionaireCode
-	 * @return
-	 */
-	public CallResult<Boolean> disableQuestionaire(int taskId,String questionaireCode);
-	
-	/**
 	 * 获取任务问题列表
 	 * @param taskId
 	 * @param questionaireCode
