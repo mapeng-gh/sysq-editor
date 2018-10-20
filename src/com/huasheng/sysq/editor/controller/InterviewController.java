@@ -60,7 +60,7 @@ public class InterviewController {
 		}
 		
 		//查询访谈
-		CallResult<Page<InterviewResponse>> result = interviewService.findDoctorInterviewPage(loginName, handledParams, currentPage, pageSize);
+		CallResult<Page<InterviewResponse>> result = interviewService.findUserInterviewPage(loginName, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}

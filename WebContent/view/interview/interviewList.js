@@ -37,13 +37,13 @@
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
 						<el-table-column prop="interview.id" label="编号" align="center"></el-table-column>
-						<el-table-column prop="interview.type" label="访谈类型" width="80" align="center">
+						<el-table-column prop="interview.type" label="访谈类型" align="center">
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="患者姓名" width="150" align="center"></el-table-column>
-						<el-table-column prop="patient.mobile" label="联系电话" width="180" align="center"></el-table-column>
+						<el-table-column prop="patient.username" label="患者姓名" align="center"></el-table-column>
+						<el-table-column prop="patient.mobile" label="联系电话" align="center"></el-table-column>
 						<el-table-column prop="patient.address" label="患者地址" width="250" align="left"  :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{scope.row.patient.province + '-' + scope.row.patient.city + '-' + scope.row.patient.address}}
@@ -54,8 +54,8 @@
 								{{$commons.formatDate(scope.row.interview.endTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="interview.versionId" label="问卷版本" width="80" align="center"></el-table-column>
-						<el-table-column prop="operate" label="操作" align="center">
+						<el-table-column prop="interview.versionId" label="问卷版本" align="center"></el-table-column>
+						<el-table-column prop="operate" label="操作" align="center" width="150">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">问卷列表</el-button>
 							</template>

@@ -15,17 +15,20 @@ import com.huasheng.sysq.editor.dao.QuestionDao;
 import com.huasheng.sysq.editor.dao.QuestionaireDao;
 import com.huasheng.sysq.editor.dao.SysqResultDao;
 import com.huasheng.sysq.editor.dao.TaskDao;
+import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.Answer;
 import com.huasheng.sysq.editor.model.Interview;
 import com.huasheng.sysq.editor.model.Question;
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.SysqResult;
 import com.huasheng.sysq.editor.model.Task;
+import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.AnswerResponse;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
 import com.huasheng.sysq.editor.util.CallResult;
+import com.huasheng.sysq.editor.util.Constants;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
@@ -56,14 +59,23 @@ public class InterviewServiceImpl implements InterviewService{
 	
 	@Autowired
 	private AnswerDao answerDao;
+	
+	@Autowired
+	private UserDao userDao;
 
 	@Override
-	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize) {
-		LogUtils.info(this.getClass(), "findDoctorInterviewPage params : mobile = {},searchParams = {},currentPage = {},pageSize = {}",mobile,JsonUtils.toJson(searchParams),currentPage,pageSize);
+	public CallResult<Page<InterviewResponse>> findUserInterviewPage(String loginName,Map<String,Object> searchParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUserInterviewPage params : loginName = {},searchParams = {},currentPage = {},pageSize = {}",loginName,JsonUtils.toJson(searchParams),currentPage,pageSize);
 		
 		try {
+			//获取用户类型
+			User loginUser = userDao.selectByLoginName(loginName);
+			if(loginUser.getUserType() == Constants.USER_TYPE_ADMIN) {
+				loginName = "";
+			}
+			
 			//查询访谈
-			List<Interview> interviewList = interviewDao.findDoctorInterviewPage(mobile, searchParams, currentPage, pageSize);
+			List<Interview> interviewList = interviewDao.findUserInterviewPage(loginName, searchParams, currentPage, pageSize);
 			
 			//关联数据
 			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
@@ -78,12 +90,12 @@ public class InterviewServiceImpl implements InterviewService{
 			}
 			
 			//统计
-			int total = interviewDao.countDoctorInterview(mobile, searchParams);
+			int total = interviewDao.countUserInterview(loginName, searchParams);
 			
 			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
 			
 		}catch(Exception e) {
-			LogUtils.error(UserServiceImpl.class, "findDoctorInterviewPage error", e);
+			LogUtils.error(UserServiceImpl.class, "findUserInterviewPage error", e);
 			return CallResult.failure("查找访谈失败");
 		}
 	}

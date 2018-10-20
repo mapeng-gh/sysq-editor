@@ -16,7 +16,7 @@ public interface InterviewService {
 	 * @param searchParams
 	 * @return
 	 */
-	public CallResult<Page<InterviewResponse>> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize);
+	public CallResult<Page<InterviewResponse>> findUserInterviewPage(String loginName,Map<String,Object> searchParams,int currentPage,int pageSize);
 	
 	/**
 	 * 查找问卷列表

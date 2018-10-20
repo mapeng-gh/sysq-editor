@@ -15,22 +15,22 @@ public interface InterviewDao {
 	public Interview selectById(int id);
 
 	/**
-	 * 查找医生访谈列表
+	 * 查找用户访谈
 	 * @param mobile
 	 * @param searchParams
 	 * @param currentPage
 	 * @param pageSize
 	 * @return
 	 */
-	public List<Interview> findDoctorInterviewPage(String mobile,Map<String,Object> searchParams,int currentPage,int pageSize);
+	public List<Interview> findUserInterviewPage(String loginName,Map<String,Object> searchParams,int currentPage,int pageSize);
 	
 	/**
-	 * 统计医生访谈
+	 * 统计用户访谈
 	 * @param mobile
 	 * @param searchParams
 	 * @return
 	 */
-	public int countDoctorInterview(String mobile,Map<String,Object> searchParams);
+	public int countUserInterview(String loginName,Map<String,Object> searchParams);
 	
 	/**
 	 * 查找未分配访谈列表

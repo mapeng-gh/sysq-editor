@@ -22,24 +22,26 @@
 		where interview.id = #{id}  
 	</select>
 	
-        <select id="findDoctorInterviewPage" parameterType="hashmap" resultMap="allResultMap">
+        <select id="findUserInterviewPage" parameterType="hashmap" resultMap="allResultMap">
                  select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
 	         from sysq_interview interview 
-	         inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
+	         <if test="loginName != null and loginName != ''">inner join sysq_doctor doctor on interview.doctor_id = doctor.id </if>
 	         inner join sysq_patient patient on interview.patient_id = patient.id 
-	         where doctor.mobile = #{mobile}
+	         where 1 = 1 
+	         <if test="loginName != null and loginName != ''">and doctor.mobile = #{loginName}</if>
 	         <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
                  <if test="type != null">and interview.type = #{type}</if>
                  limit #{offset},#{limit}
 	         
 	</select>
 	 
-        <select id="countDoctorInterview" parameterType="hashmap" resultType="_int">
+        <select id="countUserInterview" parameterType="hashmap" resultType="_int">
 	         select count(interview.id) 
 	         from sysq_interview interview 
-	         inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
+	         <if test="loginName != null and loginName != ''">inner join sysq_doctor doctor on interview.doctor_id = doctor.id </if>
 	         inner join sysq_patient patient on interview.patient_id = patient.id 
-	         where doctor.mobile = #{mobile}
+	         where 1 = 1 
+	         <if test="loginName != null and loginName != ''">and doctor.mobile = #{loginName}</if>
 	         <if test="name != null and name != ''">and patient.username like concat(concat('%',#{name}),'%')</if>
                  <if test="type != null">and interview.type = #{type}</if>
         </select>

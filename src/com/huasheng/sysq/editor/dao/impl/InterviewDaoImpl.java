@@ -15,28 +15,26 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	private static String NAMESPACE = "mapper.InterviewMapper";
 	
 	@Override
-	public List<Interview> findDoctorInterviewPage(String mobile,Map<String, Object> searchParams,int currentPage,int pageSize) {
+	public List<Interview> findUserInterviewPage(String loginName,Map<String, Object> searchParams,int currentPage,int pageSize) {
 		if(searchParams == null) {
 			searchParams = new HashMap<String,Object>();
 		}
 		
-		searchParams.put("mobile", mobile);
-		
+		searchParams.put("loginName", loginName);
 		searchParams.put("offset", (currentPage - 1) * pageSize);
 		searchParams.put("limit", pageSize);
 		
-		return this.getSqlSession().selectList(NAMESPACE + ".findDoctorInterviewPage", searchParams);
+		return this.getSqlSession().selectList(NAMESPACE + ".findUserInterviewPage", searchParams);
 	}
 
 	@Override
-	public int countDoctorInterview(String mobile,Map<String, Object> searchParams) {
+	public int countUserInterview(String loginName,Map<String, Object> searchParams) {
 		if(searchParams == null) {
 			searchParams = new HashMap<String,Object>();
 		}
+		searchParams.put("loginName", loginName);
 		
-		searchParams.put("mobile", mobile);
-		
-		return this.getSqlSession().selectOne(NAMESPACE + ".countDoctorInterview", searchParams);
+		return this.getSqlSession().selectOne(NAMESPACE + ".countUserInterview", searchParams);
 	}
 	
 	@Override
