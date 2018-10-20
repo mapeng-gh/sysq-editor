@@ -39,11 +39,11 @@
         },
 	    
         {
-			name: '我的访谈',
+			name: '访谈浏览',
 			index: '/myInterview',
 			icon: 'fa fa-eye',
 			sub: [
-				{index : '/myInterview/interviewList' , name: '访谈列表'}
+				{index : '/interview/interviewList' , name: '访谈列表'}
 			]
         },
 	    

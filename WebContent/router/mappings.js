@@ -79,29 +79,29 @@
 	];
         
     //我的访谈
-    var myInterviewMappings = [
+    var interviewMappings = [
         {
-			name : 'myInterview4InterviewList',
-			path : '/myInterview/interviewList',
-			component : myInterview4InterviewListComponent,
+			name : 'interview4InterviewList',
+			path : '/interview/interviewList',
+			component : interview4InterviewListComponent,
 			meta : {
-				activeIndex : '/myInterview/interviewList'
+				activeIndex : '/interview/interviewList'
 			}
         },
 		{
-			name : 'myInterview4QuestionaireList',
-			path : '/myInterview/questionaireList',
-			component : myInterview4QuestionaireListComponent,
+			name : 'interview4QuestionaireList',
+			path : '/interview/questionaireList',
+			component : interview4QuestionaireListComponent,
 			meta : {
-				activeIndex : '/myInterview/interviewList'
+				activeIndex : '/interview/interviewList'
 			}
         },
 		{
-			name : 'myInterview4QuestionList',
-			path : '/myInterview/questionList',
-			component : myInterview4QuestionListComponent,
+			name : 'interview4QuestionList',
+			path : '/interview/questionList',
+			component : interview4QuestionListComponent,
 			meta : {
-				activeIndex : '/myInterview/interviewList'
+				activeIndex : '/interview/interviewList'
 			}
         }
     ];
@@ -154,6 +154,6 @@
 		}
 	];
         
-    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,myInterviewMappings,usercenterMappings);
+    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,interviewMappings,usercenterMappings);
 	window.mappings = mappings;
 })();

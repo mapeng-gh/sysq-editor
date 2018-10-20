@@ -24,8 +24,8 @@ import com.huasheng.sysq.editor.util.Page;
 import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
-@RequestMapping(value="/myInterview")
-public class MyInterviewController {
+@RequestMapping(value="/interview")
+public class InterviewController {
 	
 	@Autowired
 	private InterviewService interviewService;

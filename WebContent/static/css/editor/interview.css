@@ -1,0 +1,52 @@
+.interview-questionaire-list .questionaire {
+  margin-top: 20px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.interview-questionaire-list .questionaire:hover {
+  background-color: #eef1f6;
+}
+
+.interview-questionaire-list .questionaire .questionaire-header {
+  font-size: 14px;
+  color: #20a0ff;
+}
+
+.interview-questionaire-list .questionaire .questionaire-content {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #48576a;
+  line-height: 200%;
+  text-indent: 30px;
+}
+
+.interview-question-list .question {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.interview-question-list .question:hover {
+  background-color: #eef1f6;
+}
+
+.interview-question-list .question .question-desc {
+  font-size: 14px;
+  color: #48576a;
+  line-height: 200%;
+}
+
+.interview-question-list .question .answer {
+  margin-top: 20px;
+  text-indent: 30px;
+}
+
+.interview-question-list .question .answer .label {
+  font-size: 14px;
+  color: #48576a;
+}
+
+.interview-question-list .question .answer .value {
+  font-size: 14px;
+  color: #20a0ff;
+}

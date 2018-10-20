@@ -59,7 +59,7 @@ function getHomePage(){
 	}else if(userType == constants.USER_TYPE.enums.EDITOR){
 		return {name : 'myTask4TaskList'};
 	}else if(userType == constants.USER_TYPE.enums.VIEWER){
-		return {name : 'myInterview4InterviewList'};
+		return {name : 'interview4InterviewList'};
 	}
 }
 
