@@ -6,7 +6,7 @@
 			
 				<div class="common-title">任务详情</div>
 				
-				<el-collapse :value="['task']" style="padding-left:10px;">
+				<el-collapse :value="['task','interview','patient','doctor']" style="padding-left:10px;">
 				
 					<el-collapse-item name="task">
 						<span slot="title" class="task-title">任务信息</span>
@@ -62,12 +62,6 @@
 									</el-form-item>
 									<el-form-item label="患者姓名">
 										<el-input :value="taskDetail.patient.username" readonly></el-input>
-									</el-form-item>
-									<el-form-item label="联系电话">
-										<el-input :value="taskDetail.patient.mobile" readonly></el-input>
-									</el-form-item>
-									<el-form-item label="家庭住址">
-										<el-input :value="taskDetail.patient.province + '-' + taskDetail.patient.city + '-' + taskDetail.patient.address " readonly></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>

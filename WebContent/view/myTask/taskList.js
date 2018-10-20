@@ -68,7 +68,7 @@
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleTaskDetail(scope)">任务详情</el-button>
 								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">编辑访谈</el-button>
-								<el-button type="text" size="mini" @click="handleFinishTask(scope)">任务完成</el-button>
+								<el-button type="text" size="mini" :disabled="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED"@click="handleFinishTask(scope)">任务完成</el-button>
 							</template>
 						</el-table-column>
                     </el-table>
