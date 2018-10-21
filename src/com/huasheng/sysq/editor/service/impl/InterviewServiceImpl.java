@@ -105,20 +105,18 @@ public class InterviewServiceImpl implements InterviewService{
 		LogUtils.info(this.getClass(), "findQuestionaireListByInterviewId params : interviewId = {}", interviewId);
 		
 		try {
-			Task task = taskDao.findByInterviewId(interviewId);
-			if(task == null) {//访谈未编辑
-				List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(interviewId);
-				if(questionaireCodeList == null || questionaireCodeList.size() == 0) {
-					return CallResult.success(new ArrayList<Questionaire>());
-				}else {
-					Interview interview = interviewDao.selectById(interviewId);
-					List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
-					return CallResult.success(questionaireList);
-				}
-				
-			}else {//访谈已编辑
-				return CallResult.success(null);
+			//从答案表查询所有问卷编码
+			List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(interviewId);
+			
+			if(questionaireCodeList == null || questionaireCodeList.size() == 0) {
+				return CallResult.success(new ArrayList<Questionaire>());
 			}
+			
+			//查询问卷详细信息
+			Interview interview = interviewDao.selectById(interviewId);
+			List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
+			return CallResult.success(questionaireList);
+			
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "findQuestionaireListByInterviewId error", e);
 			return CallResult.failure("获取问卷列表失败");
