@@ -26,6 +26,7 @@ public interface EditorQuestionDao {
 	 */
 	public List<EditorQuestion> selectListByQuestionaire(int interviewId,String questionaireCode);
 	
+	
 	/**
 	 * 根据编码查询
 	 * @param interviewId

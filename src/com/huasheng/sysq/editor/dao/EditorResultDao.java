@@ -35,5 +35,14 @@ public interface EditorResultDao {
 	 * @param questionCode
 	 */
 	public void deleteByQuestion(int interviewId,String questionaireCode,String questionCode);
+	
+	/**
+	 * 查找答案集合
+	 * @param interviewId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @return
+	 */
+	public List<String> getAnswerList(int interviewId,String questionaireCode,String questionCode);
 
 }

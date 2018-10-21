@@ -38,4 +38,10 @@
 	    	delete from editor_result where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
 	</delete>
 	
+	<select id="getAnswerList" parameterType="hashmap" resultType="string">
+            	select  answer_code 
+            	from sysq_result 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
+        </select>
+	
 </mapper>  

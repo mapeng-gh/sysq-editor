@@ -28,7 +28,7 @@
         </select>
         
         <select id="getAnswerList" parameterType="hashmap" resultType="string">
-            	select distinct answer_code 
+            	select answer_code 
             	from sysq_result 
             	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
         </select>

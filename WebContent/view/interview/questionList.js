@@ -60,15 +60,24 @@
 				
 				if(['calendar','spinbox','slider','text'].indexOf(type) > -1){
 					return value;
-				}else if(['checkbox','dropdownlist','radiogroup'].indexOf(type) > -1){
+				}else if(['dropdownlist','radiogroup'].indexOf(type) > -1){
 					var extraJson = JSON.parse(extra);
 					for(var i = 0 ; i < extraJson.length ; i++){
 						if(extraJson[i].value == value){
 							return extraJson[i].text;
 						}
 					}
+				}else if(type == 'checkbox'){
+					var texts = [];
+					var extraJson = JSON.parse(extra);
+					var values = value.split(',');
+					for(var i = 0 ; i < extraJson.length ; i++){
+						if(values.indexOf(extraJson[i].value) > -1){
+							texts.push(extraJson[i].text);
+						}
+					}
+					return texts.join(',');
 				}
-				
 				return value;
 			}
 				

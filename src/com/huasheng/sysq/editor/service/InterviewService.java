@@ -26,10 +26,11 @@ public interface InterviewService {
 	public CallResult<List<Questionaire>> findQuestionaireListByInterviewId(int interviewId);
 	
 	/**
-	 * 查找问题列表
+	 * 获取问题列表
 	 * @param interviewId
 	 * @param questionaireCode
 	 * @return
 	 */
-	public CallResult<List<QuestionResponse>> findQuestionListByInterviewIdAndQuestionaireCode(int interviewId,String questionaireCode);
+	public CallResult<List<QuestionResponse>> findQuestionList(int interviewId,String questionaireCode);
+	
 }

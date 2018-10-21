@@ -93,7 +93,7 @@ public class InterviewController {
 		LogUtils.info(this.getClass(), "questionList params : interviewId = {} , questionaireCode",interviewId,questionaireCode);
 		
 		//查询问题
-		CallResult<List<QuestionResponse>> result = interviewService.findQuestionListByInterviewIdAndQuestionaireCode(interviewId, questionaireCode);
+		CallResult<List<QuestionResponse>> result = interviewService.findQuestionList(interviewId, questionaireCode);
 		LogUtils.info(this.getClass(), "questionList result : {}", JsonUtils.toJson(result));
 		
 		return result;
