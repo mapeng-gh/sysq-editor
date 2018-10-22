@@ -17,7 +17,7 @@ public interface TaskService {
 	 * @param searchParams
 	 * @return
 	 */
- 	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String,Object> searchParams,int currentPage,int pageSize);
+ 	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String,Object> searchParams,Map<String,String> orderParams,int currentPage,int pageSize);
 
 	/**
 	 * 任务分配

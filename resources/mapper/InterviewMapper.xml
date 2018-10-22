@@ -49,10 +49,13 @@
         <select id="findUnAssignInterviewPage" parameterType="hashmap" resultMap="allResultMap">
                  select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
 	         from sysq_interview interview 
+	         left join sysq_doctor doctor on interview.doctor_id = doctor.id 
 	         where interview.id not in (
 	         	select distinct task.interview_id from editor_task task
 	         )
-	         order by interview.end_time desc
+	         <if test="interviewType != null and interviewType != ''">order by interview.type ${interviewType} </if>
+	         <if test="doctorName != null and doctorName != ''">order by doctor.username ${doctorName} </if>
+	         <if test="interviewEndTime != null and interviewEndTime != ''">order by interview.end_time ${interviewEndTime} </if>
                  limit #{offset},#{limit}
 	         
 	</select>

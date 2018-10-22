@@ -37,7 +37,7 @@ public interface InterviewDao {
 	 * @param searchParams
 	 * @return
 	 */
-	public List<Interview> findUnAssignInterviewPage(Map<String,Object> searchParams,int currentPage,int pageSize);
+	public List<Interview> findUnAssignInterviewPage(Map<String,Object> searchParams,Map<String,String> orderParams,int currentPage,int pageSize);
 	
 	/**
 	 * 统计未分配访谈列表

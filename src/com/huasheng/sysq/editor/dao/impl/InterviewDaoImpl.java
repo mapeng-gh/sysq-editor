@@ -38,13 +38,19 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	}
 	
 	@Override
-	public List<Interview> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
+	public List<Interview> findUnAssignInterviewPage(Map<String, Object> searchParams,Map<String,String> orderParams,int currentPage,int pageSize) {
 		if(searchParams == null) {
 			searchParams = new HashMap<String,Object>();
 		}
 		
 		searchParams.put("offset",(currentPage -1) * pageSize);
 		searchParams.put("limit", pageSize);
+		
+		if(orderParams != null && orderParams.size() > 0) {
+			for(String key : orderParams.keySet()) {
+				searchParams.put(key, orderParams.get(key));
+			}
+		}
 		
         	return super.getSqlSession().selectList(NAMESPACE + ".findUnAssignInterviewPage",searchParams);
 	}

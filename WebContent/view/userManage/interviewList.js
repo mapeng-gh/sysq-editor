@@ -7,8 +7,6 @@
 			
 				<div class="common-title">任务分配</div>
 				
-				<div class="bg-warning">温馨提示：暂不支持跨页进行任务分配</div>
-				
 				<div class="common-list-operate">
 					<el-button type="primary" @click="handleAssignTask">分配</el-button>
 				</div>
@@ -20,18 +18,19 @@
 						header-cell-class-name="common-table-header"
 						style="width: 100%"
 						@select="handleSelect"
-						@select-all="handleSelectAll">
+						@select-all="handleSelectAll"
+						@sort-change="handleSortChange">
 						<el-table-column type="selection" width="55"></el-table-column>
 						<el-table-column prop="interview.id" label="访谈编号" align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.type" label="类型" align="center" :show-overflow-tooltip="true">
+						<el-table-column prop="interview.type" label="类型" sortable="custom" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
                                 {{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
                             </template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="患者姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="doctor.username" label="医生姓名"  align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="patient.username" label="患者姓名" "align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="doctor.username" label="医生姓名" sortable="custom" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="interview.versionId" label="问卷版本"  align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.endTime" label="访谈日期" align="center" :show-overflow-tooltip="true">
+						<el-table-column prop="interview.endTime" label="访谈日期" sortable="custom" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
                                 {{$commons.formatDate(scope.row.interview.endTime)}}
                             </template>
@@ -77,6 +76,8 @@
 					total : 0
                 },
 				
+				sort : {},
+				
 				selectedInterviewList : []
 			}
 		},
@@ -101,7 +102,7 @@
 				var self = this;
 				this.paginate.currentPage = currentPage;
 				
-				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,this.$lodash.assign({},this.sort,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
 					self.interviewList = resultObject.data;
                     self.paginate.total = resultObject.total;
 				});
@@ -114,7 +115,7 @@
 				this.paginate.currentPage = 1;
 				this.paginate.pageSize = currentSize;
 				 
-				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize},function(resultObject){
+				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,this.$lodash.assign({},this.sort,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
 					self.interviewList = resultObject.data;
                     self.paginate.total = resultObject.total;
 				});
@@ -128,6 +129,34 @@
 			//全选任务
 			handleSelectAll : function(selection){
 				this.selectedInterviewList = selection;
+			},
+			
+			//排序
+			handleSortChange(sortEvent){
+				var self = this;
+				
+				if(!sortEvent.prop){//取消排序
+					this.sort = {};
+				}else{
+					var type = sortEvent.order == 'ascending' ? 'asc' : 'desc';
+					
+					//组件不支持组合排序
+					if(sortEvent.prop == 'interview.type'){
+						this.sort = {interviewType : type};
+					}else if(sortEvent.prop == 'doctor.username'){
+						this.sort = {doctorName : type};
+					}else if(sortEvent.prop == 'interview.endTime'){
+						this.sort = {interviewEndTime : type};
+					}
+				}
+				
+				//加载数据
+				this.paginate.currentPage = 1;
+				this.paginate.pageSize = 10;
+				this.$request.sendGetRequest(this.APIS.UNASSIGN_INTERVIEW_LIST,this.$lodash.assign({},this.sort,{currentPage:this.paginate.currentPage,pageSize:this.paginate.pageSize}),function(resultObject){
+					self.interviewList = resultObject.data;
+					self.paginate.total = resultObject.total;
+				});
 			},
 			
 			//分配任务

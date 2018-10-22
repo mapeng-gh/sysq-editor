@@ -87,12 +87,12 @@ public class TaskServiceImpl implements TaskService{
 	private AnswerDao answerDao;
 	
 	@Override
-	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,int currentPage,int pageSize) {
-		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : searchParams = {},currentPage = {},pageSize = {}", JsonUtils.toJson(searchParams),currentPage,pageSize);
+	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,Map<String,String> orderParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUnAssignInterviewPage params : searchParams = {},orderParams = {} , currentPage = {},pageSize = {}", JsonUtils.toJson(searchParams),JsonUtils.toJson(orderParams),currentPage,pageSize);
 		
 		try {
 			//查询访谈
-			List<Interview> interviewList = interviewDao.findUnAssignInterviewPage(searchParams,currentPage,pageSize);
+			List<Interview> interviewList = interviewDao.findUnAssignInterviewPage(searchParams,orderParams,currentPage,pageSize);
 			
 			//关联数据
 			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 

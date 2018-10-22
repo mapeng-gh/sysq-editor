@@ -1,5 +1,6 @@
 package com.huasheng.sysq.editor.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,15 +105,19 @@ public class UserManageController {
 		//参数处理
 		int currentPage = 0;
 		int pageSize = 0;
+		Map<String,String> orderParams = new HashMap<String,String>();
 		try {
 			currentPage = Integer.parseInt(searchParams.get("currentPage"));
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
+			orderParams.put("interviewType", searchParams.get("interviewType"));
+			orderParams.put("doctorName", searchParams.get("doctorName"));
+			orderParams.put("interviewEndTime", searchParams.get("interviewEndTime"));
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "interviewList error", e);
 			return CallResult.failure("获取未分配访谈列表失败");
 		}
 		
-		CallResult<Page<InterviewResponse>> result = taskService.findUnAssignInterviewPage(null,currentPage,pageSize);
+		CallResult<Page<InterviewResponse>> result = taskService.findUnAssignInterviewPage(null,orderParams,currentPage,pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
