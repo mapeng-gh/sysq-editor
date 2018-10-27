@@ -50,12 +50,13 @@
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="name" label="姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="loginName" label="登录账号" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="userType" label="类型" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$constants.USER_TYPE.getUserTypeText(scope.row.userType)}}
 							</template>
 						</el-table-column>
+						<el-table-column prop="name" label="姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="workingPlace" label="工作单位" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="createTime" label="创建日期" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
@@ -69,7 +70,7 @@
 								<el-tag type="danger" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.REJECT">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" :show-overflow-tooltip="true">
+						<el-table-column prop="operate" label="操作" align="center" :show-overflow-tooltip="true" width="200">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleUserDetail(scope)">查看详情</el-button>
 								<el-button type="text" size="mini" @click="handleAuditDialog(scope)">账号审核</el-button>

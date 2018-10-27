@@ -153,7 +153,19 @@
 			}
 		}
 	];
+	
+	//操作日志
+	var operateLogMappings = [
+		{
+			name : 'log4LoginLogList',
+			path : '/log/loginLogList',
+			component : log4LoginLogComponent,
+			meta : {
+				activeIndex : '/log/loginLogList'
+			}
+		}
+	];
         
-    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,interviewMappings,usercenterMappings);
+    var mappings = _.concat(userManageMappings,taskManageMappings,dataManageMappings,myTaskMappings,interviewMappings,usercenterMappings,operateLogMappings);
 	window.mappings = mappings;
 })();

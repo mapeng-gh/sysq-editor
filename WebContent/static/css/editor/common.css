@@ -36,6 +36,7 @@ html, body {
   background: #eef1f6;
   border-radius: 2px;
 }
+
 .common-search .common-search-opt {
   text-align: right;
 }
@@ -85,4 +86,8 @@ html, body {
 
 .hidden {
   display: none;
+}
+
+.el-date-editor .el-range-separator {
+  width: 8% !important;
 }

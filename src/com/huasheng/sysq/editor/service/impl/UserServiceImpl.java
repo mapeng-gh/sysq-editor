@@ -14,8 +14,10 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.huasheng.sysq.editor.dao.DoctorDao;
+import com.huasheng.sysq.editor.dao.EditorLoginLogDao;
 import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.Doctor;
+import com.huasheng.sysq.editor.model.EditorLoginLog;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.LoginResponse;
 import com.huasheng.sysq.editor.params.UserResponse;
@@ -26,6 +28,7 @@ import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
 import com.huasheng.sysq.editor.util.SessionCache;
+import com.huasheng.sysq.editor.util.ThreadLocalUtils;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -38,6 +41,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private DoctorDao doctorDao;
+	
+	@Autowired
+	private EditorLoginLogDao editorLoginLogDao;
 	
 	@Override
 	public CallResult<Page<User>> findUserPage(Map<String,String> searchParams) {
@@ -133,36 +139,55 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public CallResult<LoginResponse> login(String loginName, String loginPwd) {
+		LogUtils.info(this.getClass(), "login params : loginName = {}",loginName);
 		
-		//参数校验
-		if(StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
-			return CallResult.failure("登录名和登录密码不能为空");
+		try {
+			//参数校验
+			if(StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
+				return CallResult.failure("登录名和登录密码不能为空");
+			}
+			
+			//业务校验
+			User loginUser = userDao.selectByLoginName(loginName);
+			if(loginUser == null) {
+				return CallResult.failure("登录名不存在");
+			}
+			if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_ING) {
+				return CallResult.failure("用户正在审核");
+			}else if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_REJECT) {
+				return CallResult.failure("用户审核未通过：" + loginUser.getRemark());
+			}
+			if(!loginPwd.equals(loginUser.getLoginPwd())) {
+				return CallResult.failure("登录密码不正确");
+			}
+			
+			//保存会话
+			String token = SessionCache.USER_LOGIN_KEY + UUID.randomUUID().toString();
+			SessionCache.add(token, loginUser);
+			
+			//登录日志
+			try {
+				EditorLoginLog editorLoginLog = new EditorLoginLog();
+				editorLoginLog.setLoginName(loginUser.getLoginName());
+				Date curTime = new Date();
+				editorLoginLog.setLoginTime(curTime);
+				editorLoginLog.setLoginIp(ThreadLocalUtils.getLoginIp());
+				editorLoginLog.setCreateTime(curTime);
+				editorLoginLogDao.insert(editorLoginLog);
+			}catch(Exception e) {
+				LogUtils.error(this.getClass(), "login : log error", e);
+			}
+			
+			LoginResponse userLoginResponse = new LoginResponse();
+			userLoginResponse.setName(loginUser.getName());
+			userLoginResponse.setUserType(loginUser.getUserType());
+			userLoginResponse.setToken(token);
+			
+			return CallResult.success(userLoginResponse);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "login", e);
+			return CallResult.failure("登录失败");
 		}
-		
-		//业务校验
-		User loginUser = userDao.selectByLoginName(loginName);
-		if(loginUser == null) {
-			return CallResult.failure("登录名不存在");
-		}
-		if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_ING) {
-			return CallResult.failure("用户正在审核");
-		}else if(loginUser.getAuditStatus() == Constants.AUDIT_STATUS_REJECT) {
-			return CallResult.failure("用户审核未通过：" + loginUser.getRemark());
-		}
-		if(!loginPwd.equals(loginUser.getLoginPwd())) {
-			return CallResult.failure("登录密码不正确");
-		}
-		
-		//保存会话
-		String token = SessionCache.USER_LOGIN_KEY + UUID.randomUUID().toString();
-		SessionCache.add(token, loginUser);
-		
-		LoginResponse userLoginResponse = new LoginResponse();
-		userLoginResponse.setName(loginUser.getName());
-		userLoginResponse.setUserType(loginUser.getUserType());
-		userLoginResponse.setToken(token);
-		
-		return CallResult.success(userLoginResponse);
 	}
 
 	@Override

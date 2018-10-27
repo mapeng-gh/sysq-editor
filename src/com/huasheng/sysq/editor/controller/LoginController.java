@@ -1,5 +1,7 @@
 package com.huasheng.sysq.editor.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.SessionCache;
+import com.huasheng.sysq.editor.util.ThreadLocalUtils;
+import com.huasheng.sysq.editor.util.WebUtils;
 
 @Controller
 public class LoginController {
@@ -32,8 +36,11 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/login.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<LoginResponse> login(@RequestBody String requestJsonStr) {
+	public CallResult<LoginResponse> login(@RequestBody String requestJsonStr , HttpServletRequest request) {
 		LogUtils.info(this.getClass(), "login params : {}",requestJsonStr);
+		
+		//设置访问IP
+		ThreadLocalUtils.setLoginIp(WebUtils.getClientIp(request));
 		
 		//参数处理
 		String loginName,loginPwd;
