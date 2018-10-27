@@ -34,8 +34,8 @@
                  select count(id)
 	         from editor_login_log 
 	         where 1 = 1 
-                 <if test="startTime != null">and login_time &gt;= #{startTime}</if>
-                 <if test="endTime != null">and login_time &lt;= #{endTime}</if>
+                 <if test="startTime != null and startTime != ''">and login_time &gt;= #{startTime}</if>
+                 <if test="endTime != null and endTime != ''">and login_time &lt;= #{endTime}</if>
                  <if test="loginName != null and loginName != ''">and login_name = #{loginName}</if>
 	</select>
 	
