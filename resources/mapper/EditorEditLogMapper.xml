@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="mapper.EditorEditLogMapper">
+	
+	<sql id="allColumns">
+	    id,login_name,name,interview_id,version_id,questionaire_code,questionaire_title,question_code,operate_type,before_value,after_value,edit_time  
+	</sql>
+	
+	<resultMap id="allResultMap" type="EditorEditLog">
+		<id column="id" property="id" jdbcType="INTEGER" javaType="int"/>
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" javaType="String"/>
+		<result column="name" property="name" jdbcType="VARCHAR" javaType="String"/>
+		<result column="interview_id" property="interviewId" jdbcType="INTEGER" javaType="_int"/>
+		<result column="version_id" property="versionId" jdbcType="INTEGER" javaType="_int"/>
+		<result column="questionaire_code" property="questionaireCode" jdbcType="VARCHAR" javaType="String"/>
+		<result column="questionaire_title" property="questionaireTitle" jdbcType="VARCHAR" javaType="String"/>
+		<result column="question_code" property="questionCode" jdbcType="VARCHAR" javaType="String"/>
+		<result column="operate_type" property="operateType" jdbcType="INTEGER" javaType="_int"/>
+		<result column="before_value" property="beforeValue" jdbcType="VARCHAR" javaType="String"/>
+		<result column="after_value" property="afterValue" jdbcType="VARCHAR" javaType="String"/>
+  		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="EditorEditLog" useGeneratedKeys="true" keyProperty="id">
+            insert into editor_edit_log(login_name,name,interview_id,version_id,questionaire_code,questionaire_title,question_code,operate_type,before_value,after_value,edit_time)  
+            values(#{loginName},#{name},#{interviewId},#{versionId},#{questionaireCode},#{questionaireTitle},#{questionCode},#{operateType},#{beforeValue},#{afterValue},#{editTime}) 
+        </insert>
+	
+        <select id="findPage" parameterType="hashmap" resultMap="allResultMap">
+                 select <include refid="allColumns"></include> 
+	         from editor_edit_log 
+	         where 1 = 1 
+                 <if test="startTime != null and startTime != ''">and edit_time &gt;= #{startTime}</if>
+                 <if test="endTime != null and endTime != ''">and edit_time &lt;= #{endTime}</if>
+                 <if test="loginName != null and loginName != ''">and login_name = #{loginName}</if> 
+                 order by edit_time desc 
+                 limit #{offset},#{limit}
+	</select>
+	 
+        <select id="count" parameterType="hashmap" resultType="_int">
+                 select count(id)
+	         from editor_edit_log 
+	         where 1 = 1 
+                 <if test="startTime != null and startTime != ''">and edit_time &gt;= #{startTime}</if>
+                 <if test="endTime != null and endTime != ''">and edit_time &lt;= #{endTime}</if>
+                 <if test="loginName != null and loginName != ''">and login_name = #{loginName}</if>
+	</select>
+	
+</mapper>  

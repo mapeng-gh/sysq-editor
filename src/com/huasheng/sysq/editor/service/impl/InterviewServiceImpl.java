@@ -220,7 +220,7 @@ public class InterviewServiceImpl implements InterviewService{
 			questionResponseList.add(questionResponse);
 			
 			//获取所有答案编码
-			List<String> answerCodeList = editorResultDao.getAnswerList(interviewId, questionaireCode, question.getCode());
+			List<String> answerCodeList = editorResultDao.getAnswerCodeList(interviewId, questionaireCode, question.getCode());
 			
 			if(answerCodeList == null || answerCodeList.size() <= 0) {
 				questionResponse.setAnswerList(new ArrayList<AnswerResponse>());

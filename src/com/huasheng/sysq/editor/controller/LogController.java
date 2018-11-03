@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.huasheng.sysq.editor.model.EditorEditLog;
 import com.huasheng.sysq.editor.params.EditorLoginLogResponse;
 import com.huasheng.sysq.editor.service.LogService;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -24,6 +25,11 @@ public class LogController {
 	@Autowired
 	private LogService logService;
 
+	/**
+	 * 查询登录日志
+	 * @param searchParams
+	 * @return
+	 */
 	@RequestMapping(value="/loginLogList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Page<EditorLoginLogResponse>> loginLogList(@RequestParam Map<String,String> searchParams) {
@@ -46,6 +52,36 @@ public class LogController {
 		
 		CallResult<Page<EditorLoginLogResponse>> result = logService.findLoginLogPage(handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "loginLogList result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 查询编辑日志
+	 * @param searchParams
+	 * @return
+	 */
+	@RequestMapping(value="/editLogList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Page<EditorEditLog>> editLogList(@RequestParam Map<String,String> searchParams) {
+		LogUtils.info(this.getClass(), "editLogList params : searchParams = {}",JsonUtils.toJson(searchParams));
+		
+		//参数处理
+		Map<String,Object> handledParams = new HashMap<String,Object>();
+		int currentPage = 0;
+		int pageSize = 0;
+		try {
+			handledParams.put("startTime",searchParams.get("startTime"));
+			handledParams.put("endTime",searchParams.get("endTime"));
+			handledParams.put("loginName", searchParams.get("loginName"));
+			currentPage = Integer.parseInt(searchParams.get("currentPage"));
+			pageSize = Integer.parseInt(searchParams.get("pageSize"));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "editLogList error", e);
+			return CallResult.failure("查询编辑日志失败");
+		}
+		
+		CallResult<Page<EditorEditLog>> result = logService.findEditLogPage(handledParams, currentPage, pageSize);
+		LogUtils.info(this.getClass(), "editLogList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

@@ -20,8 +20,6 @@ import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.SessionCache;
-import com.huasheng.sysq.editor.util.ThreadLocalUtils;
-import com.huasheng.sysq.editor.util.WebUtils;
 
 @Controller
 public class LoginController {
@@ -38,9 +36,6 @@ public class LoginController {
 	@ResponseBody
 	public CallResult<LoginResponse> login(@RequestBody String requestJsonStr , HttpServletRequest request) {
 		LogUtils.info(this.getClass(), "login params : {}",requestJsonStr);
-		
-		//设置访问IP
-		ThreadLocalUtils.setLoginIp(WebUtils.getClientIp(request));
 		
 		//参数处理
 		String loginName,loginPwd;

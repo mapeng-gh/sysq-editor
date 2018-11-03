@@ -97,6 +97,31 @@
 				}
 				return list;
 			}
+		},
+		
+		//编辑类型
+		OPERATE_TYPE : {
+			enums : {
+				ENABLE : 1,
+				DISABLE : 2,
+				EDIT : 3
+			},
+			getOperateTypeText(code){
+				if(code == this.enums.ENABLE){
+					return '启用';
+				}else if(code == this.enums.DISABLE){
+					return '禁用';
+				}else if(code == this.enums.EDIT){
+					return '编辑';
+				}
+			},
+			getOperateTypeList(){
+				var list = [];
+				for(var key in this.enums){
+						list.push({'code' : this.enums[key] , 'text' : this.getOperateTypeText(this.enums[key])});
+				}
+				return list;
+			}
 		}
 	};
 	

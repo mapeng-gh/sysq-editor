@@ -10,9 +10,7 @@
 					<div class="question-operate hidden">
 						<el-button type="primary" plain size="small" :class="{'hidden' : questionResponse.editorQuestion.status == 0}" @click="handleEditQuestionDialog(questionResponse)"">编辑</el-button>
 						<el-button type="primary" plain size="small" :class="{'hidden' : questionResponse.editorQuestion.status == 1}" @click="handleEnableQuestion(questionResponse)">启用</el-button>
-						<el-tooltip effect="dark" content="禁用问题意味着访谈不包含该问题" placement="top-start">
-							<el-button type="primary" plain size="small" :class="{'hidden' : questionResponse.editorQuestion.status == 0}" @click="handleDisableQuestion(questionResponse)">禁用<i class="el-icon-question"></i></el-button>
-						</el-tooltip>
+						<el-button type="primary" plain size="small" :class="{'hidden' : questionResponse.editorQuestion.status == 0}" @click="handleDisableQuestion(questionResponse)">禁用</el-button>
 					</div>
 					<div class="question-desc" v-html="handleQuestionDesc(questionResponse.question.description)"></div>
 					<div class="answer" v-for="answerResponse in questionResponse.answerResponseList" v-if="answerResponse.result" :key="answerResponse.answer.code">
@@ -238,17 +236,17 @@
 					taskId : this.params.taskId,
 					questionaireCode : this.params.questionaireCode,
 					questionCode : this.editQuestionDialog.questionResponse.question.code,
-					editorResults : []
+					results : []
 				};
 				for(var i = 0 ; i < answerResponseList.length ; i++){
-					var editorResult = {};
-					editorResult.answerCode = answerResponseList[i].answer.code;
+					var result = {};
+					result.answerCode = answerResponseList[i].answer.code;
 					if(answerResponseList[i].answer.type == 'checkbox'){
-						editorResult.answerValue = answerResponseList[i].result.answerValue.join(',');
+						result.answerValue = answerResponseList[i].result.answerValue.join(',');
 					}else{
-						editorResult.answerValue = answerResponseList[i].result.answerValue;
+						result.answerValue = answerResponseList[i].result.answerValue;
 					}
-					params.editorResults.push(editorResult);
+					params.results.push(result);
 				}
 				
 				this.$request.sendPostRequest(this.APIS.EDIT_QUESTION,params,function(resultObject){

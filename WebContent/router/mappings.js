@@ -163,6 +163,14 @@
 			meta : {
 				activeIndex : '/log/loginLogList'
 			}
+		},
+		{
+			name : 'log4EditLogList',
+			path : '/log/editLogList',
+			component : log4EditLogListComponent,
+			meta : {
+				activeIndex : '/log/editLogList'
+			}
 		}
 	];
         

@@ -24,4 +24,9 @@ public class Constants {
 	//编辑问题状态（1：有效 0 ：无效）
 	public static final int EDIT_QUESTION_STATUS_VALID= 1;
 	public static final int EDIT_QUESTION_STATUS_INVALID= 0;
+	
+	//操作类型（1：启用 2：禁用 3、编辑）
+	public static final int OPERATE_TYPE_ENABLE = 1;
+	public static final int OPERATE_TYPE_DISABLE = 2;
+	public static final int OPERATE_TYPE_EDIT = 3;
 }

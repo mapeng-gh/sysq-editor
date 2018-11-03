@@ -46,7 +46,17 @@ public class EditorResultDaoImpl extends BaseDao implements EditorResultDao{
 	}
 
 	@Override
-	public List<String> getAnswerList(int interviewId, String questionaireCode, String questionCode) {
+	public List<String> getAnswerCodeList(int interviewId, String questionaireCode, String questionCode) {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("interviewId", interviewId);
+		paramMap.put("questionaireCode", questionaireCode);
+		paramMap.put("questionCode", questionCode);
+		
+		return super.getSqlSession().selectList(NAMESPACE + ".getAnswerCodeList", paramMap);
+	}
+
+	@Override
+	public List<SysqResult> getAnswerList(int interviewId, String questionaireCode, String questionCode) {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		paramMap.put("interviewId", interviewId);
 		paramMap.put("questionaireCode", questionaireCode);

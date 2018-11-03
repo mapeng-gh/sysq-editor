@@ -93,6 +93,13 @@ public interface TaskService {
 	 */
 	public CallResult<Boolean> disableQuestion(int taskId,String questionaireCode,String questionCode);
 	
-	//编辑问题
-	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String editorResults);
+	/**
+	 * 编辑问题
+	 * @param taskId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @param results
+	 * @return
+	 */
+	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String results);
 }

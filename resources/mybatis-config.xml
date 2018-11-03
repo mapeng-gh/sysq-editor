@@ -22,6 +22,7 @@
 		<typeAlias type="com.huasheng.sysq.editor.model.EditorQuestion" alias="EditorQuestion"/>
 		<typeAlias type="com.huasheng.sysq.editor.model.SysqResult" alias="SysqResult"/>
 		<typeAlias type="com.huasheng.sysq.editor.model.EditorLoginLog" alias="EditorLoginLog"/>
+		<typeAlias type="com.huasheng.sysq.editor.model.EditorEditLog" alias="EditorEditLog"/>
 		
 	</typeAliases>
     
@@ -40,6 +41,7 @@
         	<mapper resource="mapper/EditorQuestionMapper.xml"/>
         	<mapper resource="mapper/EditorResultMapper.xml"/>
         	<mapper resource="mapper/EditorLoginLogMapper.xml"/>
+        	<mapper resource="mapper/EditorEditLogMapper.xml"/>
 	</mappers>
     
 </configuration>

@@ -5,15 +5,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.huasheng.sysq.editor.dao.AnswerDao;
 import com.huasheng.sysq.editor.dao.DoctorDao;
+import com.huasheng.sysq.editor.dao.EditorEditLogDao;
 import com.huasheng.sysq.editor.dao.EditorQuestionDao;
 import com.huasheng.sysq.editor.dao.EditorQuestionaireDao;
 import com.huasheng.sysq.editor.dao.EditorResultDao;
@@ -25,6 +29,7 @@ import com.huasheng.sysq.editor.dao.SysqResultDao;
 import com.huasheng.sysq.editor.dao.TaskDao;
 import com.huasheng.sysq.editor.dao.UserDao;
 import com.huasheng.sysq.editor.model.Answer;
+import com.huasheng.sysq.editor.model.EditorEditLog;
 import com.huasheng.sysq.editor.model.EditorQuestion;
 import com.huasheng.sysq.editor.model.EditorQuestionaire;
 import com.huasheng.sysq.editor.model.Interview;
@@ -32,6 +37,7 @@ import com.huasheng.sysq.editor.model.Question;
 import com.huasheng.sysq.editor.model.Questionaire;
 import com.huasheng.sysq.editor.model.SysqResult;
 import com.huasheng.sysq.editor.model.Task;
+import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.AnswerResponse;
 import com.huasheng.sysq.editor.params.EditorQuestionResponse;
 import com.huasheng.sysq.editor.params.EditorQuestionaireResponse;
@@ -43,6 +49,7 @@ import com.huasheng.sysq.editor.util.Constants;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
+import com.huasheng.sysq.editor.util.ThreadLocalUtils;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -85,6 +92,9 @@ public class TaskServiceImpl implements TaskService{
 	
 	@Autowired
 	private AnswerDao answerDao;
+	
+	@Autowired
+	private EditorEditLogDao editorEditLogDao;
 	
 	@Override
 	public CallResult<Page<InterviewResponse>> findUnAssignInterviewPage(Map<String, Object> searchParams,Map<String,String> orderParams,int currentPage,int pageSize) {
@@ -471,32 +481,64 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public CallResult<Boolean> editQuestion(int taskId, String questionaireCode, String questionCode,String editorResults) {
-		LogUtils.info(this.getClass(), "editQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , editorResults = {}", taskId,questionaireCode,questionCode,editorResults);
+	public CallResult<Boolean> editQuestion(int taskId, String questionaireCode, String questionCode,String results) {
+		LogUtils.info(this.getClass(), "editQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , results = {}", taskId,questionaireCode,questionCode,results);
 		try {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
 				protected void doInTransactionWithoutResult(TransactionStatus status) {
 					
-					//删除旧值
+					Date curTime = new Date();
+					
+					//记录日志
+					EditorEditLog editorEditLog = new EditorEditLog();
 					Task task = taskDao.selectById(taskId);
+					Interview interview = interviewDao.selectById(task.getInterviewId());
+					User loginUser = ThreadLocalUtils.getLoginUser();
+					Questionaire questionaire = questionaireDao.selectByCode(interview.getVersionId(), questionaireCode);
+					editorEditLog.setLoginName(loginUser.getLoginName());
+					editorEditLog.setName(loginUser.getName());
+					editorEditLog.setInterviewId(interview.getId());
+					editorEditLog.setVersionId(interview.getVersionId());
+					editorEditLog.setQuestionaireCode(questionaireCode);
+					editorEditLog.setQuestionaireTitle(questionaire.getTitle());
+					editorEditLog.setQuestionCode(questionCode);
+					editorEditLog.setEditTime(curTime);
+					editorEditLog.setOperateType(Constants.OPERATE_TYPE_EDIT);
+					List<SysqResult> beforeResultList = editorResultDao.getAnswerList(interview.getId(), questionaireCode, questionCode);
+					if(beforeResultList != null && beforeResultList.size() > 0) {
+						editorEditLog.setBeforeValue(JSON.toJSONString(beforeResultList, new PropertyFilter() {
+							@Override
+							public boolean apply(Object object, String name, Object value) {
+								if(ArrayUtils.contains(new String[] {"answerCode","answerValue"}, name)) {
+									return true;
+								}
+								return false;
+							}
+						}));
+					}
+					editorEditLog.setAfterValue(results);
+					editorEditLogDao.insert(editorEditLog);
+					
+					//删除旧值
 					editorResultDao.deleteByQuestion(task.getInterviewId(), questionaireCode, questionCode);
 					
 					//插入新值
-					JSONArray jsonArray = JSONArray.parseArray(editorResults);
-					for(int i = 0 ; i < jsonArray.size() ; i++) {
+					JSONArray resultsJsonArr = JSONArray.parseArray(results);
+					for(int i = 0 ; i < resultsJsonArr.size() ; i++) {
 						SysqResult editorResult = new SysqResult();
 						editorResult.setInterviewId(task.getInterviewId());
 						editorResult.setQuestionaireCode(questionaireCode);
 						editorResult.setQuestionCode(questionCode);
-						editorResult.setAnswerCode(jsonArray.getJSONObject(i).getString("answerCode"));
-						editorResult.setAnswerValue(jsonArray.getJSONObject(i).getString("answerValue"));
+						editorResult.setAnswerCode(resultsJsonArr.getJSONObject(i).getString("answerCode"));
+						editorResult.setAnswerValue(resultsJsonArr.getJSONObject(i).getString("answerValue"));
 						editorResultDao.insert(editorResult);
 					}
 					
 					//更新任务
-					task.setUpdateTime(new Date());
+					task.setUpdateTime(curTime);
 					taskDao.update(task);
+					
 				}
 			});
 			return CallResult.success(true);

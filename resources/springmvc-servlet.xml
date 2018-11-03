@@ -14,7 +14,15 @@
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="interceptors">
             <list>
-                <bean class="com.huasheng.sysq.editor.filter.SessionInterceptor"></bean>
+                <bean class="com.huasheng.sysq.editor.filter.LoginInterceptor">
+                    <property name="excludePaths">
+                        <array>
+                            <value>/login.do</value>
+                            <value>/register.do</value>
+                        </array>
+                    </property>
+                </bean>
+                <bean class="com.huasheng.sysq.editor.filter.ClientInterceptor"/>
             </list>
         </property>
     </bean>

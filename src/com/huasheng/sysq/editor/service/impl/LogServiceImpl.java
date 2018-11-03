@@ -7,8 +7,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.huasheng.sysq.editor.dao.EditorEditLogDao;
 import com.huasheng.sysq.editor.dao.EditorLoginLogDao;
 import com.huasheng.sysq.editor.dao.UserDao;
+import com.huasheng.sysq.editor.model.EditorEditLog;
 import com.huasheng.sysq.editor.model.EditorLoginLog;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.EditorLoginLogResponse;
@@ -23,6 +25,9 @@ public class LogServiceImpl implements LogService{
 	
 	@Autowired
 	private EditorLoginLogDao editorLoginLogDao;
+	
+	@Autowired
+	private EditorEditLogDao editorEditLogDao;
 	
 	@Autowired
 	private UserDao userDao;
@@ -64,6 +69,24 @@ public class LogServiceImpl implements LogService{
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "findLoginLogPage error", e);
 			return CallResult.failure("获取登录日志失败");
+		}
+	}
+
+	@Override
+	public CallResult<Page<EditorEditLog>> findEditLogPage(Map<String, Object> searchParams, int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findEditLogPage params : searchParams = {} , currentPage = {} , pageSize = {}", JsonUtils.toJson(searchParams),currentPage,pageSize);
+		
+		try {
+			//查询编辑日志
+			List<EditorEditLog> editorEditLogList = editorEditLogDao.findPage(searchParams, currentPage, pageSize);
+			
+			//统计
+			int total = editorEditLogDao.count(searchParams);
+			
+			return CallResult.success(new Page<EditorEditLog>(editorEditLogList,currentPage,pageSize,total));
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "findEditLogPage error", e);
+			return CallResult.failure("查询编辑日志失败");
 		}
 	}
 

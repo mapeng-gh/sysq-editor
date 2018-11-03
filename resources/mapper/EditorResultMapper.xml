@@ -38,9 +38,15 @@
 	    	delete from editor_result where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
 	</delete>
 	
-	<select id="getAnswerList" parameterType="hashmap" resultType="string">
+	<select id="getAnswerCodeList" parameterType="hashmap" resultType="string">
             	select  answer_code 
-            	from sysq_result 
+            	from editor_result 
+            	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
+        </select>
+        
+	<select id="getAnswerList" parameterType="hashmap" resultMap="allResultMap">
+            	select  <include refid="allColumns"></include> 
+            	from editor_result  
             	where interview_id = #{interviewId} and questionaire_code = #{questionaireCode} and question_code = #{questionCode}
         </select>
 	

@@ -43,6 +43,15 @@ public interface EditorResultDao {
 	 * @param questionCode
 	 * @return
 	 */
-	public List<String> getAnswerList(int interviewId,String questionaireCode,String questionCode);
+	public List<String> getAnswerCodeList(int interviewId,String questionaireCode,String questionCode);
+	
+	/**
+	 * 获取答案集合
+	 * @param interviewId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @return
+	 */
+	public List<SysqResult> getAnswerList(int interviewId,String questionaireCode,String questionCode);
 
 }

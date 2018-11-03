@@ -206,19 +206,19 @@ public class MyTaskController {
 		int taskId;
 		String questionaireCode;
 		String questionCode;
-		String editorResults;
+		String results;
 		try {
 			JSONObject requestJson = JSON.parseObject(requestJsonStr);
 			taskId = requestJson.getIntValue("taskId");
 			questionaireCode = requestJson.getString("questionaireCode");
 			questionCode = requestJson.getString("questionCode");
-			editorResults = requestJson.getString("editorResults");
+			results = requestJson.getString("results");
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "editQuestion error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<Boolean> result = taskService.editQuestion(taskId, questionaireCode, questionCode, editorResults);
+		CallResult<Boolean> result = taskService.editQuestion(taskId, questionaireCode, questionCode, results);
 		LogUtils.info(this.getClass(), "editQuestion result : {}", JsonUtils.toJson(result));
 		return result;
 	}
