@@ -84,4 +84,6 @@ public class LogController {
 		LogUtils.info(this.getClass(), "editLogList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
+	
+	
 }

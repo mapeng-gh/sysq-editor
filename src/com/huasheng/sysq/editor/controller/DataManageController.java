@@ -88,4 +88,21 @@ public class DataManageController {
 		
 		return result;
 	}
+	
+	/**
+	 * 查看问题
+	 * @param versionId
+	 * @return
+	 */
+	@RequestMapping(value="/viewQuestion.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<QuestionResponse> viewQuestion(@RequestParam(value="versionId") int versionId , @RequestParam(value="questionCode") String questionCode) {
+		LogUtils.info(this.getClass(), "viewQuestion params : versionId = {},questionCode = {}",versionId,questionCode);
+		
+		CallResult<QuestionResponse> result = dataService.getQuestion(versionId, questionCode);
+		LogUtils.info(this.getClass(), "viewQuestion result : {}", JsonUtils.toJson(result));
+		
+		return result;
+	}
+	
 }

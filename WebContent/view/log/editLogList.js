@@ -48,9 +48,9 @@
 						<el-table-column prop="loginName" label="编辑账号" align="center"></el-table-column>
 						<el-table-column prop="name" label="用户姓名" align="center"></el-table-column>
 						<el-table-column prop="interviewId" label="访谈编号" align="center"></el-table-column>
-						<el-table-column prop="questionaireName" label="问卷名称" align="center">
+						<el-table-column prop="questionaireName" label="问卷名称" align="center" :show-overflow-tooltip="true" min-width="180">
 							<template slot-scope="scope">
-								{{scope.row.questionaireCode + ' ' + scope.row.questionaireTitle}}
+								{{scope.row.questionaireCode + scope.row.questionaireTitle}}
 							</template>
 						</el-table-column>
 						<el-table-column prop="questionCode" label="问题编号" align="center"></el-table-column>
@@ -59,19 +59,15 @@
 								{{$constants.OPERATE_TYPE.getOperateTypeText(scope.row.operateType)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="beforeValue" label="编辑前值" align="center">
-							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleViewQuestion(scope)">查看</el-button>
-							</template>
-						</el-table-column>
-						<el-table-column prop="afterValue" label="编辑后值" align="center">
-							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleViewQuestion(scope)">查看</el-button>
-							</template>
-						</el-table-column>
 						<el-table-column prop="editTime" label="编辑时间" align="center" width="180">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.editTime)}}
+							</template>
+						</el-table-column>
+						<el-table-column prop="operate" label="操作" align="center" width="180">
+							<template slot-scope="scope">
+								<el-button v-if="scope.row.operateType == $constants.OPERATE_TYPE.enums.EDIT" type="text" size="mini" @click="handleQuestionDialog(scope)">查看修改</el-button>
+								<el-button type="text" size="mini" @click="handleRemark(scope)">查看备注</el-button>
 							</template>
 						</el-table-column>
                     </el-table>
@@ -91,6 +87,107 @@
 					</el-pagination>
 				</div>
 				
+				<el-dialog
+					title="查看修改"
+					:visible.sync="viewQuestionDialog.visible"
+					width="50%"
+					:close-on-click-modal="false"
+					:close-on-press-escape="false">
+					<div class="question-dialog">
+						
+						<div class="question-desc" v-html="handleQuestionDesc(viewQuestionDialog.question.description)"></div>
+						<el-row :gutter="50">
+							<el-col :span="12">
+								<div class="answer" v-for="answerResponse in viewQuestionDialog.answerList">
+									<div class="answer-label">{{answerResponse.answer.label? answerResponse.answer.label : answerResponse.answer.code}}</div>
+									<div class="answer-content">
+										<el-input v-if="answerResponse.answer.type == 'text'" type="textarea" :rows="3" :value="viewQuestionDialog.beforeValue[answerResponse.answer.code]"></el-input>
+										
+										<el-radio-group v-if="answerResponse.answer.type == 'radiogroup'" :class="{vertical : answerResponse.answer.showType == 'vertical'}" :value="viewQuestionDialog.beforeValue[answerResponse.answer.code]">
+											<el-radio v-for="item in JSON.parse(answerResponse.answer.extra)" :key="item.value" :label="item.value">{{item.text}}</el-radio>
+										</el-radio-group>
+										
+										<el-checkbox-group v-if="answerResponse.answer.type == 'checkbox'" :class="{vertical : answerResponse.answer.showType == 'vertical'}" :value="viewQuestionDialog.beforeValue[answerResponse.answer.code].split(',')">
+											<el-checkbox v-for="item in JSON.parse(answerResponse.answer.extra)" :key="item.value" :label="item.value">{{item.text}}</el-checkbox>
+										</el-checkbox-group>
+										
+										<el-date-picker v-if="answerResponse.answer.type == 'calendar'"
+											:value="viewQuestionDialog.beforeValue[answerResponse.answer.code]"
+											type="date"
+											format="yyyy-MM-dd"
+											value-format="yyyy-MM-dd"
+											:editable="false"
+											:clearable="false">
+										</el-date-picker>
+										
+										<el-input-number v-if="answerResponse.answer.type == 'spinbox'" 
+											:value="viewQuestionDialog.beforeValue[answerResponse.answer.code]"
+											:min="JSON.parse(answerResponse.answer.extra).start" 
+											:step="JSON.parse(answerResponse.answer.extra).step" 
+											:max="JSON.parse(answerResponse.answer.extra).end">
+										</el-input-number>
+										
+										<el-select v-if="answerResponse.answer.type == 'dropdownlist'"
+											:value="viewQuestionDialog.beforeValue[answerResponse.answer.code]">
+											<el-option
+												v-for="item in JSON.parse(answerResponse.answer.extra)"
+												:key="item.value"
+												:label="item.text"
+												:value="item.value">
+											</el-option>
+										</el-select>
+									</div>
+								</div>
+							</el-col>
+							<el-col :span="12">
+								<div class="answer" v-for="answerResponse in viewQuestionDialog.answerList">
+									<div class="answer-label">{{answerResponse.answer.label? answerResponse.answer.label : answerResponse.answer.code}}</div>
+									<div class="answer-content">
+										<el-input v-if="answerResponse.answer.type == 'text'" type="textarea" :rows="3" :value="viewQuestionDialog.afterValue[answerResponse.answer.code]"></el-input>
+										
+										<el-radio-group v-if="answerResponse.answer.type == 'radiogroup'" :class="{vertical : answerResponse.answer.showType == 'vertical'}" :value="viewQuestionDialog.afterValue[answerResponse.answer.code]">
+											<el-radio v-for="item in JSON.parse(answerResponse.answer.extra)" :key="item.value" :label="item.value">{{item.text}}</el-radio>
+										</el-radio-group>
+										
+										<el-checkbox-group v-if="answerResponse.answer.type == 'checkbox'" :class="{vertical : answerResponse.answer.showType == 'vertical'}" :value="viewQuestionDialog.afterValue[answerResponse.answer.code].split(',')">
+											<el-checkbox v-for="item in JSON.parse(answerResponse.answer.extra)" :key="item.value" :label="item.value">{{item.text}}</el-checkbox>
+										</el-checkbox-group>
+										
+										<el-date-picker v-if="answerResponse.answer.type == 'calendar'"
+											:value="viewQuestionDialog.afterValue[answerResponse.answer.code]"
+											type="date"
+											format="yyyy-MM-dd"
+											value-format="yyyy-MM-dd"
+											:editable="false"
+											:clearable="false">
+										</el-date-picker>
+										
+										<el-input-number v-if="answerResponse.answer.type == 'spinbox'" 
+											:value="viewQuestionDialog.afterValue[answerResponse.answer.code]"
+											:min="JSON.parse(answerResponse.answer.extra).start" 
+											:step="JSON.parse(answerResponse.answer.extra).step" 
+											:max="JSON.parse(answerResponse.answer.extra).end">
+										</el-input-number>
+										
+										<el-select v-if="answerResponse.answer.type == 'dropdownlist'"
+											:value="viewQuestionDialog.afterValue[answerResponse.answer.code]">
+											<el-option
+												v-for="item in JSON.parse(answerResponse.answer.extra)"
+												:key="item.value"
+												:label="item.text"
+												:value="item.value">
+											</el-option>
+										</el-select>
+									</div>
+								</div>
+							</el-col>
+						</el-row>
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="viewQuestionDialog.visible = false">取消</el-button>
+					</span>
+				</el-dialog>
+				
 			</div>
 		`,
 		
@@ -100,6 +197,7 @@
 			return {
 				APIS : {
 					EDIT_LOG_LIST : '/log/editLogList.do',
+					VIEW_QUESTION : '/dataManage/viewQuestion.do'
 				},
 				
 				search : {
@@ -113,6 +211,14 @@
 					pageSize : 10,
 					currentPage : 1,
 					total : 0
+				},
+				
+				viewQuestionDialog : {
+					visible : false,
+					question : {},
+					answerList : [],
+					beforeValue : {},
+					afterValue : {}
 				}
 				
 			}
@@ -198,9 +304,23 @@
 				});
 			},
 			
-			//查看问题
-			handleViewQuestion(scope){
-				
+			
+			//查看问题：对话框
+			handleQuestionDialog(scope){
+				this.$request.sendGetRequest(this.APIS.VIEW_QUESTION,{'versionId' : scope.row.versionId , 'questionCode' : scope.row.questionCode},(resultObject)=>{
+					this.viewQuestionDialog.question = resultObject.question;
+					this.viewQuestionDialog.answerList = resultObject.answerList;
+					
+					this.viewQuestionDialog.beforeValue = JSON.parse(scope.row.beforeValue);
+					this.viewQuestionDialog.afterValue = JSON.parse(scope.row.afterValue);
+					
+					this.viewQuestionDialog.visible = true;
+				});
+			},
+			
+			//问题描述处理
+			handleQuestionDesc(desc){
+				return desc && desc.replace(/<para>/g,'<br/>');
 			}
 		}
 	};

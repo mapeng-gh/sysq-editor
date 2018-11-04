@@ -2,6 +2,7 @@ package com.huasheng.sysq.editor.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.huasheng.sysq.editor.dao.AnswerDao;
 import com.huasheng.sysq.editor.dao.DoctorDao;
@@ -445,6 +447,24 @@ public class TaskServiceImpl implements TaskService{
 					//更新任务
 					task.setUpdateTime(curTime);
 					taskDao.update(task);
+					
+					//记录日志
+					EditorEditLog editorEditLog = new EditorEditLog();
+					Interview interview = interviewDao.selectById(task.getInterviewId());
+					User loginUser = ThreadLocalUtils.getLoginUser();
+					Questionaire questionaire = questionaireDao.selectByCode(interview.getVersionId(), questionaireCode);
+					editorEditLog.setLoginName(loginUser.getLoginName());
+					editorEditLog.setName(loginUser.getName());
+					editorEditLog.setInterviewId(interview.getId());
+					editorEditLog.setVersionId(interview.getVersionId());
+					editorEditLog.setQuestionaireCode(questionaireCode);
+					editorEditLog.setQuestionaireTitle(questionaire.getTitle());
+					editorEditLog.setQuestionCode(questionCode);
+					editorEditLog.setEditTime(curTime);
+					editorEditLog.setOperateType(Constants.OPERATE_TYPE_ENABLE);
+					editorEditLog.setBeforeValue(Constants.EDIT_QUESTION_STATUS_INVALID + "");
+					editorEditLog.setAfterValue(Constants.EDIT_QUESTION_STATUS_VALID + "");
+					editorEditLogDao.insert(editorEditLog);
 				}
 			});
 			return CallResult.success(true);
@@ -471,6 +491,24 @@ public class TaskServiceImpl implements TaskService{
 					//更新任务
 					task.setUpdateTime(curTime);
 					taskDao.update(task);
+					
+					//记录日志
+					EditorEditLog editorEditLog = new EditorEditLog();
+					Interview interview = interviewDao.selectById(task.getInterviewId());
+					User loginUser = ThreadLocalUtils.getLoginUser();
+					Questionaire questionaire = questionaireDao.selectByCode(interview.getVersionId(), questionaireCode);
+					editorEditLog.setLoginName(loginUser.getLoginName());
+					editorEditLog.setName(loginUser.getName());
+					editorEditLog.setInterviewId(interview.getId());
+					editorEditLog.setVersionId(interview.getVersionId());
+					editorEditLog.setQuestionaireCode(questionaireCode);
+					editorEditLog.setQuestionaireTitle(questionaire.getTitle());
+					editorEditLog.setQuestionCode(questionCode);
+					editorEditLog.setEditTime(curTime);
+					editorEditLog.setOperateType(Constants.OPERATE_TYPE_DISABLE);
+					editorEditLog.setBeforeValue(Constants.EDIT_QUESTION_STATUS_VALID + "");
+					editorEditLog.setAfterValue(Constants.EDIT_QUESTION_STATUS_INVALID + "");
+					editorEditLogDao.insert(editorEditLog);
 				}
 			});
 			return CallResult.success(true);
@@ -507,15 +545,11 @@ public class TaskServiceImpl implements TaskService{
 					editorEditLog.setOperateType(Constants.OPERATE_TYPE_EDIT);
 					List<SysqResult> beforeResultList = editorResultDao.getAnswerList(interview.getId(), questionaireCode, questionCode);
 					if(beforeResultList != null && beforeResultList.size() > 0) {
-						editorEditLog.setBeforeValue(JSON.toJSONString(beforeResultList, new PropertyFilter() {
-							@Override
-							public boolean apply(Object object, String name, Object value) {
-								if(ArrayUtils.contains(new String[] {"answerCode","answerValue"}, name)) {
-									return true;
-								}
-								return false;
-							}
-						}));
+						Map<String,String> beforeResultMap = new HashMap<String,String>();
+						for(SysqResult beforeResult : beforeResultList) {
+							beforeResultMap.put(beforeResult.getAnswerCode(), beforeResult.getAnswerValue());
+						}
+						editorEditLog.setBeforeValue(JSON.toJSONString(beforeResultMap));
 					}
 					editorEditLog.setAfterValue(results);
 					editorEditLogDao.insert(editorEditLog);
@@ -524,14 +558,14 @@ public class TaskServiceImpl implements TaskService{
 					editorResultDao.deleteByQuestion(task.getInterviewId(), questionaireCode, questionCode);
 					
 					//插入新值
-					JSONArray resultsJsonArr = JSONArray.parseArray(results);
-					for(int i = 0 ; i < resultsJsonArr.size() ; i++) {
+					JSONObject resultsJson = JSONArray.parseObject(results);
+					for(String answerCode : resultsJson.keySet()) {
 						SysqResult editorResult = new SysqResult();
 						editorResult.setInterviewId(task.getInterviewId());
 						editorResult.setQuestionaireCode(questionaireCode);
 						editorResult.setQuestionCode(questionCode);
-						editorResult.setAnswerCode(resultsJsonArr.getJSONObject(i).getString("answerCode"));
-						editorResult.setAnswerValue(resultsJsonArr.getJSONObject(i).getString("answerValue"));
+						editorResult.setAnswerCode(answerCode);
+						editorResult.setAnswerValue(resultsJson.getString(answerCode));
 						editorResultDao.insert(editorResult);
 					}
 					

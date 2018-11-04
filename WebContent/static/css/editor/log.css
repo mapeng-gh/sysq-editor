@@ -1,0 +1,11 @@
+.log-edit-log-list .question-dialog .question-desc {
+  line-height: 200%;
+}
+
+.log-edit-log-list .question-dialog .answer {
+  margin: 20px 0 0 20px;
+}
+
+.log-edit-log-list .question-dialog .answer .answer-content {
+  margin-top: 10px;
+}

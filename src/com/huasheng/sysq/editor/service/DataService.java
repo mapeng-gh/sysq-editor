@@ -28,11 +28,19 @@ public interface DataService {
 	public CallResult<List<Questionaire>> getQuestionaireList(int versionId,int type);
 	
 	/**
-	 * 查询问题
+	 * 问题列表
 	 * @param versionId
 	 * @param questionaireCode
 	 * @return
 	 */
 	public CallResult<List<QuestionResponse>> getQuestionList(int versionId,String questionaireCode);
+	
+	/**
+	 * 查看问题
+	 * @param versionId
+	 * @param questionCode
+	 * @return
+	 */
+	public CallResult<QuestionResponse> getQuestion(int versionId,String questionCode);
 }
 

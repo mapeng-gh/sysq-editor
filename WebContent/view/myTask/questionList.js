@@ -236,17 +236,14 @@
 					taskId : this.params.taskId,
 					questionaireCode : this.params.questionaireCode,
 					questionCode : this.editQuestionDialog.questionResponse.question.code,
-					results : []
+					results : {}
 				};
 				for(var i = 0 ; i < answerResponseList.length ; i++){
-					var result = {};
-					result.answerCode = answerResponseList[i].answer.code;
 					if(answerResponseList[i].answer.type == 'checkbox'){
-						result.answerValue = answerResponseList[i].result.answerValue.join(',');
+						params.results[answerResponseList[i].answer.code] = answerResponseList[i].result.answerValue.join(',');
 					}else{
-						result.answerValue = answerResponseList[i].result.answerValue;
+						params.results[answerResponseList[i].answer.code] = answerResponseList[i].result.answerValue;
 					}
-					params.results.push(result);
 				}
 				
 				this.$request.sendPostRequest(this.APIS.EDIT_QUESTION,params,function(resultObject){

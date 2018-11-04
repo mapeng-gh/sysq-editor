@@ -106,5 +106,37 @@ public class DataSerivceImpl implements DataService{
 			return CallResult.failure("获取问题列表失败");
 		}
 	}
+
+	@Override
+	public CallResult<QuestionResponse> getQuestion(int versionId, String questionCode) {
+		LogUtils.info(this.getClass(), "getQuestion params : versionId = {} , questionCode = {}", versionId,questionCode);
+		
+		try {
+			QuestionResponse questionResponse = new QuestionResponse();
+			
+			//获取问题
+			Question question = questionDao.selectByCode(versionId, questionCode);
+			questionResponse.setQuestion(question);
+			
+			//获取答案
+			List<Answer> answerList = answerDao.selectListByQuestion(versionId,questionCode);
+			if(answerList == null || answerList.size() == 0) {
+				questionResponse.setAnswerList(new ArrayList<AnswerResponse>());
+			}else {
+				List<AnswerResponse> answerResponseList = new ArrayList<AnswerResponse>();
+				for(Answer answer : answerList) {
+					AnswerResponse answerResponse = new AnswerResponse();
+					answerResponse.setAnswer(answer);
+					answerResponseList.add(answerResponse);
+				}
+				questionResponse.setAnswerList(answerResponseList);
+			}
+			
+			return CallResult.success(questionResponse);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "getQuestion error", e);
+			return CallResult.failure("查询问题失败");
+		}
+	}
 	
 }
