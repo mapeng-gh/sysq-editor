@@ -166,12 +166,20 @@
 			handleEnableQuestion : function(questionResponse){
 				var self = this;
 				this.$commons.confirm('确定启用该问题吗？','确认',function(){
-					self.$request.sendPostRequest(self.APIS.ENABLE_QUESTION,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode , questionCode : questionResponse.question.code},function(resultObject){
-						self.$message.success('启用成功');
+					
+					self.$commons.prompt('','备注',function(inputValue){
+						if(!inputValue || inputValue.trim().length == 0){
+							self.$message.error('请填写备注信息');
+							return;
+						}
 						
-						//刷新问题
-						self.$request.sendGetRequest(self.APIS.QUESTION_LIST,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode},function(resultObject){
-							self.questionList = resultObject;
+						self.$request.sendPostRequest(self.APIS.ENABLE_QUESTION,{'taskId' : self.params.taskId , 'questionaireCode' : self.params.questionaireCode , 'questionCode' : questionResponse.question.code , 'remark' : inputValue},function(resultObject){
+							self.$message.success('启用成功');
+							
+							//刷新问题
+							self.$request.sendGetRequest(self.APIS.QUESTION_LIST,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode},function(resultObject){
+								self.questionList = resultObject;
+							});
 						});
 					});
 				});
@@ -181,12 +189,20 @@
 			handleDisableQuestion : function(questionResponse){
 				var self = this;
 				this.$commons.confirm('确定禁用该问题吗？','确认',function(){
-					self.$request.sendPostRequest(self.APIS.DISABLE_QUESTION,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode , questionCode : questionResponse.question.code},function(resultObject){
-						self.$message.success('禁用成功');
+					
+					self.$commons.prompt('','备注',function(inputValue){
+						if(!inputValue || inputValue.trim().length == 0){
+							self.$message.error('请填写备注信息');
+							return;
+						}
 						
-						//刷新问题
-						self.$request.sendGetRequest(self.APIS.QUESTION_LIST,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode},function(resultObject){
-							self.questionList = resultObject;
+						self.$request.sendPostRequest(self.APIS.DISABLE_QUESTION,{'taskId' : self.params.taskId , 'questionaireCode' : self.params.questionaireCode , 'questionCode' : questionResponse.question.code , 'remark' : inputValue},function(resultObject){
+							self.$message.success('禁用成功');
+							
+							//刷新问题
+							self.$request.sendGetRequest(self.APIS.QUESTION_LIST,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode},function(resultObject){
+								self.questionList = resultObject;
+							});
 						});
 					});
 				});
@@ -231,28 +247,37 @@
 					}
 				}
 				
-				//数据封装
-				var params = {
-					taskId : this.params.taskId,
-					questionaireCode : this.params.questionaireCode,
-					questionCode : this.editQuestionDialog.questionResponse.question.code,
-					results : {}
-				};
-				for(var i = 0 ; i < answerResponseList.length ; i++){
-					if(answerResponseList[i].answer.type == 'checkbox'){
-						params.results[answerResponseList[i].answer.code] = answerResponseList[i].result.answerValue.join(',');
-					}else{
-						params.results[answerResponseList[i].answer.code] = answerResponseList[i].result.answerValue;
-					}
-				}
-				
-				this.$request.sendPostRequest(this.APIS.EDIT_QUESTION,params,function(resultObject){
-					self.$message.success('编辑成功');
-					self.editQuestionDialog.visible = false;
+				this.$commons.prompt('','备注',function(inputValue){
 					
-					//刷新列表
-					self.$request.sendGetRequest(self.APIS.QUESTION_LIST,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode},function(resultObject){
-						self.questionList = resultObject;
+					if(!inputValue || inputValue.trim().length == 0){
+						self.$message.error('请填写备注信息');
+						return;
+					}
+					
+					//数据封装
+					var params = {
+						taskId : self.params.taskId,
+						questionaireCode : self.params.questionaireCode,
+						questionCode : self.editQuestionDialog.questionResponse.question.code,
+						results : {},
+						remark : inputValue
+					};
+					for(var i = 0 ; i < answerResponseList.length ; i++){
+						if(answerResponseList[i].answer.type == 'checkbox'){
+							params.results[answerResponseList[i].answer.code] = answerResponseList[i].result.answerValue.join(',');
+						}else{
+							params.results[answerResponseList[i].answer.code] = answerResponseList[i].result.answerValue;
+						}
+					}
+					
+					self.$request.sendPostRequest(self.APIS.EDIT_QUESTION,params,function(resultObject){
+						self.$message.success('编辑成功');
+						self.editQuestionDialog.visible = false;
+						
+						//刷新列表
+						self.$request.sendGetRequest(self.APIS.QUESTION_LIST,{taskId : self.params.taskId , questionaireCode : self.params.questionaireCode},function(resultObject){
+							self.questionList = resultObject;
+						});
 					});
 				});
 			}

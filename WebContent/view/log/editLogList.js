@@ -48,12 +48,8 @@
 						<el-table-column prop="loginName" label="编辑账号" align="center"></el-table-column>
 						<el-table-column prop="name" label="用户姓名" align="center"></el-table-column>
 						<el-table-column prop="interviewId" label="访谈编号" align="center"></el-table-column>
-						<el-table-column prop="questionaireName" label="问卷名称" align="center" :show-overflow-tooltip="true" min-width="180">
-							<template slot-scope="scope">
-								{{scope.row.questionaireCode + scope.row.questionaireTitle}}
-							</template>
-						</el-table-column>
-						<el-table-column prop="questionCode" label="问题编号" align="center"></el-table-column>
+						<el-table-column prop="questionaireCode" label="问卷编码" align="center"></el-table-column>
+						<el-table-column prop="questionCode" label="问题编码" align="center"></el-table-column>
 						<el-table-column prop="operateType" label="操作类型" align="center">
 							<template slot-scope="scope">
 								{{$constants.OPERATE_TYPE.getOperateTypeText(scope.row.operateType)}}
@@ -64,10 +60,10 @@
 								{{$commons.formatDate(scope.row.editTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" width="180">
+						<el-table-column prop="remark" label="备注" align="center" min-width="130" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="operate" label="操作" align="center" width="100">
 							<template slot-scope="scope">
-								<el-button v-if="scope.row.operateType == $constants.OPERATE_TYPE.enums.EDIT" type="text" size="mini" @click="handleQuestionDialog(scope)">查看修改</el-button>
-								<el-button type="text" size="mini" @click="handleRemark(scope)">查看备注</el-button>
+								<el-button :disabled="scope.row.operateType != $constants.OPERATE_TYPE.enums.EDIT" type="text" size="mini" @click="handleQuestionDialog(scope)">查看对比</el-button>
 							</template>
 						</el-table-column>
                     </el-table>
@@ -94,7 +90,6 @@
 					:close-on-click-modal="false"
 					:close-on-press-escape="false">
 					<div class="question-dialog">
-						
 						<div class="question-desc" v-html="handleQuestionDesc(viewQuestionDialog.question.description)"></div>
 						<el-row :gutter="50">
 							<el-col :span="12">
@@ -218,7 +213,7 @@
 					question : {},
 					answerList : [],
 					beforeValue : {},
-					afterValue : {}
+					afterValue : {},
 				}
 				
 			}

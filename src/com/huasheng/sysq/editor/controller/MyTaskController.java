@@ -150,17 +150,19 @@ public class MyTaskController {
 		int taskId;
 		String questionaireCode;
 		String questionCode;
+		String remark;
 		try {
 			JSONObject requestJson = JSON.parseObject(requestJsonStr);
 			taskId = requestJson.getIntValue("taskId");
 			questionaireCode = requestJson.getString("questionaireCode");
 			questionCode = requestJson.getString("questionCode");
+			remark = requestJson.getString("remark");
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "enableQuestion error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<Boolean> result = taskService.enableQuestion(taskId, questionaireCode, questionCode);
+		CallResult<Boolean> result = taskService.enableQuestion(taskId, questionaireCode, questionCode , remark);
 		LogUtils.info(this.getClass(), "enableQuestion result : {}", JsonUtils.toJson(result));
 		return result;
 	}
@@ -178,17 +180,19 @@ public class MyTaskController {
 		int taskId;
 		String questionaireCode;
 		String questionCode;
+		String remark;
 		try {
 			JSONObject requestJson = JSON.parseObject(requestJsonStr);
 			taskId = requestJson.getIntValue("taskId");
 			questionaireCode = requestJson.getString("questionaireCode");
 			questionCode = requestJson.getString("questionCode");
+			remark = requestJson.getString("remark");
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "disableQuestion error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<Boolean> result = taskService.disableQuestion(taskId, questionaireCode, questionCode);
+		CallResult<Boolean> result = taskService.disableQuestion(taskId, questionaireCode, questionCode , remark);
 		LogUtils.info(this.getClass(), "disableQuestion result : {}", JsonUtils.toJson(result));
 		return result;
 	}
@@ -207,18 +211,20 @@ public class MyTaskController {
 		String questionaireCode;
 		String questionCode;
 		String results;
+		String remark;
 		try {
 			JSONObject requestJson = JSON.parseObject(requestJsonStr);
 			taskId = requestJson.getIntValue("taskId");
 			questionaireCode = requestJson.getString("questionaireCode");
 			questionCode = requestJson.getString("questionCode");
 			results = requestJson.getString("results");
+			remark = requestJson.getString("remark");
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "editQuestion error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<Boolean> result = taskService.editQuestion(taskId, questionaireCode, questionCode, results);
+		CallResult<Boolean> result = taskService.editQuestion(taskId, questionaireCode, questionCode, results , remark);
 		LogUtils.info(this.getClass(), "editQuestion result : {}", JsonUtils.toJson(result));
 		return result;
 	}

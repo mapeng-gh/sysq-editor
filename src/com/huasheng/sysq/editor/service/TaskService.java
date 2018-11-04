@@ -80,18 +80,20 @@ public interface TaskService {
 	 * @param taskId
 	 * @param questionaireCode
 	 * @param questionCode
+	 * @param remark
 	 * @return
 	 */
-	public CallResult<Boolean> enableQuestion(int taskId,String questionaireCode,String questionCode);
+	public CallResult<Boolean> enableQuestion(int taskId,String questionaireCode,String questionCode , String remark);
 	
 	/**
 	 * 禁用问题
 	 * @param taskId
 	 * @param questionaireCode
 	 * @param questionCode
+	 * @param remark
 	 * @return
 	 */
-	public CallResult<Boolean> disableQuestion(int taskId,String questionaireCode,String questionCode);
+	public CallResult<Boolean> disableQuestion(int taskId,String questionaireCode,String questionCode , String remark);
 	
 	/**
 	 * 编辑问题
@@ -99,7 +101,8 @@ public interface TaskService {
 	 * @param questionaireCode
 	 * @param questionCode
 	 * @param results
+	 * * @param remark
 	 * @return
 	 */
-	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String results);
+	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String results,String remark);
 }

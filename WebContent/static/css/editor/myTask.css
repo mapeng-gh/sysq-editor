@@ -75,3 +75,12 @@
 .my-task-question-list .edit-question .answer .answer-content {
   margin-top: 10px;
 }
+
+.my-task-question-list .edit-question .remark {
+  margin-top: 20px;
+}
+
+.my-task-question-list .edit-question .remark .remark-title {
+  margin-bottom: 10px;
+  color: #F00;
+}

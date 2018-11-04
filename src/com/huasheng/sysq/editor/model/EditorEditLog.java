@@ -15,6 +15,7 @@ public class EditorEditLog {
 	private int operateType;
 	private String beforeValue;
 	private String afterValue;
+	private String remark;
 	private Date editTime;
 	
 	public int getId() {
@@ -88,5 +89,11 @@ public class EditorEditLog {
 	}
 	public void setEditTime(Date editTime) {
 		this.editTime = editTime;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

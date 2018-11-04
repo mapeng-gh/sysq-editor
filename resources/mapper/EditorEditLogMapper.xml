@@ -3,7 +3,7 @@
 <mapper namespace="mapper.EditorEditLogMapper">
 	
 	<sql id="allColumns">
-	    id,login_name,name,interview_id,version_id,questionaire_code,questionaire_title,question_code,operate_type,before_value,after_value,edit_time  
+	    id,login_name,name,interview_id,version_id,questionaire_code,questionaire_title,question_code,operate_type,before_value,after_value,remark,edit_time  
 	</sql>
 	
 	<resultMap id="allResultMap" type="EditorEditLog">
@@ -18,12 +18,13 @@
 		<result column="operate_type" property="operateType" jdbcType="INTEGER" javaType="_int"/>
 		<result column="before_value" property="beforeValue" jdbcType="VARCHAR" javaType="String"/>
 		<result column="after_value" property="afterValue" jdbcType="VARCHAR" javaType="String"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR" javaType="String"/>
   		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
 	</resultMap>
 	
 	<insert id="insert" parameterType="EditorEditLog" useGeneratedKeys="true" keyProperty="id">
-            insert into editor_edit_log(login_name,name,interview_id,version_id,questionaire_code,questionaire_title,question_code,operate_type,before_value,after_value,edit_time)  
-            values(#{loginName},#{name},#{interviewId},#{versionId},#{questionaireCode},#{questionaireTitle},#{questionCode},#{operateType},#{beforeValue},#{afterValue},#{editTime}) 
+            insert into editor_edit_log(login_name,name,interview_id,version_id,questionaire_code,questionaire_title,question_code,operate_type,before_value,after_value,remark,edit_time)  
+            values(#{loginName},#{name},#{interviewId},#{versionId},#{questionaireCode},#{questionaireTitle},#{questionCode},#{operateType},#{beforeValue},#{afterValue},#{remark},#{editTime}) 
         </insert>
 	
         <select id="findPage" parameterType="hashmap" resultMap="allResultMap">

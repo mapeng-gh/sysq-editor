@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
@@ -16,7 +15,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.huasheng.sysq.editor.dao.AnswerDao;
 import com.huasheng.sysq.editor.dao.DoctorDao;
 import com.huasheng.sysq.editor.dao.EditorEditLogDao;
@@ -431,8 +429,8 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public CallResult<Boolean> enableQuestion(int taskId, String questionaireCode, String questionCode) {
-		LogUtils.info(this.getClass(), "enableQuestion params : taskId = {} , questionaireCode = {} , questionCode = {}", taskId,questionaireCode,questionCode);
+	public CallResult<Boolean> enableQuestion(int taskId, String questionaireCode, String questionCode , String remark) {
+		LogUtils.info(this.getClass(), "enableQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , remark = {}", taskId,questionaireCode,questionCode,remark);
 		try {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
@@ -460,10 +458,11 @@ public class TaskServiceImpl implements TaskService{
 					editorEditLog.setQuestionaireCode(questionaireCode);
 					editorEditLog.setQuestionaireTitle(questionaire.getTitle());
 					editorEditLog.setQuestionCode(questionCode);
-					editorEditLog.setEditTime(curTime);
 					editorEditLog.setOperateType(Constants.OPERATE_TYPE_ENABLE);
 					editorEditLog.setBeforeValue(Constants.EDIT_QUESTION_STATUS_INVALID + "");
 					editorEditLog.setAfterValue(Constants.EDIT_QUESTION_STATUS_VALID + "");
+					editorEditLog.setRemark(remark);
+					editorEditLog.setEditTime(curTime);
 					editorEditLogDao.insert(editorEditLog);
 				}
 			});
@@ -475,8 +474,8 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public CallResult<Boolean> disableQuestion(int taskId, String questionaireCode, String questionCode) {
-		LogUtils.info(this.getClass(), "disableQuestion params : taskId = {} , questionaireCode = {} , questionCode = {}", taskId,questionaireCode,questionCode);
+	public CallResult<Boolean> disableQuestion(int taskId, String questionaireCode, String questionCode,String remark) {
+		LogUtils.info(this.getClass(), "disableQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , remark = {}", taskId,questionaireCode,questionCode,remark);
 		try {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
@@ -504,10 +503,11 @@ public class TaskServiceImpl implements TaskService{
 					editorEditLog.setQuestionaireCode(questionaireCode);
 					editorEditLog.setQuestionaireTitle(questionaire.getTitle());
 					editorEditLog.setQuestionCode(questionCode);
-					editorEditLog.setEditTime(curTime);
 					editorEditLog.setOperateType(Constants.OPERATE_TYPE_DISABLE);
 					editorEditLog.setBeforeValue(Constants.EDIT_QUESTION_STATUS_VALID + "");
 					editorEditLog.setAfterValue(Constants.EDIT_QUESTION_STATUS_INVALID + "");
+					editorEditLog.setRemark(remark);
+					editorEditLog.setEditTime(curTime);
 					editorEditLogDao.insert(editorEditLog);
 				}
 			});
@@ -519,8 +519,8 @@ public class TaskServiceImpl implements TaskService{
 	}
 
 	@Override
-	public CallResult<Boolean> editQuestion(int taskId, String questionaireCode, String questionCode,String results) {
-		LogUtils.info(this.getClass(), "editQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , results = {}", taskId,questionaireCode,questionCode,results);
+	public CallResult<Boolean> editQuestion(int taskId, String questionaireCode, String questionCode,String results , String remark) {
+		LogUtils.info(this.getClass(), "editQuestion params : taskId = {} , questionaireCode = {} , questionCode = {} , results = {} , remark = {}", taskId,questionaireCode,questionCode,results,remark);
 		try {
 			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 				@Override
@@ -541,7 +541,6 @@ public class TaskServiceImpl implements TaskService{
 					editorEditLog.setQuestionaireCode(questionaireCode);
 					editorEditLog.setQuestionaireTitle(questionaire.getTitle());
 					editorEditLog.setQuestionCode(questionCode);
-					editorEditLog.setEditTime(curTime);
 					editorEditLog.setOperateType(Constants.OPERATE_TYPE_EDIT);
 					List<SysqResult> beforeResultList = editorResultDao.getAnswerList(interview.getId(), questionaireCode, questionCode);
 					if(beforeResultList != null && beforeResultList.size() > 0) {
@@ -552,6 +551,8 @@ public class TaskServiceImpl implements TaskService{
 						editorEditLog.setBeforeValue(JSON.toJSONString(beforeResultMap));
 					}
 					editorEditLog.setAfterValue(results);
+					editorEditLog.setRemark(remark);
+					editorEditLog.setEditTime(curTime);
 					editorEditLogDao.insert(editorEditLog);
 					
 					//删除旧值
