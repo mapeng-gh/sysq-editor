@@ -6,6 +6,7 @@
 
     <!-- 日志根目录 -->
     <property name="LOG_HOME" value="H:\\log\\sysq-editor" />
+    <!-- <property name="LOG_HOME" value="/data/application/log/sysq-editor" /> -->
     
     <!-- 业务默认日志 -->
   	<appender name="DEFAULT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender" >

@@ -10,6 +10,7 @@
   	<context:component-scan base-package="com.huasheng.sysq.editor.service"/>
   	<context:component-scan base-package="com.huasheng.sysq.editor.dao"/>
   	
+  	<!--  dev -->
   	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>  
 	    <property name="url" value="jdbc:mysql://192.168.133.132:3306/doc_patient_test?useUnicode=true&amp;characterEncoding=utf-8"/>
@@ -20,6 +21,34 @@
 	    <property name="maxIdle" value="5"/>  
 	    <property name="maxTotal" value="15"/>  
 	</bean>  
+	 
+	<!-- test -->
+	<!-- 
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>  
+	    <property name="url" value="jdbc:mysql://192.168.9.221:3306/doc_patient_test?useUnicode=true&amp;characterEncoding=utf-8"/>
+	    <property name="username" value="root"/>  
+	    <property name="password" value="ccpl_817"/>  
+	    <property name="initialSize" value="3"/>  
+	    <property name="minIdle" value="3"/>  
+	    <property name="maxIdle" value="5"/>  
+	    <property name="maxTotal" value="15"/>  
+	</bean>   
+	-->
+	
+	<!--  prod -->
+	<!-- 
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>  
+	    <property name="url" value="jdbc:mysql://192.168.9.221:3306/doc_patient?useUnicode=true&amp;characterEncoding=utf-8"/>
+	    <property name="username" value="root"/>  
+	    <property name="password" value="ccpl_817"/>  
+	    <property name="initialSize" value="3"/>  
+	    <property name="minIdle" value="3"/>  
+	    <property name="maxIdle" value="5"/>  
+	    <property name="maxTotal" value="15"/>  
+	</bean>  
+	-->
   	
   	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
   		<property name="dataSource" ref="dataSource" />
