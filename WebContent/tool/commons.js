@@ -53,13 +53,18 @@ function getLoginUser(){
 
 //跳转主页
 function getHomePage(){
-	var userType = getLoginUser().userType;
-	if(userType == constants.USER_TYPE.enums.ADMIN){
-		return 'userManage4UserList';
-	}else if(userType == constants.USER_TYPE.enums.EDITOR){
-		return 'myTask4TaskList';
-	}else if(userType == constants.USER_TYPE.enums.VIEWER){
-		return 'interview4InterviewList';
+	var loginUser = getLoginUser();
+	if(!loginUser){
+		return 'login';
+	}else{
+		var userType = loginUser.userType;
+		if(userType == constants.USER_TYPE.enums.ADMIN){
+			return 'userManage4UserList';
+		}else if(userType == constants.USER_TYPE.enums.EDITOR){
+			return 'myTask4TaskList';
+		}else if(userType == constants.USER_TYPE.enums.VIEWER){
+			return 'interview4InterviewList';
+		}
 	}
 }
 
