@@ -43,18 +43,41 @@
 		`,
 		
 		data : function(){
+			
+			//菜单权限过滤
+			var filteredMenuList = [];
+			var copyMenuList = JSON.parse(JSON.stringify(menuList));
+			var loginUser = commons.getLoginUser();
+			if(loginUser){
+				var userType = loginUser.userType;
+				for(var i = 0 ; i < copyMenuList.length ; i++){
+					var menu = copyMenuList[i];
+					if(menu.auths.length > 0 && menu.auths.indexOf(userType) > -1){
+						filteredMenuList.push(menu);
+						
+						var subMenus = menu.sub;
+						menu.sub = [];
+						for(var j = 0 ; j < subMenus.length ; j++){
+							var subMenu = subMenus[j];
+							if(subMenu.auths.length > 0 && subMenu.auths.indexOf(userType) > -1){
+								menu.sub.push(subMenu);
+							}
+						}
+					}
+				}
+			}
+			
 			return {
-				
-				menuList : menuList
+				menuList : filteredMenuList
 			}
 		},
 		
 		computed : {
             activeIndex(){
-                    return this.$store.state.menu.activeIndex
+                return this.$store.state.menu.activeIndex
             }
 		}
 	};
-	Vue.component('sysq-aside',asideComponent);
 	
+	Vue.component('sysq-aside',asideComponent);
 })();
