@@ -7,8 +7,8 @@
 			{
 				path : '/',
 				redirect : function(to){
-					//根据用户类型跳转页面
-					return commons.getHomePage();
+					var homePage = commons.getHomePage();
+					return {name : homePage};
 				},
 				component : layoutComponent,
 				children : mappings

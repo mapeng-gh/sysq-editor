@@ -145,8 +145,8 @@
 				this.$request.sendPostRequest(this.APIS.USER_LOGIN,{loginName : this.loginName,loginPwd : this.loginPwd},function(resultObject){
 					window.localStorage.setItem('loginUser',JSON.stringify(resultObject));
                     
-					//根据用户类型跳转页面
-					self.$router.push(commons.getHomePage());
+					//跳转根页面
+					self.$router.push({path : '/'});
 				});
 			},
 			
