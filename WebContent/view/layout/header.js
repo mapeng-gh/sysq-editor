@@ -3,22 +3,19 @@
 			
 		template : `
 			<el-row>
-				
-				<el-col class="left" :span="4">
-					<img class="logo" src="/static/image/logo.png"/>
+				<el-col :span="4" class="header-left">
+					<img class="logo" src="/static/image/logo.jpg"/>
 					<span class="title">抑郁症数据编辑平台</span>
 				</el-col>
 				
-				<el-col class="right" :span="3" :offset="17">
-					<i class="fa fa-user-circle"></i>
-					<el-dropdown trigger="click"@command="handleCommand">
-						<span>{{name}}<i class="el-icon-arrow-down"></i></span>
+				<el-col :span="4" :offset="16" class="header-right">
+					<el-dropdown trigger="click" @command="handleCommand">
+						<span>{{name}} <i class="el-icon-arrow-down"></i></span>
 						 <el-dropdown-menu slot="dropdown">
 							<el-dropdown-item command="logout">退出登录</el-dropdown-item>
 						  </el-dropdown-menu>
 					</el-dropdown>
 				</el-col>
-				
 			</el-row>
 		`,
 		

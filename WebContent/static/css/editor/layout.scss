@@ -1,57 +1,56 @@
 .container{
-        .header{
-                height:80px;
-                background-color:#20a0ff;
-                
-                .left{
-                        height:100%;
-                        text-align:center;
-                        line-height: 80px;
-                        
-                        .logo{
-                                width:50px;
-                                height:50px;
-                                vertical-align: middle;
-                        }
-                        
-                        .title{
-                                color:#FFF;
-                                font-weight:bold;
-                                font-size:20px;
-                                vertical-align: middle;
-                        }
-                }
-                
-                .right{
-                        height:100%;
-                        text-align:center;
-                        line-height: 80px;
-                        color:#fff;
-                        font-size:16px;
-                        cursor: pointer;
-                        
-                        .el-dropdown{
-                                color:#fff;
-                                font-size:16px;
-                        }
-                }
-                
-              
-        }
+	.header{
+		height:80px;
+		background-color:#20a0ff;
+		
+		.header-left{
+			height:100%;
+			line-height: 80px;
+			text-align : left;
+			padding-left:25px;
+			
+			.logo{
+				width:40px;
+				height:40px;
+				vertical-align: middle;
+			}
+			
+			.title{
+				color:#FFF;
+				font-weight:bold;
+				font-size:20px;
+			}
+		}
+		
+		.header-right{
+			height:100%;
+			line-height: 80px;
+			text-align : right;
+			padding-right:25px;
+			color:#fff;
+			font-size:16px;
+			cursor: pointer;
+				
+			.el-dropdown{
+				color:#fff;
+				font-size:16px;
+			}
+		}
+	}
         
-        .content{
-                padding:25px;
-                min-height: 500px;
-        }
-        
-        .footer{
-                padding: 20px 0;
-                background-color: #eef1f6;
-                
-                .info{
-                        text-align:center;
-                        font-size: 13px;
-                        color: #48576a;
-                }
-        }
+	.content{
+		padding:25px;
+		min-height: 500px;
+	}
+	
+	.footer{
+		padding: 20px 0;
+		background-color: #eef1f6;
+		
+		.info{
+			text-align:center;
+			font-size: 13px;
+			color: #48576a;
+		}
+	}
 }

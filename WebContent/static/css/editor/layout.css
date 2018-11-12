@@ -2,42 +2,51 @@
   height: 80px;
   background-color: #20a0ff;
 }
-.container .header .left {
+
+.container .header .header-left {
   height: 100%;
-  text-align: center;
   line-height: 80px;
+  text-align: left;
+  padding-left: 25px;
 }
-.container .header .left .logo {
-  width: 50px;
-  height: 50px;
+
+.container .header .header-left .logo {
+  width: 40px;
+  height: 40px;
   vertical-align: middle;
 }
-.container .header .left .title {
+
+.container .header .header-left .title {
   color: #FFF;
   font-weight: bold;
   font-size: 20px;
-  vertical-align: middle;
 }
-.container .header .right {
+
+.container .header .header-right {
   height: 100%;
-  text-align: center;
   line-height: 80px;
+  text-align: right;
+  padding-right: 25px;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
 }
-.container .header .right .el-dropdown {
+
+.container .header .header-right .el-dropdown {
   color: #fff;
   font-size: 16px;
 }
+
 .container .content {
   padding: 25px;
   min-height: 500px;
 }
+
 .container .footer {
   padding: 20px 0;
   background-color: #eef1f6;
 }
+
 .container .footer .info {
   text-align: center;
   font-size: 13px;
