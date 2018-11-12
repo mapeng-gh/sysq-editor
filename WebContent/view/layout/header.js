@@ -3,12 +3,12 @@
 			
 		template : `
 			<el-row>
-				<el-col :span="4" class="header-left">
-					<img class="logo" src="/static/image/logo.jpg"/>
+				<el-col :span="5" class="header-left">
+					<img class="logo" src="/static/image/logo.png"/>
 					<span class="title">抑郁症数据编辑平台</span>
 				</el-col>
 				
-				<el-col :span="4" :offset="16" class="header-right">
+				<el-col :span="5" :offset="14" class="header-right">
 					<el-dropdown trigger="click" @command="handleCommand">
 						<span>{{name}} <i class="el-icon-arrow-down"></i></span>
 						 <el-dropdown-menu slot="dropdown">

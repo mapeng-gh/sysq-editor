@@ -5,22 +5,12 @@
 		template : `
             <div class="login">
 		
-				<div class="header">
-
-					<div class="left el-col-5">
-						<img class="logo" src="/static/image/logo.png"/>
-						<span class="title">抑郁症数据编辑平台</span>
-					</div>
-
-					<div class="center el-col-15"></div>
-
-					<div class="right el-col-4">
-						服务热线：400-100-5619
-					</div>
-
+				<div class="login-header">
+					<img class="logo" src="/static/image/logo.png"/>
+					<span class="title">抑郁症数据编辑平台</span>
 				</div>
 		
-				<div class="main">
+				<div class="login-main">
 						
 					<div class="content">
 							
@@ -55,8 +45,8 @@
 						
 				</div>
 		
-				<div class="footer">
-					<div class="info">北京华晟信息技术有限公司版权所有</div>
+				<div class="login-footer">
+					<div class="info">&copy;抑郁症数据编辑平台 2018 V1.0</div>
 				</div>
 				
 				<el-dialog
