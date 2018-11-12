@@ -96,6 +96,7 @@
 			return {
 				APIS : {
 					TASK_LIST : '/myTask/taskList.do',
+					INIT_TASK : '/myTask/initTask.do',
 					FINISH_TASK : '/myTask/finishTask.do'
 				},
 				
@@ -183,7 +184,18 @@
 			
 			//问卷列表
 			handleQuestionaireList(scope){
-				this.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : scope.row.task.id}});
+				var self = this;
+				
+				if(scope.row.task.status == this.$constants.TASK_STATUS.enums.ASSIGNED){//新分配的任务需进行初始化
+					self.$commons.alert('首次编辑需要初始化任务，此操作比较耗时，请耐心等待...','提示',function(){
+						self.$request.sendPostRequest(self.APIS.INIT_TASK,{taskId : scope.row.task.id},(resultObject)=>{
+							self.$message.success('任务初始化成功');
+							self.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : scope.row.task.id}});
+						});
+					});
+				}else{
+					this.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : scope.row.task.id}});
+				}
 			},
 			
 			//任务完成

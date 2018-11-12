@@ -56,7 +56,7 @@
 						<span slot="title" class="task-title">患者信息</span>
 						<el-form label-width="100px">
 							<el-row>
-								<el-col :span="12">,
+								<el-col :span="12">
 									<el-form-item label="患者编号">
 										<el-input :value="taskDetail.patient.id" readonly></el-input>
 									</el-form-item>

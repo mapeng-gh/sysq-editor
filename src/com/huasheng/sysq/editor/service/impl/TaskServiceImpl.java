@@ -40,7 +40,7 @@ import com.huasheng.sysq.editor.model.Task;
 import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.AnswerResponse;
 import com.huasheng.sysq.editor.params.EditorQuestionResponse;
-import com.huasheng.sysq.editor.params.EditorQuestionaireResponse;
+import com.huasheng.sysq.editor.params.EditorQuestionaireResponse; 
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.TaskResponse;
 import com.huasheng.sysq.editor.service.TaskService;
@@ -223,20 +223,7 @@ public class TaskServiceImpl implements TaskService{
 	public CallResult<List<EditorQuestionaireResponse>> getTaskQuestionaireList(int taskId) {
 		LogUtils.info(this.getClass(), "getTaskQuestionaireList params : taskId = {}", taskId);
 		try {
-			//获取任务
 			Task task = taskDao.selectById(taskId);
-			
-			//任务初始化
-			if(task.getStatus() == Constants.TASK_STATUS_ASSIGNED) {
-				try {
-					this.initTask(task);
-				}catch(Exception e) {
-					LogUtils.error(this.getClass(), "getTaskQuestionaireList", e);
-					return CallResult.failure("任务初始化失败");
-				}
-			}
-			
-			//获取任务问卷
 			List<EditorQuestionaireResponse> editorQuestionaireResponseList = new ArrayList<EditorQuestionaireResponse>();
 			Interview interview = interviewDao.selectById(task.getInterviewId());
 			List<EditorQuestionaire> editorQuestionaireList = editorQuestionaireDao.getListByInterviewId(interview.getId());
@@ -255,87 +242,6 @@ public class TaskServiceImpl implements TaskService{
 		}
 	}
 	
-	/**
-	 * 任务初始化
-	 * @param task
-	 */
-	private void initTask(Task task) {
-		
-		//获取访谈过的问卷
-		List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(task.getInterviewId());
-		if(questionaireCodeList != null && questionaireCodeList.size() > 0) {
-			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-				@Override
-				protected void doInTransactionWithoutResult(TransactionStatus status) {
-					Interview interview = interviewDao.selectById(task.getInterviewId());
-					List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
-					Date curTime = new Date();
-					
-					List<EditorQuestionaire> editorQuestionaireList = new ArrayList<EditorQuestionaire>();
-					List<EditorQuestion> editorQuestionList = new ArrayList<EditorQuestion>();
-					List<SysqResult> editorResultList = new ArrayList<SysqResult>();
-					
-					//添加问卷
-					for(Questionaire questionaire : questionaireList) {
-						EditorQuestionaire editorQuestionaire = new EditorQuestionaire();
-						editorQuestionaire.setInterviewId(task.getInterviewId());
-						editorQuestionaire.setQuestionaireCode(questionaire.getCode());
-						editorQuestionaire.setSeqNum(questionaire.getSeqNum());
-						editorQuestionaire.setCreateTime(curTime);
-						editorQuestionaire.setUpdateTime(curTime);
-						editorQuestionaireList.add(editorQuestionaire);
-						
-						//添加问题
-						List<Question> questionList = questionDao.selectListByQuestionaire(interview.getVersionId(), questionaire.getCode());
-						if(questionList != null && questionList.size() > 0) {
-							for(Question question : questionList) {
-								EditorQuestion editorQuestion = new EditorQuestion();
-								editorQuestion.setInterviewId(interview.getId());
-								editorQuestion.setQuestionaireCode(questionaire.getCode());
-								editorQuestion.setQuestionCode(question.getCode());
-								editorQuestion.setCreateTime(curTime);
-								editorQuestion.setUpdateTime(curTime);
-								editorQuestion.setSeqNum(question.getSeqNum());
-								
-								//设置状态
-								editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_INVALID);
-								List<String> questionCodeList = sysqResultDao.getQuestionList(interview.getId(),questionaire.getCode());
-								if(questionCodeList != null && questionCodeList.size() > 0) {
-									if(questionCodeList.contains(question.getCode())){
-										editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_VALID);
-									}
-								}
-								editorQuestionList.add(editorQuestion);
-								
-								//添加答案（有效问题）
-								if(editorQuestion.getStatus() == Constants.EDIT_QUESTION_STATUS_VALID) {
-									List<SysqResult> sysqResultList = sysqResultDao.getAnswerResultByQuestion(interview.getId(), questionaire.getCode(), question.getCode());
-									if(sysqResultList != null && sysqResultList.size() > 0) {
-										for(SysqResult sysqResult : sysqResultList) {
-											editorResultList.add(sysqResult);
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					//批量插入
-					editorQuestionaireDao.batchInsert(editorQuestionaireList);
-					editorQuestionDao.batchInsert(editorQuestionList);
-					editorResultDao.batchInsert(editorResultList);
-					LogUtils.info(this.getClass(), "initTask : init success");
-					
-					//修改任务状态
-					task.setStatus(Constants.TASK_STATUS_EDITING);
-					task.setUpdateTime(curTime);
-					taskDao.update(task);
-					LogUtils.info(this.getClass(), "initTask : update task status success");
-				}
-			});
-		}
-	}
-
 	@Override
 	public CallResult<TaskResponse> getTaskDetail(int taskId) {
 		LogUtils.info(this.getClass(), "getTaskDetail params : taskId = {}", taskId);
@@ -583,4 +489,92 @@ public class TaskServiceImpl implements TaskService{
 		}
 	}
 
+	@Override
+	public CallResult<Boolean> initTask(int taskId) {
+		LogUtils.info(this.getClass(), "initTask params : taskId = {}", taskId);
+		try {
+			//获取任务
+			Task task = taskDao.selectById(taskId);
+			
+			//获取访谈过的问卷
+			List<String> questionaireCodeList = sysqResultDao.getQuestionaireList(task.getInterviewId());
+			if(questionaireCodeList != null && questionaireCodeList.size() > 0) {
+				this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+					@Override
+					protected void doInTransactionWithoutResult(TransactionStatus status) {
+						Interview interview = interviewDao.selectById(task.getInterviewId());
+						List<Questionaire> questionaireList = questionaireDao.batchSelectByCode(interview.getVersionId(), questionaireCodeList);
+						Date curTime = new Date();
+						
+						List<EditorQuestionaire> editorQuestionaireList = new ArrayList<EditorQuestionaire>();
+						List<EditorQuestion> editorQuestionList = new ArrayList<EditorQuestion>();
+						List<SysqResult> editorResultList = new ArrayList<SysqResult>();
+						
+						//添加问卷（访谈过的）
+						for(Questionaire questionaire : questionaireList) {
+							EditorQuestionaire editorQuestionaire = new EditorQuestionaire();
+							editorQuestionaire.setInterviewId(task.getInterviewId());
+							editorQuestionaire.setQuestionaireCode(questionaire.getCode());
+							editorQuestionaire.setSeqNum(questionaire.getSeqNum());
+							editorQuestionaire.setCreateTime(curTime);
+							editorQuestionaire.setUpdateTime(curTime);
+							editorQuestionaireList.add(editorQuestionaire);
+							
+							//添加问题（所有）
+							List<Question> questionList = questionDao.selectListByQuestionaire(interview.getVersionId(), questionaire.getCode());
+							List<String> questionCodeList = sysqResultDao.getQuestionList(interview.getId(),questionaire.getCode());
+							if(questionList != null && questionList.size() > 0) {
+								for(Question question : questionList) {
+									EditorQuestion editorQuestion = new EditorQuestion();
+									editorQuestion.setInterviewId(interview.getId());
+									editorQuestion.setQuestionaireCode(questionaire.getCode());
+									editorQuestion.setQuestionCode(question.getCode());
+									editorQuestion.setCreateTime(curTime);
+									editorQuestion.setUpdateTime(curTime);
+									editorQuestion.setSeqNum(question.getSeqNum());
+									editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_INVALID);
+									editorQuestionList.add(editorQuestion);
+									
+									//设置状态
+									if(questionCodeList != null && questionCodeList.size() > 0) {
+										if(questionCodeList.contains(question.getCode())){
+											editorQuestion.setStatus(Constants.EDIT_QUESTION_STATUS_VALID);
+										}
+									}
+									
+									//添加答案（有效问题）
+									if(editorQuestion.getStatus() == Constants.EDIT_QUESTION_STATUS_VALID) {
+										List<SysqResult> sysqResultList = sysqResultDao.getAnswerResultByQuestion(interview.getId(), questionaire.getCode(), question.getCode());
+										if(sysqResultList != null && sysqResultList.size() > 0) {
+											for(SysqResult sysqResult : sysqResultList) {
+												editorResultList.add(sysqResult);
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						//批量插入
+						editorQuestionaireDao.batchInsert(editorQuestionaireList);
+						editorQuestionDao.batchInsert(editorQuestionList);
+						editorResultDao.batchInsert(editorResultList);
+						LogUtils.info(this.getClass(), "initTask : init success");
+						
+						//修改任务状态
+						task.setStatus(Constants.TASK_STATUS_EDITING);
+						task.setUpdateTime(curTime);
+						taskDao.update(task);
+						LogUtils.info(this.getClass(), "initTask : update task status success");
+					}
+				});
+			}
+			
+			return CallResult.success(true);
+			
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "initTask error", e);
+			return CallResult.failure("初始化任务失败");
+		}
+	}
 }

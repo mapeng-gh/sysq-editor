@@ -93,6 +93,21 @@ function prompt(message,title,confirmCallback){
 	});
 }
 
+//提示对话框
+function alert(message,title,confirmCallback){
+	Vue.prototype.$alert(message,title,{
+		dangerouslyUseHTMLString : true,
+		closeOnClickModal : false,
+		closeOnPressEscape : false,
+		confirmButtonText : '知道了',
+		callback : function(action){
+			if(action == 'confirm'){
+				confirmCallback();
+			}
+		}
+	});
+}
+
 window.commons = {
 	formatDate : formatDate,
 	serialize : serialize,
@@ -102,7 +117,8 @@ window.commons = {
 	goLogin : goLogin,
 	getHomePage : getHomePage,
 	confirm : confirm,
-	prompt : prompt
+	prompt : prompt,
+	alert : alert
 }
       
 })();

@@ -105,4 +105,11 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String results,String remark);
+	
+	/**
+	 * 初始化任务
+	 * @param taskId
+	 * @return
+	 */
+	public CallResult<Boolean> initTask(int taskId);
 }

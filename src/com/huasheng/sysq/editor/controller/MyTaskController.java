@@ -84,26 +84,26 @@ public class MyTaskController {
 	}
 	
 	/**
-	 * 完成任务
+	 * 初始化任务
 	 * @param requestJsonStr
 	 * @return
 	 */
-	@RequestMapping(value="/finishTask.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@RequestMapping(value="/initTask.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Boolean> finishTask(@RequestBody String requestJsonStr) {
-		LogUtils.info(this.getClass(), "finishTask params : {}",requestJsonStr);
+	public CallResult<Boolean> initTask(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "initTask params : {}",requestJsonStr);
 		
 		int taskId;
 		try {
 			JSONObject requestJson = JSON.parseObject(requestJsonStr);
 			taskId = requestJson.getIntValue("taskId");
 		}catch(Exception e) {
-			LogUtils.error(this.getClass(), "finishTask error", e);
+			LogUtils.error(this.getClass(), "initTask error", e);
 			return CallResult.failure("参数格式不正确");
 		}
 		
-		CallResult<Boolean> result = taskService.finishTask(taskId);
-		LogUtils.info(this.getClass(), "finishTask result : {}", JsonUtils.toJson(result));
+		CallResult<Boolean> result = taskService.initTask(taskId);
+		LogUtils.info(this.getClass(), "initTask result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 	
@@ -226,6 +226,30 @@ public class MyTaskController {
 		
 		CallResult<Boolean> result = taskService.editQuestion(taskId, questionaireCode, questionCode, results , remark);
 		LogUtils.info(this.getClass(), "editQuestion result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 完成任务
+	 * @param requestJsonStr
+	 * @return
+	 */
+	@RequestMapping(value="/finishTask.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<Boolean> finishTask(@RequestBody String requestJsonStr) {
+		LogUtils.info(this.getClass(), "finishTask params : {}",requestJsonStr);
+		
+		int taskId;
+		try {
+			JSONObject requestJson = JSON.parseObject(requestJsonStr);
+			taskId = requestJson.getIntValue("taskId");
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "finishTask error", e);
+			return CallResult.failure("参数格式不正确");
+		}
+		
+		CallResult<Boolean> result = taskService.finishTask(taskId);
+		LogUtils.info(this.getClass(), "finishTask result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

@@ -65,11 +65,6 @@
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED" type="success">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" width="150" :show-overflow-tooltip="true">
-							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleAssignTask(scope)">重新分配</el-button>
-							</template>
-						</el-table-column>
                     </el-table>
                 </div>
                                         
@@ -175,11 +170,7 @@
 					self.taskList = resultObject.data;
 					self.paginate.total = resultObject.total;
 				});
-            },
-                                
-			//重新分配
-			handleAssignTask : function(scope){
-			}
+            }
         }
 	};
 	window.taskManage4TaskListComponent = taskManage4TaskListComponent;
