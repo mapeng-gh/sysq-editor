@@ -49,6 +49,7 @@ public class CommonController {
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 			ftpClient.enterLocalPassiveMode();
 			ftpClient.changeWorkingDirectory(FTP_WORKING_DIR);
+			ftpClient.setRemoteVerificationEnabled(false);
 			LogUtils.info(this.getClass(), "downloadAuto[{}] : FTP settings ok",interviewId);
 			
 			//文件过滤
