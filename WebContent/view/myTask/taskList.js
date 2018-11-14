@@ -64,9 +64,10 @@
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED" type="success">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" width="200" :show-overflow-tooltip="true">
+						<el-table-column prop="operate" label="操作" align="center" width="270" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleTaskDetail(scope)">任务详情</el-button>
+								<el-button type="text" size="mini" @click="handleDownloadAudio(scope)">下载录音</el-button>
 								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">编辑访谈</el-button>
 								<el-button type="text" size="mini" :disabled="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED"@click="handleFinishTask(scope)">任务完成</el-button>
 							</template>
@@ -97,7 +98,8 @@
 				APIS : {
 					TASK_LIST : '/myTask/taskList.do',
 					INIT_TASK : '/myTask/initTask.do',
-					FINISH_TASK : '/myTask/finishTask.do'
+					FINISH_TASK : '/myTask/finishTask.do',
+					DOWNLOAD_AUDIO : '/common/downloadAudio.do'
 				},
 				
 				search : {
@@ -222,6 +224,11 @@
 						}
 					}
 				});
+			},
+			
+			//下载录音
+			handleDownloadAudio(scope){
+				this.$commons.download(this.APIS.DOWNLOAD_AUDIO,{'interviewId' : scope.row.interview.id});
 			}
 		}
 	};

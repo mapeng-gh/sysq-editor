@@ -58,6 +58,7 @@
 						<el-table-column prop="operate" label="操作" align="center" width="150">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">问卷列表</el-button>
+								<el-button type="text" size="mini" @click="handleDownloadAudio(scope)">下载录音</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -84,7 +85,8 @@
 			return {
 					
 				APIS : {
-					INTERVIEW_LIST : '/interview/interviewList.do'
+					INTERVIEW_LIST : '/interview/interviewList.do',
+					DOWNLOAD_AUDIO : '/common/downloadAudio.do'
 				},
 				
 				interviewList : [],
@@ -162,6 +164,11 @@
 			//问卷列表
 			handleQuestionaireList(scope){
 				this.$commons.openWindow('#/interview/questionaireList',{interviewId : scope.row.interview.id});
+			},
+			
+			//下载录音
+			handleDownloadAudio(scope){
+				this.$commons.download(this.APIS.DOWNLOAD_AUDIO,{'interviewId' : scope.row.interview.id});
 			}
 		},
 		
