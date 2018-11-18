@@ -10,6 +10,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +23,22 @@ import com.huasheng.sysq.editor.util.LogUtils;
 @RequestMapping(value="/common")
 public class CommonController {
 	
-	private static final String FTP_HOST = "ccpl.psych.ac.cn";//ccpl.psych.ac.cn 192.168.8.1
-	private static final int FTP_PORT = 20020;
-	private static final String FTP_USER = "anonymous";
-	private static final String FTP_PASSWD = "";
-	private static final String FTP_WORKING_DIR = "/sysq/";
 	private static final String MSG_CONTENT_TYPE = "text/plain;charset=utf-8";
+	
+	@Value("#{appProperties['ftp.host']}")
+	private String FTP_HOST;
+	
+	@Value("#{appProperties['ftp.port']}")
+	private int FTP_PORT;
+	
+	@Value("#{appProperties['ftp.user']}")
+	private String FTP_USER;
+	
+	@Value("#{appProperties['ftp.passwd']}")
+	private String FTP_PASSWD;
+	
+	@Value("#{appProperties['ftp.workingDir']}")
+	private String FTP_WORKING_DIR;
 	
 	/**
 	 * 下载录音
