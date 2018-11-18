@@ -57,17 +57,10 @@ public class CommonController {
 			ftpClient.connect(FTP_HOST,FTP_PORT);
 			ftpClient.login(FTP_USER, FTP_PASSWD);
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-			ftpClient.enterLocalPassiveMode();
+			ftpClient.enterLocalActiveMode();
 			ftpClient.setRemoteVerificationEnabled(false);
-//			ftpClient.configure(new FTPClientConfig(FTPClientConfig.SYST_UNIX));
 			ftpClient.changeWorkingDirectory(FTP_WORKING_DIR);
 			LogUtils.info(this.getClass(), "downloadAuto[{}] : FTP settings ok , {}:{}",interviewId,FTP_HOST,FTP_PORT);
-			
-			String[] filenames = ftpClient.listNames();
-			if(filenames == null) {
-				LogUtils.info(this.getClass(), "downloadAuto : filenames = null");
-			}
-			LogUtils.info(this.getClass(), "downloadAuto : length = {} , listNames = {}", filenames.length, JSON.toJSONString(filenames));
 			
 			//文件过滤
 			FTPFile files[] = ftpClient.listFiles("",new FTPFileFilter() {
