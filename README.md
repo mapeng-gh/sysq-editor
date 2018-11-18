@@ -1,4 +1,8 @@
-# 项目说明
+## dev
+mvn clean package -Dmaven.test.skip=true -Denv=dev
 
-## 样式构建
-sass Webcontent/static/css/editor:Webcontent/static/css/editor --style=expanded --sourcemap=none --watch
+## test
+mvn clean package -Dmaven.test.skip=true -Denv=test
+
+## prod
+mvn clean package -Dmaven.test.skip=true -Denv=prod

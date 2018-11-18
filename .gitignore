@@ -2,10 +2,12 @@
 .project
 .classpath
 .settings
-
-#classes
 build/
 classes/
+lib/
+
+#maven
+target/
 
 #css
 .sass-cache
