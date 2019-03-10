@@ -41,6 +41,7 @@ public class TaskManageController {
 				handledParams.put("taskStatus", Integer.parseInt(taskStatus));
 			}
 			handledParams.put("patientName",searchParams.get("patientName"));
+			handledParams.put("doctorName",searchParams.get("doctorName"));
 			currentPage = Integer.parseInt(searchParams.get("currentPage"));
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
 		}catch(Exception e) {

@@ -37,11 +37,12 @@
 	    	inner join editor_user usr on task.user_id = usr.id 
 	    	inner join sysq_interview interview on task.interview_id = interview.id 
 	    	inner join sysq_patient patient on interview.patient_id = patient.id 
-	    	<trim prefix="where" prefixOverrides="and">
-                   	<if test="editorName != null and editorName != ''">and usr.name like concat(concat('%',#{editorName}),'%')</if>
-                   	<if test="taskStatus != null">and task.status = #{taskStatus}</if>
-                   	<if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
-            	</trim>
+	    	inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
+	    	where 1 = 1 
+                 	<if test="editorName != null and editorName != ''">and usr.name like concat(concat('%',#{editorName}),'%')</if>
+                 	<if test="taskStatus != null">and task.status = #{taskStatus}</if>
+                 	<if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
+                 	<if test="doctorName != null and doctorName != ''">and doctor.username like concat(concat('%',#{doctorName}),'%')</if>
             	order by task.create_time desc 
             	limit #{offset},#{limit}
         </select>
@@ -49,14 +50,15 @@
         <select id="countAllTask" parameterType="hashmap" resultType="_int">
             	select count(task.id)
 	    	from editor_task task 
-	   	 inner join editor_user usr on task.user_id = usr.id 
+	   	inner join editor_user usr on task.user_id = usr.id 
 	    	inner join sysq_interview interview on task.interview_id = interview.id 
 	    	inner join sysq_patient patient on interview.patient_id = patient.id 
-	    	<trim prefix="where" prefixOverrides="and">
-                   	<if test="editorName != null and editorName != ''">and usr.name like concat(concat('%',#{editorName}),'%')</if>
-                   	<if test="taskStatus != null">and task.status = #{taskStatus}</if>
-                   	<if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
-            	</trim>
+	    	inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
+	    	where 1 = 1 
+                	<if test="editorName != null and editorName != ''">and usr.name like concat(concat('%',#{editorName}),'%')</if>
+                  	<if test="taskStatus != null">and task.status = #{taskStatus}</if>
+                  	<if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
+                  	<if test="doctorName != null and doctorName != ''">and doctor.username like concat(concat('%',#{doctorName}),'%')</if>
         </select>
         
 	<select id="findUserTaskPage" parameterType="hashmap" resultMap="allResultMap">

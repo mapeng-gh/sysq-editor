@@ -14,16 +14,16 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
+								<el-form-item label="访谈员">
+									<el-input v-model="search.doctorName" placeholder="请输入访谈员姓名"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
 								<el-form-item label="任务状态">
 									<el-select v-model="search.taskStatus" style="width:100%;">
 										<el-option value="" label="全部"></el-option>
 										<el-option v-for="item in $constants.TASK_STATUS.getTaskStatusList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
                                     </el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="受访者">
-									<el-input v-model="search.patientName" placeholder="请输入受访者姓名"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -40,14 +40,15 @@
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="task.id" label="任务编号" align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="user.name" label="编辑人员" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="task.id" label="任务编号" align="center" :show-overflow-tooltip="true"></el-table-column>,
+						<el-table-column prop="interview.id" label="访谈编号" align="center" :show-overflow-tooltip="true"></el-table-column>,
 						<el-table-column prop="interview.type" label="访谈类型" align="center" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="受访者" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="user.name" label="编辑人员" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="doctor.username" label="访谈员" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="task.createTime" label="创建时间" align="center" width="180" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.createTime)}}
@@ -97,7 +98,7 @@
 				search : {
 					editorName : '',
 					taskStatus : '',
-					patientName : ''
+					doctorName : ''
 				},
 				
 				taskList : [],
@@ -140,7 +141,7 @@
             //重置
             handleReset : function(){
 				var self = this;
-				this.search = {editorName : '' , taskStatus : '' , patientName : ''},
+				this.search = {editorName : '' , taskStatus : '' , doctorName : ''};
 				this.paginate.currentPage = 1;
                                         
                 this.$request.sendGetRequest(this.APIS.TASK_LIST,this.$lodash.assign({},this.search,{currentPage : this.paginate.currentPage,pageSize:this.paginate.pageSize}),(resultObject)=>{
