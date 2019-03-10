@@ -170,7 +170,7 @@
 					}
 				}else if(this.register.userType == this.$constants.USER_TYPE.enums.VIEWER){
 					if(!/^1\d{10}$/g.test(this.register.loginName)){
-						this.$message.error('登陆账号格式不正确，浏览人员须使用App关联的手机号');
+						this.$message.error('登陆账号格式不正确，访谈员须使用App关联的手机号');
 						return;
 					}
 				}

@@ -8,8 +8,8 @@
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="患者姓名">
-									<el-input v-model="search.name" placeholder="请输入患者姓名"></el-input>
+								<el-form-item label="受访者">
+									<el-input v-model="search.name" placeholder="请输入受访者姓名"></el-input>
 								</el-form-item>
 							</el-col>
 		
@@ -36,15 +36,15 @@
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="interview.id" label="编号" align="center"></el-table-column>
+						<el-table-column prop="interview.id" label="访谈编号" align="center"></el-table-column>
 						<el-table-column prop="interview.type" label="访谈类型" align="center">
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="患者姓名" align="center"></el-table-column>
+						<el-table-column prop="patient.username" label="受访者" align="center"></el-table-column>
 						<el-table-column prop="patient.mobile" label="联系电话" align="center"></el-table-column>
-						<el-table-column prop="patient.address" label="患者地址" width="250" align="left"  :show-overflow-tooltip="true">
+						<el-table-column prop="patient.address" label="联系地址" width="250" align="center"  :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{scope.row.patient.province + '-' + scope.row.patient.city + '-' + scope.row.patient.address}}
 							</template>

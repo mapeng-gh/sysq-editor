@@ -15,7 +15,7 @@
 				}else if(code == this.enums.EDITOR){
 					return '编辑人员';
 				}else if(code == this.enums.VIEWER){
-					return '浏览人员';
+					return '访谈员';
 				}
 			},
 			getUserTypeList(){
