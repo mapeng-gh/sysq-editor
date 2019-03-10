@@ -79,6 +79,7 @@
 									<el-button type="text" size="small">更多操作<i class="el-icon-arrow-down"></i></el-button>
 									<el-dropdown-menu slot="dropdown">
 										<el-dropdown-item :command="{'code' : 'resetPwd' , 'data' : scope}">密码重置</el-dropdown-item>
+										<el-dropdown-item :command="{'code' : 'changeType' , 'data' : scope}" :disabled="scope.row.userType != $constants.USER_TYPE.enums.VIEWER">身份更改</el-dropdown-item>
 									</el-dropdown-menu>
 								</el-dropdown>
 							</template>
@@ -134,7 +135,8 @@
                 APIS : {
                     USER_LIST : '/userManage/userList.do',
 					USER_AUDIT : '/userManage/auditUser.do',
-					USER_RESET_PWD : '/userManage/resetPwd.do'
+					USER_RESET_PWD : '/userManage/resetPwd.do',
+					USER_CHANGE_TYPE : '/userManage/changeType.do'
                 },
                                         
 				userList : [],
@@ -273,6 +275,8 @@
 				var code = command.code;
 				if(code == 'resetPwd'){
 					this.resetPwd(command.data);
+				}else if(code == 'changeType'){
+					this.changeType(command.data);
 				}
 			},
 			
@@ -281,6 +285,22 @@
 				var self = this;
 				self.$commons.confirm('确定将用户【'+scope.row.loginName+'】密码重置为初始密码【sysq123】吗？','确认',function(){
 					self.$request.sendFormRequest(self.APIS.USER_RESET_PWD,{userId : scope.row.id},function(resultObject){
+						self.$message.success('操作成功');
+						
+						//刷新列表
+						self.$request.sendGetRequest(self.APIS.USER_LIST,self.$lodash.assign({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+							self.userList = resultObject.data;
+							self.paginate.total = resultObject.total;
+						});
+					});
+				});
+			},
+			
+			//类型修改
+			changeType : function(scope){
+				var self = this;
+				self.$commons.confirm('确定将用户【'+scope.row.loginName+'】类型修改为【编辑人员】吗？','确认',function(){
+					self.$request.sendFormRequest(self.APIS.USER_CHANGE_TYPE,{userId : scope.row.id , userType : self.$constants.USER_TYPE.enums.EDITOR},function(resultObject){
 						self.$message.success('操作成功');
 						
 						//刷新列表

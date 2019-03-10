@@ -164,4 +164,19 @@ public class UserManageController {
 		LogUtils.info(this.getClass(), "resetPwd result : {}", JsonUtils.toJson(result));
 		return result;
 	}
+	
+	/**
+	 * 类型修改
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/changeType.do",method=RequestMethod.POST)
+	@ResponseBody
+	public CallResult<Boolean> changeType(@RequestParam(value="userId") int userId , @RequestParam(value="userType") int userType) {
+		LogUtils.info(this.getClass(), "resetPwd params : userId = {} , userType = {}",userId,userType);
+		
+		CallResult<Boolean> result = userService.changeType(userId, userType);
+		LogUtils.info(this.getClass(), "changeType result : {}", JsonUtils.toJson(result));
+		return result;
+	}
 }

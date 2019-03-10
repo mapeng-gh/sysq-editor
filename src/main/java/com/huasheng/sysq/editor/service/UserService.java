@@ -73,4 +73,12 @@ public interface UserService {
 	 * @return
 	 */
 	public CallResult<Boolean> resetPwd(int userId,String pwd);
+	
+	/**
+	 * 类型修改
+	 * @param userId
+	 * @param userType
+	 * @return
+	 */
+	public CallResult<Boolean> changeType(int userId,int userType);
 }

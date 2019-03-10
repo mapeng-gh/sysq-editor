@@ -305,4 +305,31 @@ public class UserServiceImpl implements UserService{
 			return CallResult.failure("重置密码失败");
 		}
 	}
+
+	@Override
+	public CallResult<Boolean> changeType(int userId, final int userType) {
+		LogUtils.info(this.getClass(), "changeType params : userId = {} , userType = {}", userId,userType);
+		
+		//数据校验
+		final User user = userDao.selectById(userId);
+		if(user == null) {
+			return CallResult.failure("用户不存在");
+		}
+		
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					user.setUserType(userType);
+					user.setUpdateTime(new Date());
+					userDao.update(user);
+				}
+			});
+			
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "changeType error", e);
+			return CallResult.failure("类型修改失败");
+		}
+	}
 }
