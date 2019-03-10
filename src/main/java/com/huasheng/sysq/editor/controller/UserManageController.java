@@ -150,4 +150,18 @@ public class UserManageController {
 		return result;
 	}
 	
+	/**
+	 * 密码重置
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/resetPwd.do",method=RequestMethod.POST)
+	@ResponseBody
+	public CallResult<Boolean> resetPwd(@RequestParam(value="userId") int userId) {
+		LogUtils.info(this.getClass(), "resetPwd params : userId = {}",userId);
+		
+		CallResult<Boolean> result = userService.resetPwd(userId, "sysq123");
+		LogUtils.info(this.getClass(), "resetPwd result : {}", JsonUtils.toJson(result));
+		return result;
+	}
 }

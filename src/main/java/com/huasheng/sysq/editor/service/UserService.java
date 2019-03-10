@@ -65,4 +65,12 @@ public interface UserService {
 	 * @return
 	 */
 	public CallResult<Boolean> modifyPwd(int userId,String oldPwd,String newPwd);
+	
+	/**
+	 * 重置密码
+	 * @param userId
+	 * @param pwd
+	 * @return
+	 */
+	public CallResult<Boolean> resetPwd(int userId,String pwd);
 }

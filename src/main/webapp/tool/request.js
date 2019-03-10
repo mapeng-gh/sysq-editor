@@ -58,6 +58,22 @@
 			handleError(error);
 		});
 	};
+	
+	//POST Form请求
+	var sendFormRequest = function(url , data , successCB , errorCB){
+		var formData = commons.serialize(data);
+		axios.post(url,formData,{
+			headers : {
+				'Content-Type' : 'application/x-www-form-urlencoded'
+			}
+		})
+		.then((response) =>{
+			handleRequest(response,successCB,errorCB);
+		})
+		.catch((error) =>{
+			handleError(error);
+		});
+	};
 
 	//响应处理
 	var handleRequest = function(response,successCB,errorCB){
@@ -77,7 +93,7 @@
         
 	window.request = {
 		sendGetRequest : sendGetRequest,
-		sendPostRequest : sendPostRequest
+		sendPostRequest : sendPostRequest,
+		sendFormRequest : sendFormRequest
 	}
-      
 })();

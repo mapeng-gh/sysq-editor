@@ -70,11 +70,17 @@
 								<el-tag type="danger" v-if="scope.row.auditStatus == $constants.AUDIT_STATUS.enums.REJECT">{{$constants.AUDIT_STATUS.getAuditStatusText(scope.row.auditStatus)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" :show-overflow-tooltip="true" width="200">
+						<el-table-column prop="operate" label="操作" align="center" :show-overflow-tooltip="true" width="220">
 							<template slot-scope="scope">
-								<el-button type="text" size="mini" @click="handleUserDetail(scope)">查看详情</el-button>
-								<el-button type="text" size="mini" @click="handleAuditDialog(scope)">账号审核</el-button>
-								<el-button type="text" size="mini" @click="handleAssignTask(scope)" :disabled="scope.row.userType != $constants.USER_TYPE.enums.EDITOR">任务分配</el-button>
+								<el-button type="text" size="small" @click="handleUserDetail(scope)">查看</el-button>
+								<el-button type="text" size="small" @click="handleAuditDialog(scope)">审核</el-button>
+								<el-button type="text" size="small" @click="handleAssignTask(scope)" :disabled="scope.row.userType != $constants.USER_TYPE.enums.EDITOR">分配</el-button>
+								<el-dropdown trigger="click" @command="handleCommand" style="margin-left:10px;">
+									<el-button type="text" size="small">更多操作<i class="el-icon-arrow-down"></i></el-button>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item :command="{'code' : 'resetPwd' , 'data' : scope}">密码重置</el-dropdown-item>
+									</el-dropdown-menu>
+								</el-dropdown>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -127,7 +133,8 @@
                                         
                 APIS : {
                     USER_LIST : '/userManage/userList.do',
-					USER_AUDIT : 'userManage/auditUser.do'
+					USER_AUDIT : '/userManage/auditUser.do',
+					USER_RESET_PWD : '/userManage/resetPwd.do'
                 },
                                         
 				userList : [],
@@ -242,13 +249,13 @@
 				
 				//发送请求
 				this.$request.sendPostRequest(this.APIS.USER_AUDIT,{userId : this.auditDialog.userId , auditStatus : this.auditDialog.auditStatus , remark : this.auditDialog.remark},function(resultObject){
+					self.$message.success('操作成功');
 					
 					//关闭对话框
 					self.auditDialog.visible = false;
 					
 					//刷新列表
 					self.$request.sendGetRequest(self.APIS.USER_LIST,self.$lodash.assign({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
-						self.$message.success('操作成功');
 						self.userList = resultObject.data;
 						self.paginate.total = resultObject.total;
 					});
@@ -259,6 +266,30 @@
 			//任务分配
 			handleAssignTask : function(scope){
 				this.$router.push({name : 'userManage4InterviewList' , query : {userId : scope.row.id}});
+			},
+			
+			//更多操作
+			handleCommand : function(command){
+				var code = command.code;
+				if(code == 'resetPwd'){
+					this.resetPwd(command.data);
+				}
+			},
+			
+			//密码重置
+			resetPwd : function(scope){
+				var self = this;
+				self.$commons.confirm('确定将用户【'+scope.row.loginName+'】密码重置为初始密码【sysq123】吗？','确认',function(){
+					self.$request.sendFormRequest(self.APIS.USER_RESET_PWD,{userId : scope.row.id},function(resultObject){
+						self.$message.success('操作成功');
+						
+						//刷新列表
+						self.$request.sendGetRequest(self.APIS.USER_LIST,self.$lodash.assign({},self.search,{currentPage:self.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){
+							self.userList = resultObject.data;
+							self.paginate.total = resultObject.total;
+						});
+					});
+				});
 			}
         }
 	};

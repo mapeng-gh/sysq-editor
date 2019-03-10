@@ -275,4 +275,34 @@ public class UserServiceImpl implements UserService{
 			return CallResult.failure("修改密码失败");
 		}
 	}
+
+	@Override
+	public CallResult<Boolean> resetPwd(int userId, final String pwd) {
+		LogUtils.info(this.getClass(), "resetPwd params : userId = {} , pwd = {}", userId,pwd);
+		
+		//数据校验
+		final User user = userDao.selectById(userId);
+		if(user == null) {
+			return CallResult.failure("用户不存在");
+		}
+		if(StringUtils.isBlank(pwd)) {
+			return CallResult.failure("重置密码不能为空");
+		}
+		
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					user.setLoginPwd(pwd);
+					user.setUpdateTime(new Date());
+					userDao.update(user);
+				}
+			});
+			
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "resetPwd error", e);
+			return CallResult.failure("重置密码失败");
+		}
+	}
 }
