@@ -8,7 +8,6 @@
 				<div class="common-detail">
 					
 					<el-form label-width="100px">
-						
 						<el-row>
 							<el-col :span="12">
 								

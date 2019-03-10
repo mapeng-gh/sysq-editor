@@ -5,27 +5,26 @@
 			<div class="interview-question-list">
 			
 				<div class="common-title">问题列表</div>
+				
+				<div class="common-list-operate">
+					<el-button plain type="info" size="medium" @click="handleBack">返回</el-button>
+				</div>
 					
 				<div class="question" v-for="questionWrap in questionList" :key="questionWrap.question.id">
-				
 					<div class="question-desc" v-html="questionWrap.question.description == '' ? '暂无描述内容' : handleQuestionDesc(questionWrap.question.description)"></div>
 					
 					<div class="answer" v-for="answerWrap in questionWrap.answerList" :key="answerWrap.answer.id">
 						<span class="label">{{answerWrap.answer.label? answerWrap.answer.label : answerWrap.answer.code}}</span>
 						<span class="value">{{transferAnswerValue(answerWrap.result,answerWrap.answer)}}</span>
 					</div>
-				
 				</div>
-						
 			</div>
 		`,
 		
 		data : function(){
-	
 			return {
-						
 				APIS : {
-						QUESTION_LIST : '/interview/questionList.do'
+					QUESTION_LIST : '/interview/questionList.do'
 				},
 		
 				params : {
@@ -36,9 +35,12 @@
 				questionList : []
 			}
 		},
+		
+		mounted : function(){
+			this.init();
+		},
                 
 		methods : {
-				
 			init : function(){
 				var self = this;
 						
@@ -79,17 +81,14 @@
 					return texts.join(',');
 				}
 				return value;
+			},
+			
+			//返回
+			handleBack(){
+				this.$router.push({name : 'interview4QuestionaireList' , query : {interviewId : this.params.interviewId}});
 			}
-				
-		},
-                
-		mounted : function(){
-			this.init();
 		}
 	};
 	
 	window.interview4QuestionListComponent = interview4QuestionListComponent;
-	
 })();
-
-

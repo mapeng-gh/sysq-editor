@@ -2,9 +2,7 @@
 	var dataManage4VersionListComponent = {
 		template : `
             <div class="userManageList">
-                                
                 <div class="common-title">版本列表</div>
-                                        
                                         
                 <div class="common-list">
                     <el-table
@@ -47,14 +45,12 @@
 							@size-change="handleSizeChange">
 					</el-pagination>
 				</div>
-					
             </div>
 		`,
 			
 		data : function(){
 			var self = this;
 			return {
-				
                 APIS : {
                     VERSION_LIST : '/dataManage/versionList.do',
 				},
@@ -65,7 +61,7 @@
 					pageSize : 10,
 					currentPage : 1,
 					total : 0
-                },
+                }
 			};
 		},
 			
@@ -74,7 +70,6 @@
         },
                         
         methods : {
-                                
             init : function(){
                 var self = this;
 					
@@ -117,16 +112,17 @@
 			
 			//查看病例问卷
 			handleCaseQuestionaire : function(scope){
-				this.$commons.openWindow('#/dataManage/questionaireList',{versionId : scope.row.id  , type : this.$constants.INTERVIEW_TYPE.enums.CASE});
+				this.$router.push({name : 'dataManage4QuestionaireList' , query : {versionId : scope.row.id  , type : this.$constants.INTERVIEW_TYPE.enums.CASE}});
 			},
                                 
 			//查看对照问卷
             handleContrastQuestionaire : function(scope){
-				this.$commons.openWindow('#/dataManage/questionaireList',{versionId : scope.row.id , type : this.$constants.INTERVIEW_TYPE.enums.CONTRAST});
+				this.$router.push({name : 'dataManage4QuestionaireList' , query : {versionId : scope.row.id  , type : this.$constants.INTERVIEW_TYPE.enums.CONTRAST}});
             }
 			
         }
 	};
+	
 	window.dataManage4VersionListComponent = dataManage4VersionListComponent;
 })();
 

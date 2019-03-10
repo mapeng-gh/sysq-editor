@@ -3,11 +3,13 @@
 		
 		template : `
 			<div class="data-manage-question-list">
-			
 				<div class="common-title">问题列表</div>
+				
+				<div class="common-list-operate">
+					<el-button plain type="info" size="medium" @click="handleBack">返回</el-button>
+				</div>
 					
 				<div class="question" v-for="questionWrap in questionList" :key="questionWrap.question.id">
-				
 					<div class="question-desc" v-html="questionWrap.question.description == '' ? '暂无描述内容' : handleQuestionDesc(questionWrap.question.description)"></div>
 					
 					<div class="answer" v-for="answerWrap in questionWrap.answerList" :key="answerWrap.answer.id">
@@ -48,13 +50,9 @@
 									:value="item.value">
 								</el-option>
 							</el-select>
-							
 						</div>
-						
 					</div>
-				
 				</div>
-						
 			</div>
 		`,
 		
@@ -68,15 +66,19 @@
 		
 				params : {
 					versionId : this.$route.query.versionId,
+					type : this.$route.query.type,
 					questionaireCode : this.$route.query.questionaireCode
 				},
 				
 				questionList : []
 			}
 		},
+		
+		mounted : function(){
+			this.init();
+		},
                 
 		methods : {
-				
 			init : function(){
 				var self = this;
 						
@@ -88,12 +90,12 @@
 			//问题描述处理
 			handleQuestionDesc(desc){
 				return desc.replace(/<para>/g,'<br/>')
-			}
+			},
 				
-		},
-                
-		mounted : function(){
-			this.init();
+			//返回
+			handleBack(){
+				this.$router.push({name : 'dataManage4QuestionaireList' , query : {versionId : this.params.versionId , type : this.params.type}});
+			}
 		}
 	};
 	

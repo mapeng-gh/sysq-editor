@@ -37,8 +37,8 @@
 						</el-row>
 				
 						<div class="common-search-opt">
-							<el-button type="primary" @click="handleSearch">查询</el-button>
-							<el-button @click="handleReset">重置</el-button>
+							<el-button plain type="primary" size="medium" @click="handleSearch">查询</el-button>
+							<el-button plain type="info" size="medium" @click="handleReset">重置</el-button>
 						</div>
 			
                     </el-form>
@@ -217,7 +217,7 @@
                                 
 			//查看详情
             handleUserDetail : function(scope){
-				this.$commons.openWindow('#/userManage/userDetail',{userId : scope.row.id});
+				this.$router.push({name : 'userManage4UserDetail' , query : {userId : scope.row.id}});
             },
 				
 			//账号审核对话框
@@ -258,7 +258,7 @@
 				
 			//任务分配
 			handleAssignTask : function(scope){
-				this.$commons.openWindow('#/userManage/interviewList',{userId : scope.row.id});
+				this.$router.push({name : 'userManage4InterviewList' , query : {userId : scope.row.id}});
 			}
         }
 	};

@@ -12,7 +12,6 @@
 									<el-input v-model="search.name" placeholder="请输入受访者姓名"></el-input>
 								</el-form-item>
 							</el-col>
-		
 							<el-col :span="8">
 								<el-form-item label="访谈类型">
 									<el-select v-model="search.type" style="width:100%;">
@@ -22,10 +21,9 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-	
 						<div class="common-search-opt">
-							<el-button type="primary" @click="handleSearch">查询</el-button>
-							<el-button @click="handleReset">重置</el-button>
+							<el-button plain type="primary" size="medium" @click="handleSearch">查询</el-button>
+							<el-button plain type="info" size="medium" @click="handleReset">重置</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -103,6 +101,10 @@
 				}
 			}
 		},
+		
+		mounted : function(){
+			this.init();
+		},
                 
 		methods : {
 			//初始化列表
@@ -163,17 +165,13 @@
 				
 			//问卷列表
 			handleQuestionaireList(scope){
-				this.$commons.openWindow('#/interview/questionaireList',{interviewId : scope.row.interview.id});
+				this.$router.push({name : 'interview4QuestionaireList' , query : {interviewId : scope.row.interview.id}});
 			},
 			
 			//下载录音
 			handleDownloadAudio(scope){
 				this.$commons.download(this.APIS.DOWNLOAD_AUDIO,{'interviewId' : scope.row.interview.id});
 			}
-		},
-		
-		mounted : function(){
-			this.init();
 		}
 	};
 	

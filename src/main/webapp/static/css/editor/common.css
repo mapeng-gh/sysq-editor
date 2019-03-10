@@ -1,93 +1,74 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
 
 html, body {
   width: 100%;
-  height: 100%;
-}
+  height: 100%; }
 
 .common-title {
   padding: 10px;
   background-color: #eef1f6;
-  font-size: 16px;
-}
+  font-size: 16px; }
 
 .common-list {
-  margin: 30px 0 0 0;
-}
+  margin: 15px 0 0 0; }
 
 .common-table-header {
   background-color: #eef1f6 !important;
   color: #606266;
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 .common-pagination {
   margin-top: 20px;
-  text-align: right;
-}
+  text-align: right; }
 
 .common-search {
   margin: 30px 0 0 0;
   padding: 24px 32px;
   background: #eef1f6;
-  border-radius: 2px;
-}
-
-.common-search .common-search-opt {
-  text-align: right;
-}
+  border-radius: 2px; }
+  .common-search .common-search-opt {
+    text-align: right; }
 
 .common-detail {
-  margin-top: 20px;
-}
+  margin-top: 20px; }
 
 .common-detail-operate {
   margin-top: 20px;
-  text-align: right;
-}
+  text-align: right; }
 
 .readonly {
   background-color: #f5f7fa;
   border-color: #e4e7ed;
-  color: #c0c4cc;
-}
+  color: #c0c4cc; }
 
 .common-list-operate {
   margin-top: 20px;
-  text-align: left;
-}
+  text-align: right; }
 
 .bg-warning {
   background-color: #fcf8e3;
   padding: 15px;
   margin-top: 20px;
-  font-size: 14px;
-}
+  font-size: 14px; }
 
 .el-table .success-row {
-  background: #f0f9eb;
-}
+  background: #f0f9eb; }
 
 .el-radio-group.vertical .el-radio {
   display: block;
   margin-left: 0;
-  margin-bottom: 10px;
-}
+  margin-bottom: 10px; }
 
 .el-checkbox-group.vertical .el-checkbox {
   display: block;
   margin-left: 0;
-  margin-bottom: 10px;
-}
+  margin-bottom: 10px; }
 
 .hidden {
-  display: none;
-}
+  display: none; }
 
 .el-date-editor .el-range-separator {
-  width: 8% !important;
-}
+  width: 8% !important; }

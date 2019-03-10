@@ -78,7 +78,7 @@
 		}
 	];
         
-    //我的访谈
+    //访谈浏览
     var interviewMappings = [
         {
 			name : 'interview4InterviewList',

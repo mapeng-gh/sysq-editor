@@ -8,7 +8,8 @@
 				<div class="common-title">任务分配</div>
 				
 				<div class="common-list-operate">
-					<el-button type="primary" @click="handleAssignTask">分配</el-button>
+					<el-button plain type="primary" size="medium" @click="handleAssignTask">分配</el-button>
+					<el-button plain type="info" size="medium" @click="handleBack">返回</el-button>
 				</div>
 				
 				<div class="common-list">
@@ -185,13 +186,15 @@
 						}
 					}
 				});
-				
-				
+			},
+			
+			//返回
+			handleBack(){
+				this.$router.push({name : 'userManage4UserList'});
 			}
 		}
-		
-		
 	};
+	
 	window.userManage4InterviewListComponent = userManage4InterviewListComponent;
 })();
 
