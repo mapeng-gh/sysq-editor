@@ -6,6 +6,10 @@
                         
                 <div class="common-title">问题列表</div>
 				
+				<div class="common-list-operate">
+					<el-button plain type="info" size="small" @click="handleBack">返回</el-button>
+				</div>
+				
 				<div :class="{'question' : true , 'invalid' : questionResponse.editorQuestion.status == 0}" v-for="questionResponse in questionList" :key="questionResponse.question.code" @mouseover="handleMouseover(questionResponse,$event)" @mouseout="handleMouseout(questionResponse,$event)">
 					<div class="question-operate hidden">
 						<el-button type="primary" plain size="small" :class="{'hidden' : questionResponse.editorQuestion.status == 0}" @click="handleEditQuestionDialog(questionResponse)"">编辑</el-button>
@@ -105,6 +109,10 @@
 				}
             }
         },
+		
+		mounted : function(){
+			this.init();
+		},
                 
 		methods : {
 				
@@ -280,14 +288,13 @@
 						});
 					});
 				});
-			}
+			},
 			
-        },
-                
-		mounted : function(){
-			this.init();
-		}
-		
+			//返回
+			handleBack(){
+				this.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : this.params.taskId}});
+			}
+        }
 	};
 	
 	window.myTask4QuestionListComponent = myTask4QuestionListComponent;

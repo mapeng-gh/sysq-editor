@@ -10,8 +10,8 @@
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="患者姓名">
-									<el-input v-model="search.patientName" placeholder="请输入患者姓名"></el-input>
+								<el-form-item label="受访者">
+									<el-input v-model="search.patientName" placeholder="请输入受访者姓名"></el-input>
 								</el-form-item>
 							</el-col>
 							
@@ -26,8 +26,8 @@
 						</el-row>
 			
 						<div class="common-search-opt">
-							<el-button type="primary" @click="handleSearch">查询</el-button>
-							<el-button @click="handleReset">重置</el-button>
+							<el-button plain type="primary" size="medium" @click="handleSearch">查询</el-button>
+							<el-button plain type="info" size="medium" @click="handleReset">重置</el-button>
 						</div>
 					</el-form>
 	
@@ -46,7 +46,7 @@
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="患者姓名" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="patient.username" label="受访者" align="center" :show-overflow-tooltip="true"></el-table-column>
 						<el-table-column prop="task.createTime" label="创建时间" align="center" width="180" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.createTime)}}
@@ -181,10 +181,10 @@
 			
 			//任务详情
 			handleTaskDetail(scope){
-				this.$commons.openWindow('#/myTask/taskDetail',{taskId : scope.row.task.id});
+				this.$router.push({name : 'myTask4TaskDetail' , query : {taskId : scope.row.task.id}});
 			},
 			
-			//问卷列表
+			//编辑访谈
 			handleQuestionaireList(scope){
 				var self = this;
 				
