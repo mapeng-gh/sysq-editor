@@ -332,4 +332,26 @@ public class UserServiceImpl implements UserService{
 			return CallResult.failure("类型修改失败");
 		}
 	}
+
+	@Override
+	public CallResult<List<User>> getEditorList() {
+		LogUtils.info(this.getClass(), "getEditorList");
+		
+		try {
+			List<User> userList = userDao.findByUserType(Constants.USER_TYPE_EDITOR);
+			
+			//数据脱敏
+			if(userList != null && userList.size() > 0) {
+				for(User u : userList) {
+					u.setLoginPwd("");
+				}
+			}
+			
+			return CallResult.success(userList);
+			
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "getEditorList error", e);
+			return CallResult.failure("获取编辑员列表失败"); 
+		}
+	}
 }

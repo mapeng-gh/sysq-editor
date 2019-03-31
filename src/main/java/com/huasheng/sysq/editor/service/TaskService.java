@@ -37,6 +37,14 @@ public interface TaskService {
 	public CallResult<Page<TaskResponse>> findTaskPage(Map<String,Object> searchParams , int currentPage , int pageSize);
 	
 	/**
+	 * 重新分配
+	 * @param taskId
+	 * @param userId
+	 * @return
+	 */
+	public CallResult<Boolean> reAssignTask(int taskId , int userId);
+	
+	/**
 	 * 查询用户下任务
 	 * @param userId
 	 * @param searchParams
@@ -52,6 +60,13 @@ public interface TaskService {
 	 * @return
 	 */
 	public CallResult<TaskResponse> getTaskDetail(int taskId);
+	
+	/**
+	 * 初始化任务
+	 * @param taskId
+	 * @return
+	 */
+	public CallResult<Boolean> initTask(int taskId);
 	
 	/**
 	 * 完成任务
@@ -75,6 +90,18 @@ public interface TaskService {
 	 */
 	public CallResult<List<EditorQuestionResponse>> getTaskQuestionList(int taskId,String questionaireCode);
 	
+	
+	/**
+	 * 编辑问题
+	 * @param taskId
+	 * @param questionaireCode
+	 * @param questionCode
+	 * @param results
+	 * * @param remark
+	 * @return
+	 */
+	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String results,String remark);
+	
 	/**
 	 * 启用问题
 	 * @param taskId
@@ -95,21 +122,5 @@ public interface TaskService {
 	 */
 	public CallResult<Boolean> disableQuestion(int taskId,String questionaireCode,String questionCode , String remark);
 	
-	/**
-	 * 编辑问题
-	 * @param taskId
-	 * @param questionaireCode
-	 * @param questionCode
-	 * @param results
-	 * * @param remark
-	 * @return
-	 */
-	public CallResult<Boolean> editQuestion(int taskId,String questionaireCode,String questionCode,String results,String remark);
 	
-	/**
-	 * 初始化任务
-	 * @param taskId
-	 * @return
-	 */
-	public CallResult<Boolean> initTask(int taskId);
 }

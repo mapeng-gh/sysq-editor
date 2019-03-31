@@ -1,6 +1,7 @@
 package com.huasheng.sysq.editor.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,7 +167,7 @@ public class UserManageController {
 	}
 	
 	/**
-	 * 类型修改
+	 * 身份更改
 	 * @param userId
 	 * @return
 	 */
@@ -177,6 +178,21 @@ public class UserManageController {
 		
 		CallResult<Boolean> result = userService.changeType(userId, userType);
 		LogUtils.info(this.getClass(), "changeType result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 编辑员列表
+	 * @param searchRequest
+	 * @return
+	 */
+	@RequestMapping(value="/getEditorList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public CallResult<List<User>> getEditorList() {
+		LogUtils.info(this.getClass(), "editorList");
+		
+		CallResult<List<User>> result = userService.getEditorList();
+		LogUtils.info(this.getClass(), "editorList result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

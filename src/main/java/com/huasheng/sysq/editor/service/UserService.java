@@ -1,5 +1,6 @@
 package com.huasheng.sysq.editor.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.huasheng.sysq.editor.model.User;
@@ -81,4 +82,10 @@ public interface UserService {
 	 * @return
 	 */
 	public CallResult<Boolean> changeType(int userId,int userType);
+	
+	/**
+	 * 获取编辑员列表
+	 * @return
+	 */
+	public CallResult<List<User>> getEditorList();
 }

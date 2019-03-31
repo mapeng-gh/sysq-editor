@@ -22,6 +22,24 @@
   		
 	</resultMap>
 	
+	<select id="selectById" parameterType="_int" resultMap="userResultMap">
+                select <include refid="userColumns"></include> 
+                from editor_user 
+                where id = #{id}
+        </select>
+        
+	<select id="selectByLoginName" parameterType="string" resultMap="userResultMap">
+                select <include refid="userColumns"></include> 
+                from editor_user 
+                where login_name = #{loginName}
+        </select>
+        
+	<select id="selectByUserType" parameterType="_int" resultMap="userResultMap">
+                select <include refid="userColumns"></include> 
+                from editor_user 
+                where user_type = #{userType}
+        </select>
+	
         <select id="find" parameterType="User" resultMap="userResultMap">
                  select <include refid="userColumns"></include> 
 	         from editor_user 
@@ -45,26 +63,6 @@
                  </trim>
         </select>
         
-        <select id="selectByLoginName" parameterType="string" resultMap="userResultMap">
-                select <include refid="userColumns"></include> 
-                from editor_user 
-                where login_name = #{loginName}
-        </select>
-        
-        <select id="selectById" parameterType="_int" resultMap="userResultMap">
-                select <include refid="userColumns"></include> 
-                from editor_user 
-                where id = #{id}
-        </select>
-        
-        <update id="update" parameterType="User">
-            update editor_user 
-            set login_name = #{loginName},login_pwd = #{loginPwd},name = #{name},user_type = #{userType},
-            email = #{email},working_place = #{workingPlace},mobile = #{mobile},audit_status = #{auditStatus},
-            remark = #{remark},create_time = #{createTime},update_time = #{updateTime}
-            where id = #{id}
-        </update>
-        
         <select id="findAll" resultMap="userResultMap">
             select <include refid="userColumns"></include>  
             from editor_user
@@ -74,5 +72,13 @@
             insert into editor_user(login_name,login_pwd,name,user_type,email,working_place,mobile,audit_status,remark,create_time,update_time) 
             values(#{loginName},#{loginPwd},#{name},#{userType},#{email},#{workingPlace},#{mobile},#{auditStatus},#{remark},#{createTime},#{updateTime})
         </insert>
+        
+        <update id="update" parameterType="User">
+            update editor_user 
+            set login_name = #{loginName},login_pwd = #{loginPwd},name = #{name},user_type = #{userType},
+            email = #{email},working_place = #{workingPlace},mobile = #{mobile},audit_status = #{auditStatus},
+            remark = #{remark},create_time = #{createTime},update_time = #{updateTime}
+            where id = #{id}
+        </update>
 	
 </mapper>  

@@ -25,6 +25,11 @@ public class TaskManageController {
 	@Autowired
 	private TaskService taskService;
 
+	/**
+	 * 任务列表
+	 * @param searchParams
+	 * @return
+	 */
 	@RequestMapping(value="/taskList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public CallResult<Page<TaskResponse>> taskList(@RequestParam Map<String,String> searchParams) {
@@ -51,6 +56,21 @@ public class TaskManageController {
 		
 		CallResult<Page<TaskResponse>> result = taskService.findTaskPage(handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "taskList result : {}", JsonUtils.toJson(result));
+		return result;
+	}
+	
+	/**
+	 * 重新分配
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/reAssign.do",method=RequestMethod.POST)
+	@ResponseBody
+	public CallResult<Boolean> reAssign(@RequestParam(value="taskId") int taskId , @RequestParam(value="userId") int userId) {
+		LogUtils.info(this.getClass(), "reAssign params : taskId = {} , userId = {}",taskId , userId);
+		
+		CallResult<Boolean> result = taskService.reAssignTask(taskId, userId);
+		LogUtils.info(this.getClass(), "reAssign result : {}", JsonUtils.toJson(result));
 		return result;
 	}
 }

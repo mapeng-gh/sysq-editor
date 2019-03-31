@@ -15,6 +15,21 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 
         private static String NAMESPACE = "mapper.UserMapper";
         
+        @Override
+	public User selectById(int id) {
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectById",id);
+	}
+        
+        @Override
+	public User selectByLoginName(String loginName) {
+		return super.getSqlSession().selectOne(NAMESPACE + ".selectByLoginName",loginName);
+	}
+        
+        @Override
+	public List<User> findByUserType(int userType) {
+		return super.getSqlSession().selectList(NAMESPACE + ".selectByUserType", userType);
+	}
+        
 	private Map<String,Object> handleFindParams(Map<String,String> searchParams){
 		if(searchParams != null) {
 			String name = searchParams.get("name");
@@ -56,20 +71,10 @@ public class UserDaoImpl extends BaseDao implements UserDao{
         	Map<String,Object> handledParams = this.handleFindParams(searchParams);
         	return super.getSqlSession().selectList(NAMESPACE + ".find",handledParams);
 	}
-
+	
 	@Override
 	public void insert(User newUser) {
 		super.getSqlSession().insert(NAMESPACE + ".insert", newUser);
-	}
-
-	@Override
-	public User selectByLoginName(String loginName) {
-		return super.getSqlSession().selectOne(NAMESPACE + ".selectByLoginName",loginName);
-	}
-
-	@Override
-	public User selectById(int id) {
-		return super.getSqlSession().selectOne(NAMESPACE + ".selectById",id);
 	}
 
 	@Override

@@ -187,6 +187,27 @@ public class TaskServiceImpl implements TaskService{
 			return CallResult.failure("查找任务失败");
 		}
 	}
+	
+	@Override
+	public CallResult<Boolean> reAssignTask(final int taskId, final int userId) {
+		LogUtils.info(this.getClass(), "reAssignTask params : taskId = {} , userId = {}", taskId , userId);
+		
+		try {
+			this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Task task = taskDao.selectById(taskId);
+					task.setUserId(userId);
+					task.setUpdateTime(new Date());
+					taskDao.update(task);
+				}
+			});
+			return CallResult.success(true);
+		}catch(Exception e) {
+			LogUtils.error(this.getClass(), "reAssignTask error", e);
+			return CallResult.failure("任务重新分配失败");
+		}
+	}
 
 	@Override
 	public CallResult<Page<TaskResponse>> findUserTaskPage(int userId, Map<String, Object> searchParams,int currentPage,int pageSize) {
