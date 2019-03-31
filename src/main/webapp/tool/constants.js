@@ -13,7 +13,7 @@
 				if(code == this.enums.ADMIN){
 					return '管理员';
 				}else if(code == this.enums.EDITOR){
-					return '编辑人员';
+					return '编辑员';
 				}else if(code == this.enums.VIEWER){
 					return '访谈员';
 				}

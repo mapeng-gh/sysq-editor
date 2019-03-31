@@ -2,20 +2,17 @@
 	var userManage4UserListComponent = {
 		template : `
             <div class="userManageList">
-                                
 				<div class="common-title">用户列表</div>
 				
+				<!-- 列表搜索 -->
 				<div class="common-search">
                     <el-form label-width="80px" label-position="left">
-				
 						<el-row :gutter="50">
-
 							<el-col :span="8">
 								<el-form-item label="姓名">
 									<el-input v-model="search.name" placeholder="请输入姓名"></el-input>
 								</el-form-item>
 							</el-col>
-
 							<el-col :span="8">
 								<el-form-item label="类型">
 									<el-select v-model="search.userType" style="width:100%;">
@@ -24,7 +21,6 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-								
 							<el-col :span="8">
 								<el-form-item label="审核状态">
 									<el-select v-model="search.auditStatus" style="width:100%;">
@@ -33,17 +29,15 @@
 									</el-select>
 								</el-form-item>
 							</el-col>
-
 						</el-row>
-				
 						<div class="common-search-opt">
 							<el-button plain type="primary" size="medium" @click="handleSearch">查询</el-button>
 							<el-button plain type="info" size="medium" @click="handleReset">重置</el-button>
 						</div>
-			
                     </el-form>
                 </div>
-                                        
+                            
+				<!-- 列表数据 -->			
 				<div class="common-list">
 					<el-table
 						:data="userList"
@@ -86,7 +80,8 @@
 						</el-table-column>
 					</el-table>
 				</div>
-                                        
+                         
+				<!-- 列表分页 -->			
 				<div class="common-pagination">
 					<el-pagination
 						:page-sizes="[10,20,30,50]"
@@ -101,23 +96,21 @@
 					</el-pagination>
 				</div>
 					
+				<!-- 账号审核对话框 -->
 				<el-dialog
 					title="账号审核"
 					:visible.sync="auditDialog.visible"
 					width="50%">
-					
 					<el-form  label-width="80px">
 						<el-form-item label="审核结果">
 							<el-radio-group v-model="auditDialog.auditStatus">
 								<el-radio v-for="item in auditDialog.auditStatusList" :label="item.code" :key="item.code">{{item.text}}</el-radio>
 							</el-radio-group>
 						</el-form-item>
-						
 						<el-form-item label="备注">
 							<el-input v-model="auditDialog.remark" type="textarea" :rows="4" placeholder="请输入备注信息"></el-input>
 						</el-form-item>
 					</el-form>
-					
 					<span slot="footer" class="dialog-footer">
 						<el-button @click="auditDialog.visible = false">取 消</el-button>
 						<el-button type="primary" @click="handleAudit" :loading="auditDialog.loading">确 定</el-button>
@@ -283,7 +276,7 @@
 			//密码重置
 			resetPwd : function(scope){
 				var self = this;
-				self.$commons.confirm('确定将用户【'+scope.row.loginName+'】密码重置为初始密码【sysq123】吗？','确认',function(){
+				self.$commons.confirm('确定将用户【'+scope.row.loginName+','+scope.row.name+'】密码重置为初始密码【sysq123】吗？','确认',function(){
 					self.$request.sendFormRequest(self.APIS.USER_RESET_PWD,{userId : scope.row.id},function(resultObject){
 						self.$message.success('操作成功');
 						
@@ -296,10 +289,10 @@
 				});
 			},
 			
-			//类型修改
+			//身份修改
 			changeType : function(scope){
 				var self = this;
-				self.$commons.confirm('确定将用户【'+scope.row.loginName+'】类型修改为【编辑人员】吗？','确认',function(){
+				self.$commons.confirm('确定将用户【'+scope.row.loginName+','+scope.row.name+'】身份从【'+this.$constants.USER_TYPE.getUserTypeText(this.$constants.USER_TYPE.enums.VIEWER)+'】更改为【'+this.$constants.USER_TYPE.getUserTypeText(this.$constants.USER_TYPE.enums.EDITOR)+'】吗？','确认',function(){
 					self.$request.sendFormRequest(self.APIS.USER_CHANGE_TYPE,{userId : scope.row.id , userType : self.$constants.USER_TYPE.enums.EDITOR},function(resultObject){
 						self.$message.success('操作成功');
 						
