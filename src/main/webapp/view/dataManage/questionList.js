@@ -13,36 +13,35 @@
 					<div class="question-desc" v-html="questionWrap.question.description == '' ? '暂无描述内容' : handleQuestionDesc(questionWrap.question.description)"></div>
 					
 					<div class="answer" v-for="answerWrap in questionWrap.answerList" :key="answerWrap.answer.id">
-						<div class="answer-label">{{answerWrap.answer.label? answerWrap.answer.label : answerWrap.answer.code}}</div>
+						<div class="answer-label" v-if="questionWrap.answerList.length > 1">{{answerWrap.answer.code}} {{answerWrap.answer.label && answerWrap.answer.label.startsWith(answerWrap.answer.code) ? answerWrap.answer.label.substring(answerWrap.answer.code.length) : answerWrap.answer.label}}</div>
 						<div class="answer-content">
 							
-							<el-input v-if="answerWrap.answer.type == 'text'" type="textarea" :rows="3"></el-input>
+							<el-input v-if="answerWrap.answer.type == 'text'" type="textarea" :rows="3" disabled></el-input>
 							
-							<el-radio-group v-if="answerWrap.answer.type == 'radiogroup'" :class="{vertical : answerWrap.answer.showType == 'vertical'}" :value="JSON.parse(answerWrap.answer.extra)[0].value">
+							<el-radio-group v-else-if="answerWrap.answer.type == 'radiogroup'" :class="{vertical : answerWrap.answer.showType == 'vertical'}" value="" disabled>
 								<el-radio v-for="item in JSON.parse(answerWrap.answer.extra)" :key="item.value" :label="item.value">{{item.text}}</el-radio>
 							</el-radio-group>
 							
-							<el-checkbox-group v-if="answerWrap.answer.type == 'checkbox'" :class="{vertical : answerWrap.answer.showType == 'vertical'}" :value="[JSON.parse(answerWrap.answer.extra)[0].value]">
+							<el-checkbox-group v-else-if="answerWrap.answer.type == 'checkbox'" :class="{vertical : answerWrap.answer.showType == 'vertical'}" value="" disabled>
 								<el-checkbox v-for="item in JSON.parse(answerWrap.answer.extra)" :key="item.value" :label="item.value">{{item.text}}</el-checkbox>
 							</el-checkbox-group>
 							
-							<el-date-picker v-if="answerWrap.answer.type == 'calendar'"
-								value="1988-07-03"
+							<el-date-picker v-else-if="answerWrap.answer.type == 'calendar'"
+								value=""
 								type="date"
 								format="yyyy-MM-dd"
 								value-format="yyyy-MM-dd"
 								:editable="false"
-								:clearable="false">
+								:clearable="false"
+								disabled>
 							</el-date-picker>
 							
-							<el-input-number v-if="answerWrap.answer.type == 'spinbox'" 
-								:value="JSON.parse(answerWrap.answer.extra).start" 
-								:min="JSON.parse(answerWrap.answer.extra).start" 
-								:step="JSON.parse(answerWrap.answer.extra).step" 
-								:max="JSON.parse(answerWrap.answer.extra).end">
+							<el-input-number v-else-if="answerWrap.answer.type == 'spinbox'" 
+								value="" 
+								disabled>
 							</el-input-number>
 							
-							<el-select v-if="answerWrap.answer.type == 'dropdownlist'">
+							<el-select v-else-if="answerWrap.answer.type == 'dropdownlist'" value="" disabled>
 								<el-option
 									v-for="item in JSON.parse(answerWrap.answer.extra)"
 									:key="item.value"
