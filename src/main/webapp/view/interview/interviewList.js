@@ -8,16 +8,28 @@
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="受访者">
-									<el-input v-model="search.name" placeholder="请输入受访者姓名"></el-input>
+								<el-form-item label="访谈编号">
+									<el-input v-model="search.interviewId" placeholder="请输入访谈编号" clearable></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
 								<el-form-item label="访谈类型">
-									<el-select v-model="search.type" style="width:100%;">
+									<el-select v-model="search.interviewType" style="width:100%;">
 										<el-option value="" label="全部"></el-option>
 										<el-option v-for="item in $constants.INTERVIEW_TYPE.getInterviewTypeList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
 									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="访谈员">
+									<el-input v-model="search.doctorName" placeholder="请输入访谈员姓名" clearable></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="50">
+							<el-col :span="8">
+								<el-form-item label="受访者">
+									<el-input v-model="search.patientName" placeholder="请输入受访者姓名" clearable></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -34,26 +46,21 @@
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="interview.id" label="访谈编号" align="center"></el-table-column>
-						<el-table-column prop="interview.type" label="访谈类型" align="center">
+						<el-table-column prop="interview.id" label="访谈编号" align="center" width="150"></el-table-column>
+						<el-table-column prop="interview.type" label="访谈类型" align="center" width="150">
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="受访者" align="center"></el-table-column>
-						<el-table-column prop="patient.mobile" label="联系电话" align="center"></el-table-column>
-						<el-table-column prop="patient.address" label="联系地址" width="250" align="center"  :show-overflow-tooltip="true">
-							<template slot-scope="scope">
-								{{scope.row.patient.province + '-' + scope.row.patient.city + '-' + scope.row.patient.address}}
-							</template>
-						</el-table-column>
-						<el-table-column prop="interview.endTime" label="访谈日期" width="180" align="center">
+						<el-table-column prop="patient.username" label="受访者" align="center" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="doctor.username" label="访谈员" align="center" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="interview.startTime" label="访谈日期" width="200" align="center">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.interview.endTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="interview.versionId" label="问卷版本" align="center"></el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" width="150">
+						<el-table-column prop="interview.versionId" label="问卷版本" align="center" width="150"></el-table-column>
+						<el-table-column prop="operate" label="操作" align="center" width="180">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleQuestionaireList(scope)">问卷列表</el-button>
 								<el-button type="text" size="mini" @click="handleDownloadAudio(scope)">下载录音</el-button>
@@ -90,8 +97,10 @@
 				interviewList : [],
 				
 				search : {
-					name : '',
-					type : ''
+					interviewId : '',
+					interviewType : '',
+					doctorName : '',
+					patientName : ''
 				},
 				
 				paginate : {
@@ -131,7 +140,7 @@
 			//重置
 			handleReset(){
 				var self = this;
-				this.search = {name : '' , type : ''};
+				this.search = {interviewId : '' , interviewType : '' , doctorName : '' , patientName : ''};
 				this.paginate.currentPage = 1;
 						
 				this.$request.sendGetRequest(this.APIS.INTERVIEW_LIST,this.$lodash.assign({},this.search,{currentPage:this.paginate.currentPage,pageSize:self.paginate.pageSize}),function(resultObject){

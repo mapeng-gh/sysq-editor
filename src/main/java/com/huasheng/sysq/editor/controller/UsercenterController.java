@@ -1,9 +1,10 @@
 package com.huasheng.sysq.editor.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,11 +17,10 @@ import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
-import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
 @RequestMapping(value="/usercenter")
-public class UsercenterController {
+public class UsercenterController extends BaseController{
 	
 	@Autowired
 	private UserService userService;
@@ -32,8 +32,8 @@ public class UsercenterController {
 	 */
 	@RequestMapping(value="/profile.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<UserResponse> profile(@RequestHeader(value="Authorization") String token) {
-		int userId = SessionCache.get(token).getId();
+	public CallResult<UserResponse> profile(HttpServletRequest request) {
+		int userId = super.getLoginUser(request).getId();
 		LogUtils.info(this.getClass(), "list params : userId = {}",userId);
 		
 		CallResult<UserResponse> result = userService.viewUser(userId);
@@ -50,8 +50,8 @@ public class UsercenterController {
 	 */
 	@RequestMapping(value="/modifyProfile.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Boolean> modifyProfile(@RequestHeader(value="Authorization") String token,@RequestBody String requestJsonStr) {
-		User loginUser = SessionCache.get(token);
+	public CallResult<Boolean> modifyProfile(HttpServletRequest request , @RequestBody String requestJsonStr) {
+		User loginUser = super.getLoginUser(request);
 		LogUtils.info(this.getClass(), "modifyProfile params : loginName = {},content = {}",loginUser.getLoginName(),requestJsonStr);
 		
 		//参数处理
@@ -76,8 +76,8 @@ public class UsercenterController {
 	
 	@RequestMapping(value="/modifyPwd.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Boolean> modifyPwd(@RequestHeader(value="Authorization") String token,@RequestBody String requestJsonStr) {
-		User loginUser = SessionCache.get(token);
+	public CallResult<Boolean> modifyPwd(HttpServletRequest request , @RequestBody String requestJsonStr) {
+		User loginUser = super.getLoginUser(request);
 		LogUtils.info(this.getClass(), "modifyPwd params : loginName = {},content = {}",loginUser.getLoginName(),requestJsonStr);
 		
 		//参数处理

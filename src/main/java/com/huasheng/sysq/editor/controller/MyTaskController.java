@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,11 +25,10 @@ import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
 import com.huasheng.sysq.editor.util.Page;
-import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
 @RequestMapping(value="/myTask")
-public class MyTaskController {
+public class MyTaskController extends BaseController{
 
 	@Autowired
 	private TaskService taskService;
@@ -41,8 +41,8 @@ public class MyTaskController {
 	 */
 	@RequestMapping(value="/taskList.do",method=RequestMethod.GET,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Page<TaskResponse>> taskList(@RequestHeader(value="Authorization") String token,@RequestParam Map<String,String> searchParams) {
-		LogUtils.info(this.getClass(), "taskList params : token = {},searchParams = {}",token,JsonUtils.toJson(searchParams));
+	public CallResult<Page<TaskResponse>> taskList(HttpServletRequest request , @RequestParam Map<String,String> searchParams) {
+		LogUtils.info(this.getClass(), "taskList params : searchParams = {}",JsonUtils.toJson(searchParams));
 		
 		//参数处理
 		int userId = 0;
@@ -50,7 +50,7 @@ public class MyTaskController {
 		int pageSize = 0;
 		Map<String,Object> handledParams = new HashMap<String,Object>();
 		try {
-			userId = SessionCache.get(token).getId();
+			userId = super.getLoginUser(request).getId();
 			handledParams.put("patientName",searchParams.get("patientName"));
 			String taskStatus = searchParams.get("taskStatus");
 			if(!StringUtils.isBlank(taskStatus)) {
@@ -60,7 +60,7 @@ public class MyTaskController {
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "taskList error", e);
-			return CallResult.failure("获取我的任务失败");
+			return CallResult.failure("获取我的任务失败 : 参数解析失败");
 		}
 		
 		CallResult<Page<TaskResponse>> result = taskService.findUserTaskPage(userId, handledParams, currentPage, pageSize);

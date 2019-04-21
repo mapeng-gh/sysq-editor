@@ -19,25 +19,27 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws Exception {
 		
-		//直接过滤
+		//忽略校验
 		String requestPath = request.getRequestURI();
 		if(ArrayUtils.contains(this.getExcludePaths(), requestPath)) {
 			return true;
 		}
 		
-		//token校验（请求头或者请求参数）
+		//获取来源
 		String token = request.getHeader("Authorization");
 		if(StringUtils.isBlank(token)) {
 			token = request.getParameter("Authorization");
 		}
-		if(StringUtils.isBlank(token) || SessionCache.get(token) == null) {
+		
+		//请求拦截
+		if(StringUtils.isBlank(token) || SessionCache.getSession(token) == null) {
 			response.setHeader("Content-Type", "application/json;charset=UTF-8");
 			response.getWriter().write(JsonUtils.toJson(CallResult.failure(-2,"用户未登录")));
 			return false;
 		}
 		
 		//当前用户
-		ThreadLocalUtils.setLoginUser(SessionCache.get(token));
+		ThreadLocalUtils.setLoginUser(SessionCache.getSession(token));
 		return true;
 	}
 	

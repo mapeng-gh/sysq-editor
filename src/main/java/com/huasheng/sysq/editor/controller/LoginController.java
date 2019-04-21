@@ -2,11 +2,9 @@ package com.huasheng.sysq.editor.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,10 +17,9 @@ import com.huasheng.sysq.editor.service.UserService;
 import com.huasheng.sysq.editor.util.CallResult;
 import com.huasheng.sysq.editor.util.JsonUtils;
 import com.huasheng.sysq.editor.util.LogUtils;
-import com.huasheng.sysq.editor.util.SessionCache;
 
 @Controller
-public class LoginController {
+public class LoginController extends BaseController{
 	
 	@Autowired
 	private UserService userService;
@@ -61,21 +58,10 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/logout.do",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public CallResult<Boolean> logout(@RequestHeader(value="Authorization",required=false) String token) {
-		LogUtils.info(this.getClass(), "logout params : token = {}",token);
+	public CallResult<Boolean> logout(HttpServletRequest request) {
+		LogUtils.info(this.getClass(), "logout");
 		
-		if(StringUtils.isBlank(token)) {
-			LogUtils.info(this.getClass(), "logout result : token is empty");
-			return CallResult.success(true);
-		}
-		
-		User loginUser = SessionCache.get(token);
-		if(loginUser == null) {
-			LogUtils.info(this.getClass(), "logout result : token not exists");
-			return CallResult.success(true);
-		}
-		
-		SessionCache.remove(token);
+		super.remLoginUser(request);
 		LogUtils.info(this.getClass(), "logout result : success");
 		
 		return CallResult.success(true);

@@ -3,7 +3,6 @@ package com.huasheng.sysq.editor.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -162,8 +161,8 @@ public class UserServiceImpl implements UserService{
 			}
 			
 			//保存会话
-			String token = SessionCache.USER_LOGIN_KEY + UUID.randomUUID().toString();
-			SessionCache.add(token, loginUser);
+			String token = SessionCache.genRandomKey();
+			SessionCache.addSession(token, loginUser);
 			
 			//登录日志
 			try {
