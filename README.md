@@ -1,8 +1,5 @@
-## dev
-mvn clean package -Dmaven.test.skip=true -Denv=dev
+mvn clean package -Dmaven.test.skip=true -P dev
 
-## test
-mvn clean package -Dmaven.test.skip=true -Denv=test
+mvn clean package -Dmaven.test.skip=true -P test
 
-## prod
-mvn clean package -Dmaven.test.skip=true -Denv=prod
+mvn clean package -Dmaven.test.skip=true -P prod

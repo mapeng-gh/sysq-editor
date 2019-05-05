@@ -24,19 +24,19 @@ public class CommonController {
 	
 	private static final String MSG_CONTENT_TYPE = "text/plain;charset=utf-8";
 	
-	@Value("#{appProperties['ftp.host']}")
+	@Value("${ftp.host}")
 	private String FTP_HOST;
 	
-	@Value("#{appProperties['ftp.port']}")
+	@Value("${ftp.port}")
 	private int FTP_PORT;
 	
-	@Value("#{appProperties['ftp.user']}")
+	@Value("${ftp.user}")
 	private String FTP_USER;
 	
-	@Value("#{appProperties['ftp.passwd']}")
+	@Value("${ftp.passwd}")
 	private String FTP_PASSWD;
 	
-	@Value("#{appProperties['ftp.workingDir']}")
+	@Value("${ftp.workingDir}")
 	private String FTP_WORKING_DIR;
 	
 	/**

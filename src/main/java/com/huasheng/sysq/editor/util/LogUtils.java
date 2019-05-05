@@ -15,4 +15,8 @@ public class LogUtils {
 	public static void error(Class<?> clz,String msg,Throwable ex) {
 		LoggerFactory.getLogger(clz).error(msg, ex);
 	}
+	
+	public static void error(Class<?> clz,String msg) {
+		LoggerFactory.getLogger(clz).error(msg);
+	}
 }

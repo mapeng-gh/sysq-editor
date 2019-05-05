@@ -46,12 +46,12 @@
         </encoder> 
        </appender>
 
-  	<logger name="com.huasheng.sysq.editor" level="INFO" additivity="false">
+  	<logger name="com.huasheng.sysq.editor" level="${log.level}" additivity="false">
   	    	<appender-ref ref="DEFAULT-APPENDER"/>
   	    	<appender-ref ref="ERROR-APPENDER"/>
   	</logger>
   	
-  	<root level="DEBUG">
+  	<root level="${log.level}">
     		<appender-ref ref="FRAMEWORK-APPENDER" />
   	</root>
   	
