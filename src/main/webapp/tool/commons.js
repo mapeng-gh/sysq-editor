@@ -1,7 +1,5 @@
 (function(){
 	
-	var Message = Vue.prototype.$message;
-		  
 	//日期格式化
 	function formatDate(date,format){
 		format = format || 'YYYY-MM-DD HH:mm:ss';
@@ -38,7 +36,7 @@
 	function download(pathname,params){
 		var loginUser = getLoginUser();
 		if(!loginUser){
-			Message.error('请重新登录后再操作');
+			Vue.prototype.$message.error('请重新登录后再操作');
 			return;
 		}
 		
@@ -119,18 +117,37 @@
 	}
 
 	//提示对话框
-	function alert(message,title,confirmCallback){
+	function alert(title,message,confirmBtnText,confirmCallback){
 		Vue.prototype.$alert(message,title,{
 			dangerouslyUseHTMLString : true,
 			closeOnClickModal : false,
 			closeOnPressEscape : false,
-			confirmButtonText : '知道了',
+			confirmButtonText : confirmBtnText,
 			callback : function(action){
 				if(action == 'confirm'){
 					confirmCallback();
 				}
 			}
 		});
+	}
+	
+	//显示加载框
+	var loadingObj = null;
+	function loading(text){
+		loadingObj = Vue.prototype.$loading({
+			fullscreen : true,
+			lock : true,
+			text : text || '正在处理中,请稍候...',
+			spinner: 'el-icon-loading',
+	        background: 'rgba(0, 0, 0, 0.5)'
+		});
+	}
+	
+	//关闭加载框
+	function closeLoading(){
+		if(loadingObj){
+			loadingObj.close();
+		}
 	}
 
 	window.commons = {
@@ -144,7 +161,9 @@
 		confirm : confirm,
 		prompt : prompt,
 		alert : alert,
-		download : download
+		download : download,
+		loading,
+		closeLoading
 	}
       
 })();

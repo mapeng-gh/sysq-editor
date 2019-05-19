@@ -3,20 +3,9 @@
     var Message = Vue.prototype.$message;
       
 	//全局配置
-	axios.defaults.timeout = 30000;
+	axios.defaults.timeout = 60000;
 	axios.defaults.baseURL = location.protocol + "//" + location.host;
 
-	//错误请求处理
-	var handleError = function(error){
-		if(error.response){
-			Message.error('服务端处理失败: ' + error.response.status + ' ' + error.response.statusText);
-		}else if(error.request){
-			Message.error('请求连接超时：' + error.config.url);
-		}else{
-			Message.error(error);
-		}
-	};
-        
 	//请求拦截
 	axios.interceptors.request.use((config)=>{
 		if(config.url == '/login.do' || config.url == '/register.do'){
@@ -79,6 +68,7 @@
 	var handleRequest = function(response,successCB,errorCB){
 		var result = response.data;
 		if(result.code == -2){
+			commons.closeLoading();
 			commons.goLogin();
 		}else if(result.code == 1){
 			successCB(result.resultObject);
@@ -86,10 +76,23 @@
 			if(errorCB){
 				errorCB(result);
 			}else{
+				commons.closeLoading();
 				Message.error(result.msg);
 			}
 		}
 	}
+	
+	//错误请求处理
+	var handleError = function(error){
+		commons.closeLoading();
+		if(error.response){
+			Message.error('服务端处理失败: ' + error.response.status + ' ' + error.response.statusText);
+		}else if(error.request){
+			Message.error('请求连接超时：' + error.config.url);
+		}else{
+			Message.error(error);
+		}
+	};
         
 	window.request = {
 		sendGetRequest : sendGetRequest,

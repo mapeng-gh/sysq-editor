@@ -51,7 +51,11 @@ public class MyTaskController extends BaseController{
 		Map<String,Object> handledParams = new HashMap<String,Object>();
 		try {
 			userId = super.getLoginUser(request).getId();
-			handledParams.put("patientName",searchParams.get("patientName"));
+			String interviewId = searchParams.get("interviewId");
+			if(!StringUtils.isBlank(interviewId)) {
+				handledParams.put("interviewId", Integer.parseInt(interviewId));
+			}
+			handledParams.put("doctorName",searchParams.get("doctorName"));
 			String taskStatus = searchParams.get("taskStatus");
 			if(!StringUtils.isBlank(taskStatus)) {
 				handledParams.put("taskStatus", Integer.parseInt(taskStatus));

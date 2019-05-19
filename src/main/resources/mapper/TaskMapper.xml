@@ -66,9 +66,11 @@
 	    	from editor_task task 
 	    	inner join editor_user usr on task.user_id = usr.id 
 	    	inner join sysq_interview interview on task.interview_id = interview.id 
-	    	inner join sysq_patient patient on interview.patient_id = patient.id 
+	    	inner join sysq_patient patient on interview.patient_id = patient.id
+	    	inner join sysq_doctor doctor on interview.doctor_id = doctor.id  
 	    	where task.user_id = #{userId} 
-	    	<if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
+	    	<if test="interviewId != null">and interview.id = #{interviewId}</if>
+	    	<if test="doctorName != null and doctorName != ''">and doctor.username like concat(concat('%',#{doctorName}),'%')</if>
 	    	<if test="taskStatus != null">and task.status = #{taskStatus}</if>
             	order by task.create_time desc 
             	limit #{offset},#{limit}
@@ -80,9 +82,11 @@
 		inner join editor_user usr on task.user_id = usr.id 
 		inner join sysq_interview interview on task.interview_id = interview.id 
 		inner join sysq_patient patient on interview.patient_id = patient.id 
+		inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
 		where task.user_id = #{userId} 
-		<if test="patientName != null and patientName != ''">and patient.username like concat(concat('%',#{patientName}),'%')</if>
-		<if test="taskStatus != null">and task.status = #{taskStatus}</if>
+		<if test="interviewId != null">and interview.id = #{interviewId}</if>
+	    	<if test="doctorName != null and doctorName != ''">and doctor.username like concat(concat('%',#{doctorName}),'%')</if>
+	    	<if test="taskStatus != null">and task.status = #{taskStatus}</if>
 	</select>
         
 	<select id="findByInterviewId" parameterType="_int" resultMap="allResultMap">

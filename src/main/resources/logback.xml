@@ -10,7 +10,7 @@
     <!-- 业务默认日志 -->
   	<appender name="DEFAULT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender" >
   	    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-  	        <fileNamePattern>${home_dir}\\default\\default.log.%d{yyyy-MM-dd}</fileNamePattern>
+  	        <fileNamePattern>${home_dir}\\default\\default_log.%d{yyyy-MM-dd}.log</fileNamePattern>
   	        <maxHistory>30</maxHistory>
   	    </rollingPolicy>
   	    <encoder>
@@ -25,7 +25,7 @@
 	        <level>ERROR</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-	        <fileNamePattern>${home_dir}\\error\\error.log.%d{yyyy-MM-dd}</fileNamePattern>
+	        <fileNamePattern>${home_dir}\\error\\error_log.%d{yyyy-MM-dd}.log</fileNamePattern>
 	        <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -37,7 +37,7 @@
   	<!-- 框架日志 -->
   	<appender name="FRAMEWORK-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${home_dir}\\framework\\framework.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<fileNamePattern>${home_dir}\\framework\\framework_log.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>

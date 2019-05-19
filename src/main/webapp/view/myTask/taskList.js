@@ -3,18 +3,21 @@
 		
 		template : `
 			<div class="my-task-task-list">
-			
 				<div class="common-title">任务列表</div>
 				
 				<div class="common-search">
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="受访者">
-									<el-input v-model="search.patientName" placeholder="请输入受访者姓名"></el-input>
+								<el-form-item label="访谈编号">
+									<el-input v-model="search.interviewId" placeholder="请输入访谈编号" clearable></el-input>
 								</el-form-item>
 							</el-col>
-							
+							<el-col :span="8">
+								<el-form-item label="访谈员">
+									<el-input v-model="search.doctorName" placeholder="请输入访谈员姓名" clearable></el-input>
+								</el-form-item>
+							</el-col>
 							<el-col :span="8">
 								<el-form-item label="任务状态">
 									<el-select v-model="search.taskStatus" style="width:100%;">
@@ -24,13 +27,11 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-			
 						<div class="common-search-opt">
 							<el-button plain type="primary" size="medium" @click="handleSearch">查询</el-button>
 							<el-button plain type="info" size="medium" @click="handleReset">重置</el-button>
 						</div>
 					</el-form>
-	
 				</div>
 				
 				<div class="common-list">
@@ -39,14 +40,14 @@
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="task.id" label="任务编号" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="task.id" label="编号" align="center" width="80"></el-table-column>
 						<el-table-column prop="interview.id" label="访谈编号" align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.type" label="访谈类型" align="center" :show-overflow-tooltip="true">
+						<el-table-column prop="interview.type" label="访谈类型" align="center" width="100">
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="受访者" align="center" :show-overflow-tooltip="true"></el-table-column>
+						<el-table-column prop="doctor.username" label="访谈员" align="center" :show-overflow-tooltip="true"></el-table-column>,
 						<el-table-column prop="task.createTime" label="创建时间" align="center" width="180" :show-overflow-tooltip="true">
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.createTime)}}
@@ -57,7 +58,7 @@
 								{{$commons.formatDate(scope.row.task.updateTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="task.status" label="任务状态" align="center" :show-overflow-tooltip="true">
+						<el-table-column prop="task.status" label="任务状态" align="center" width="100">
 							<template slot-scope="scope">
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.ASSIGNED" type="info">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.EDITING" type="warning">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
@@ -103,7 +104,8 @@
 				},
 				
 				search : {
-					patientName : '',
+					interviewId : '',
+					doctorName : '',
 					taskStatus : ''
 				},
 				
@@ -147,7 +149,7 @@
 			//重置
 			handleReset : function(){
 				var self = this;
-				this.search = {patientName : '' , taskStatus : ''},
+				this.search = {interviewId : '' , doctorName : '' , taskStatus : ''},
 				this.paginate.currentPage = 1;
 				
 				this.$request.sendGetRequest(this.APIS.TASK_LIST,this.$lodash.assign({},this.search,{currentPage : this.paginate.currentPage,pageSize:this.paginate.pageSize}),(resultObject)=>{
@@ -189,8 +191,10 @@
 				var self = this;
 				
 				if(scope.row.task.status == this.$constants.TASK_STATUS.enums.ASSIGNED){//新分配的任务需进行初始化
-					self.$commons.alert('首次编辑需要初始化任务，此操作比较耗时，请耐心等待...','提示',function(){
+					self.$commons.alert('提示','首次编辑需要初始化任务，此操作比较耗时，请耐心等待...','确定',function(){
+						self.$commons.loading();
 						self.$request.sendPostRequest(self.APIS.INIT_TASK,{taskId : scope.row.task.id},(resultObject)=>{
+							self.$commons.closeLoading();
 							self.$message.success('任务初始化成功');
 							self.$router.push({name : 'myTask4QuestionaireList' , query : {taskId : scope.row.task.id}});
 						});

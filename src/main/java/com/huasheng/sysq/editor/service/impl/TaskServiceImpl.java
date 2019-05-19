@@ -226,6 +226,7 @@ public class TaskServiceImpl implements TaskService{
 					Interview interview = interviewDao.selectById(task.getInterviewId());
 					taskResponse.setInterview(interview);
 					taskResponse.setPatient(patientDao.selectById(interview.getPatientId()));
+					taskResponse.setDoctor(doctorDao.selectById(interview.getDoctorId()));
 					taskResponseList.add(taskResponse);
 				}
 			}
@@ -589,9 +590,10 @@ public class TaskServiceImpl implements TaskService{
 						LogUtils.info(this.getClass(), "initTask : update task status success");
 					}
 				});
+				return CallResult.success(true);
+			}else {
+				return CallResult.failure("该访谈没有问卷");
 			}
-			
-			return CallResult.success(true);
 			
 		}catch(Exception e) {
 			LogUtils.error(this.getClass(), "initTask error", e);

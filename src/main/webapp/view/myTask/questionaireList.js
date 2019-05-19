@@ -47,7 +47,7 @@
 			
 			//问题列表
 			handleQuestionList : function(editorQuestionaireResponse){
-				this.$commons.openWindow('#/myTask/questionList',{taskId : this.params.taskId , questionaireCode : editorQuestionaireResponse.questionaire.code});
+				this.$router.push({name : 'myTask4QuestionList' , query : {taskId : this.params.taskId , questionaireCode : editorQuestionaireResponse.questionaire.code}});
 			},
 			
 			//返回
