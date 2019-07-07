@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.huasheng.sysq.editor.dao.InterviewDao;
 import com.huasheng.sysq.editor.model.Interview;
+import com.huasheng.sysq.editor.model.User;
 
 @Repository
 public class InterviewDaoImpl extends BaseDao implements InterviewDao{
@@ -15,12 +16,13 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	private static String NAMESPACE = "mapper.InterviewMapper";
 	
 	@Override
-	public List<Interview> findUserInterviewPage(String loginName,Map<String, Object> searchParams,int currentPage,int pageSize) {
+	public List<Interview> findUserInterviewPage(User user,Map<String, Object> searchParams,int currentPage,int pageSize) {
 		if(searchParams == null) {
 			searchParams = new HashMap<String,Object>();
 		}
 		
-		searchParams.put("loginName", loginName);
+		searchParams.put("loginName", user.getLoginName());
+		searchParams.put("userType", user.getUserType());
 		searchParams.put("offset", (currentPage - 1) * pageSize);
 		searchParams.put("limit", pageSize);
 		
@@ -28,11 +30,12 @@ public class InterviewDaoImpl extends BaseDao implements InterviewDao{
 	}
 
 	@Override
-	public int countUserInterview(String loginName,Map<String, Object> searchParams) {
+	public int countUserInterview(User user,Map<String, Object> searchParams) {
 		if(searchParams == null) {
 			searchParams = new HashMap<String,Object>();
 		}
-		searchParams.put("loginName", loginName);
+		searchParams.put("loginName", user.getLoginName());
+		searchParams.put("userType", user.getUserType());
 		
 		return this.getSqlSession().selectOne(NAMESPACE + ".countUserInterview", searchParams);
 	}

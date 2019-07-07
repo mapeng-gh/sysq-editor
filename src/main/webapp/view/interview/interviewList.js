@@ -54,8 +54,8 @@
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="patient.username" label="受访者" align="center" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="doctor.username" label="访谈员" align="center" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="patient.username" label="受访者" align="center" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="interview.startTime" label="访谈日期" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.interview.endTime)}}

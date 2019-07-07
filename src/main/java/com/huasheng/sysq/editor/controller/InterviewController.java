@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huasheng.sysq.editor.model.Questionaire;
+import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.service.InterviewService;
@@ -42,12 +43,12 @@ public class InterviewController extends BaseController{
 		LogUtils.info(this.getClass(), "interviewList params : {}",JsonUtils.toJson(searchParams));
 		
 		//参数处理
-		String loginName;
+		User loginUser;
 		Map<String,Object> handledParams = new HashMap<String,Object>();
 		int currentPage = 0;
 		int pageSize = 0;
 		try {
-			loginName = super.getLoginUser(request).getLoginName();
+			loginUser = super.getLoginUser(request);
 			
 			if(!StringUtils.isBlank(searchParams.get("interviewId"))) {
 				handledParams.put("interviewId", Integer.valueOf(searchParams.get("interviewId")));
@@ -71,7 +72,7 @@ public class InterviewController extends BaseController{
 		}
 		
 		//查询访谈
-		CallResult<Page<InterviewResponse>> result = interviewService.findUserInterviewPage(loginName, handledParams, currentPage, pageSize);
+		CallResult<Page<InterviewResponse>> result = interviewService.findUserInterviewPage(loginUser, handledParams, currentPage, pageSize);
 		LogUtils.info(this.getClass(), "interviewList result : {}", JsonUtils.toJson(result));
 		return result;
 	}

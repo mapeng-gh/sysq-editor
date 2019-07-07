@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.huasheng.sysq.editor.model.Interview;
+import com.huasheng.sysq.editor.model.User;
 
 public interface InterviewDao {
 	
@@ -22,7 +23,7 @@ public interface InterviewDao {
 	 * @param pageSize
 	 * @return
 	 */
-	public List<Interview> findUserInterviewPage(String loginName,Map<String,Object> searchParams,int currentPage,int pageSize);
+	public List<Interview> findUserInterviewPage(User user,Map<String,Object> searchParams,int currentPage,int pageSize);
 	
 	/**
 	 * 统计用户访谈
@@ -30,7 +31,7 @@ public interface InterviewDao {
 	 * @param searchParams
 	 * @return
 	 */
-	public int countUserInterview(String loginName,Map<String,Object> searchParams);
+	public int countUserInterview(User user,Map<String,Object> searchParams);
 	
 	/**
 	 * 查找未分配访谈列表

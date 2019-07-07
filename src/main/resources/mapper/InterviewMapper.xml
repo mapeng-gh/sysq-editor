@@ -25,10 +25,13 @@
         <select id="findUserInterviewPage" parameterType="hashmap" resultMap="allResultMap">
                  select interview.id,interview.doctor_id,interview.patient_id,interview.type,interview.start_time,interview.end_time,interview.version_id 
 	         from sysq_interview interview 
+	        <if test="userType == 2"> inner join editor_task task on task.interview_id = interview.id </if>
+	        <if test="userType == 2"> inner join editor_user user on task.user_id = user.id </if>
 	         inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
 	         inner join sysq_patient patient on interview.patient_id = patient.id 
 	         where 1 = 1 
-	         <if test="loginName != null and loginName != ''">and doctor.mobile = #{loginName}</if>
+	         <if test="userType == 3">and doctor.mobile = #{loginName}</if>
+	         <if test="userType == 2">and user.login_name = #{loginName}</if>
 	         <if test="interviewId != null">and interview.id = #{interviewId}</if>
                  <if test="interviewType != null">and interview.type = #{interviewType}</if>
                  <if test="doctorName != null and doctorName != ''">and doctor.username like concat(concat('%',#{doctorName}),'%')</if>
@@ -40,10 +43,13 @@
         <select id="countUserInterview" parameterType="hashmap" resultType="_int">
 	         select count(interview.id) 
 	         from sysq_interview interview 
+	        <if test="userType == 2"> inner join editor_task task on task.interview_id = interview.id </if>
+	        <if test="userType == 2"> inner join editor_user user on task.user_id = user.id </if>
 	         inner join sysq_doctor doctor on interview.doctor_id = doctor.id 
 	         inner join sysq_patient patient on interview.patient_id = patient.id 
 	         where 1 = 1 
-	         <if test="loginName != null and loginName != ''">and doctor.mobile = #{loginName}</if>
+	         <if test="userType == 3">and doctor.mobile = #{loginName}</if>
+	         <if test="userType == 2">and user.login_name = #{loginName}</if>
 	         <if test="interviewId != null">and interview.id = #{interviewId}</if>
                  <if test="interviewType != null">and interview.type = #{interviewType}</if>
                  <if test="doctorName != null and doctorName != ''">and doctor.username like concat(concat('%',#{doctorName}),'%')</if>

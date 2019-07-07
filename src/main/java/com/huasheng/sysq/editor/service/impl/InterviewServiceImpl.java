@@ -73,18 +73,12 @@ public class InterviewServiceImpl implements InterviewService{
 	private EditorResultDao editorResultDao;
 
 	@Override
-	public CallResult<Page<InterviewResponse>> findUserInterviewPage(String loginName,Map<String,Object> searchParams,int currentPage,int pageSize) {
-		LogUtils.info(this.getClass(), "findUserInterviewPage params : loginName = {},searchParams = {},currentPage = {},pageSize = {}",loginName,JsonUtils.toJson(searchParams),currentPage,pageSize);
+	public CallResult<Page<InterviewResponse>> findUserInterviewPage(User user,Map<String,Object> searchParams,int currentPage,int pageSize) {
+		LogUtils.info(this.getClass(), "findUserInterviewPage params : loginName = {},searchParams = {},currentPage = {},pageSize = {}",user.getLoginName(),JsonUtils.toJson(searchParams),currentPage,pageSize);
 		
 		try {
-			//获取用户类型
-			User loginUser = userDao.selectByLoginName(loginName);
-			if(loginUser.getUserType() == Constants.USER_TYPE_ADMIN) {
-				loginName = "";
-			}
-			
 			//查询访谈
-			List<Interview> interviewList = interviewDao.findUserInterviewPage(loginName, searchParams, currentPage, pageSize);
+			List<Interview> interviewList = interviewDao.findUserInterviewPage(user, searchParams, currentPage, pageSize);
 			
 			//关联数据
 			List<InterviewResponse> interviewResponseList = new ArrayList<InterviewResponse>(); 
@@ -99,7 +93,7 @@ public class InterviewServiceImpl implements InterviewService{
 			}
 			
 			//统计
-			int total = interviewDao.countUserInterview(loginName, searchParams);
+			int total = interviewDao.countUserInterview(user, searchParams);
 			
 			return CallResult.success(new Page<InterviewResponse>(interviewResponseList,currentPage,pageSize,total));
 			

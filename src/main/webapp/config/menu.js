@@ -44,9 +44,9 @@
 			name: '访谈查询',
 			index: '/interview',
 			icon: 'fa fa-eye',
-			auths : [1,3],
+			auths : [1,2,3],
 			sub: [
-				{index : '/interview/interviewList' , name: '访谈列表' , auths : [1,3]}
+				{index : '/interview/interviewList' , name: '访谈列表' , auths : [1,2,3]}
 			]
         },
 	    

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.huasheng.sysq.editor.model.Questionaire;
+import com.huasheng.sysq.editor.model.User;
 import com.huasheng.sysq.editor.params.InterviewResponse;
 import com.huasheng.sysq.editor.params.QuestionResponse;
 import com.huasheng.sysq.editor.util.CallResult;
@@ -16,7 +17,7 @@ public interface InterviewService {
 	 * @param searchParams
 	 * @return
 	 */
-	public CallResult<Page<InterviewResponse>> findUserInterviewPage(String loginName,Map<String,Object> searchParams,int currentPage,int pageSize);
+	public CallResult<Page<InterviewResponse>> findUserInterviewPage(User user,Map<String,Object> searchParams,int currentPage,int pageSize);
 	
 	/**
 	 * 查找问卷列表
