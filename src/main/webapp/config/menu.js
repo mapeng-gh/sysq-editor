@@ -1,7 +1,5 @@
 (function(){
-	
 	var menuList = [
-                
 		{
 			name: '用户管理',
 			index: '/userManage',
@@ -77,5 +75,4 @@
 	];
 	
 	window.menuList = menuList;
-	
 })();

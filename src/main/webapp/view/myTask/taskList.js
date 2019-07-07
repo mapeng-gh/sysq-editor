@@ -1,25 +1,25 @@
 (function(){
 	var myTask4TaskListComponent = {
-		
 		template : `
 			<div class="my-task-task-list">
 				<div class="common-title">任务列表</div>
 				
+				<!-- 列表搜索 -->
 				<div class="common-search">
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="访谈编号">
+								<el-form-item label="访谈编号 : ">
 									<el-input v-model="search.interviewId" placeholder="请输入访谈编号" clearable></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item label="访谈员">
+								<el-form-item label="访谈员 : ">
 									<el-input v-model="search.doctorName" placeholder="请输入访谈员姓名" clearable></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item label="任务状态">
+								<el-form-item label="任务状态 : ">
 									<el-select v-model="search.taskStatus" style="width:100%;">
 										<el-option value="" label="全部"></el-option>
 										<el-option v-for="item in $constants.TASK_STATUS.getTaskStatusList()" :key="item.code" :label="item.text" :value="item.code"></el-option>
@@ -34,38 +34,38 @@
 					</el-form>
 				</div>
 				
+				<!-- 列表数据 -->
 				<div class="common-list">
 					<el-table
 						:data="taskList"
 						border
 						header-cell-class-name="common-table-header"
 						style="width: 100%">
-						<el-table-column prop="task.id" label="编号" align="center" width="80"></el-table-column>
-						<el-table-column prop="interview.id" label="访谈编号" align="center" :show-overflow-tooltip="true"></el-table-column>
-						<el-table-column prop="interview.type" label="访谈类型" align="center" width="100">
+						<el-table-column prop="interview.id" label="访谈编号" align="center" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="interview.type" label="访谈类型" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								{{$constants.INTERVIEW_TYPE.getInterviewTypeText(scope.row.interview.type)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="doctor.username" label="访谈员" align="center" :show-overflow-tooltip="true"></el-table-column>,
-						<el-table-column prop="task.createTime" label="创建时间" align="center" width="180" :show-overflow-tooltip="true">
+						<el-table-column prop="doctor.username" label="访谈员" align="center" show-overflow-tooltip></el-table-column>,
+						<el-table-column prop="task.createTime" label="创建时间" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.createTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="task.updateTime" label="更新时间" align="center" width="180" :show-overflow-tooltip="true">
+						<el-table-column prop="task.updateTime" label="更新时间" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								{{$commons.formatDate(scope.row.task.updateTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="task.status" label="任务状态" align="center" width="100">
+						<el-table-column prop="task.status" label="任务状态" align="center" show-overflow-tooltip>
 							<template slot-scope="scope">
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.ASSIGNED" type="info">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.EDITING" type="warning">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 								<el-tag v-if="scope.row.task.status == $constants.TASK_STATUS.enums.FINISHED" type="success">{{$constants.TASK_STATUS.getTaskStatusText(scope.row.task.status)}}</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="operate" label="操作" align="center" width="270" :show-overflow-tooltip="true">
+						<el-table-column prop="operate" label="操作" align="center" width="270">
 							<template slot-scope="scope">
 								<el-button type="text" size="mini" @click="handleTaskDetail(scope)">任务详情</el-button>
 								<el-button type="text" size="mini" @click="handleDownloadAudio(scope)">下载录音</el-button>
@@ -76,6 +76,7 @@
                     </el-table>
 				</div>
 				
+				<!-- 列表分页 -->
 				<div class="common-pagination">
 					<el-pagination
 						:page-sizes="[10,20,30,50]"
