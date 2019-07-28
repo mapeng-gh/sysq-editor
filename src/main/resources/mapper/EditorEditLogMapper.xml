@@ -31,9 +31,12 @@
                  select <include refid="allColumns"></include> 
 	         from editor_edit_log 
 	         where 1 = 1 
+	          <if test="interviewId != null">and interview_id = #{interviewId}</if>
+	          <if test="questionaireCode != null and questionaireCode != ''">and questionaire_code like concat(concat('%',#{questionaireCode}),'%')</if> 
+	          <if test="questionCode != null and questionCode != ''">and question_code like concat(concat('%',#{questionCode}),'%')</if> 
+	          <if test="loginName != null and loginName != ''">and login_name like concat(concat('%',#{loginName}),'%')</if> 
                  <if test="startTime != null and startTime != ''">and edit_time &gt;= #{startTime}</if>
                  <if test="endTime != null and endTime != ''">and edit_time &lt;= #{endTime}</if>
-                 <if test="loginName != null and loginName != ''">and login_name = #{loginName}</if> 
                  order by edit_time desc 
                  limit #{offset},#{limit}
 	</select>
@@ -42,9 +45,12 @@
                  select count(id)
 	         from editor_edit_log 
 	         where 1 = 1 
+                 <if test="interviewId != null">and interview_id = #{interviewId}</if>
+	          <if test="questionaireCode != null and questionaireCode != ''">and questionaire_code like concat(concat('%',#{questionaireCode}),'%')</if> 
+	          <if test="questionCode != null and questionCode != ''">and question_code like concat(concat('%',#{questionCode}),'%')</if> 
+	          <if test="loginName != null and loginName != ''">and login_name like concat(concat('%',#{loginName}),'%')</if> 
                  <if test="startTime != null and startTime != ''">and edit_time &gt;= #{startTime}</if>
                  <if test="endTime != null and endTime != ''">and edit_time &lt;= #{endTime}</if>
-                 <if test="loginName != null and loginName != ''">and login_name = #{loginName}</if>
 	</select>
 	
 </mapper>  

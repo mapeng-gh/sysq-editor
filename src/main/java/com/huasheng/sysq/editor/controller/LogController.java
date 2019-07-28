@@ -3,6 +3,7 @@ package com.huasheng.sysq.editor.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,9 +71,25 @@ public class LogController {
 		int currentPage = 0;
 		int pageSize = 0;
 		try {
-			handledParams.put("startTime",searchParams.get("startTime"));
-			handledParams.put("endTime",searchParams.get("endTime"));
-			handledParams.put("loginName", searchParams.get("loginName"));
+			if(!StringUtils.isBlank(searchParams.get("interviewId"))) {
+				handledParams.put("interviewId", Integer.parseInt(searchParams.get("interviewId")));
+			}
+			if(!StringUtils.isBlank(searchParams.get("questionaireCode"))) {
+				handledParams.put("questionaireCode",searchParams.get("questionaireCode"));
+			}
+			if(!StringUtils.isBlank(searchParams.get("questionCode"))) {
+				handledParams.put("questionCode", searchParams.get("questionCode"));
+			}
+			if(!StringUtils.isBlank(searchParams.get("loginName"))) {
+				handledParams.put("loginName", searchParams.get("loginName"));
+			}
+			if(!StringUtils.isBlank(searchParams.get("startTime"))) {
+				handledParams.put("startTime", searchParams.get("startTime"));
+			}
+			if(!StringUtils.isBlank(searchParams.get("endTime"))) {
+				handledParams.put("endTime", searchParams.get("endTime"));
+			}
+			
 			currentPage = Integer.parseInt(searchParams.get("currentPage"));
 			pageSize = Integer.parseInt(searchParams.get("pageSize"));
 		}catch(Exception e) {

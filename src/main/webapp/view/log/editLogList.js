@@ -1,32 +1,50 @@
 (function(){
 	var log4EditLogListComponent = {
-		
 		template : `
 			<div class="log-edit-log-list">
-			
 				<div class="common-title">编辑日志</div>
 				
+				<!-- 搜索条件 -->
 				<div class="common-search">
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="编辑日期">
+								<el-form-item label="访谈编号">
+									<el-input v-model.trim="search.interviewId" placeholder="请输入访谈编号" clearable></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="问卷编码">
+									<el-input v-model.trim="search.questionaireCode" placeholder="请输入问卷编码" clearable></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="问题编码">
+									<el-input v-model.trim="search.questionCode" placeholder="请输入问题编码" clearable></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="50">
+							<el-col :span="8">
+								<el-form-item label="编辑账号">
+									<el-input v-model.trim="search.loginName" placeholder="请输入编辑账号" clearable></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="编辑时间">
 									<el-date-picker
 											v-model="search.editDateRange"
 											type="daterange"
 											range-separator="至"
-											start-placeholder="开始日期"
-											end-placeholder="结束日期"
-											format="yyyy-MM-dd"
-											value-format="yyyy-MM-dd"
+											start-placeholder="开始时间"
+											end-placeholder="结束时间"
+											format="yyyy-MM-dd HH:mm:ss"
+											value-format="yyyy-MM-dd HH:mm:ss"
+											:default-time="['00:00:00','23:59:59']"
 											:editable="false"
+											:clearable="true"
 											style="width:100%;">
 									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="编辑账号">
-									<el-input v-model="search.loginName" placeholder="请输入编辑账号" clearable></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -39,6 +57,7 @@
 	
 				</div>
 				
+				<!-- 列表数据 -->
 				<div class="common-list">
 					<el-table
 						:data="editLogList"
@@ -69,6 +88,7 @@
                     </el-table>
 				</div>
 				
+				<!-- 分页数据 -->
 				<div class="common-pagination">
 					<el-pagination
 						:page-sizes="[10,20,30,50]"
@@ -83,8 +103,9 @@
 					</el-pagination>
 				</div>
 				
+				<!-- 分页数据 -->
 				<el-dialog
-					title="查看修改"
+					title="查看对比(左边修改前,右边修改后)"
 					:visible.sync="viewQuestionDialog.visible"
 					width="50%"
 					:close-on-click-modal="false"
@@ -196,8 +217,11 @@
 				},
 				
 				search : {
+					interviewId : '',
+					questionaireCode : '',
+					questionCode : '',
+					loginName : '',
 					editDateRange : [],
-					loginName : ''
 				},
 				
 				editLogList : [],
@@ -239,8 +263,8 @@
 			handleParams : function(search){
 				var searchCopy = this.$lodash.assign({},search);
 				if(searchCopy.editDateRange && searchCopy.editDateRange.length == 2){
-					searchCopy.startTime = searchCopy.editDateRange[0] + ' 00:00:00';
-					searchCopy.endTime = searchCopy.editDateRange[1] + ' 23:59:59';
+					searchCopy.startTime = searchCopy.editDateRange[0];
+					searchCopy.endTime = searchCopy.editDateRange[1];
 				}else{
 					searchCopy.startTime = '';
 					searchCopy.endTime = '';
