@@ -1,25 +1,26 @@
 (function(){
 	var log4LoginLogComponent = {
-		
 		template : `
 			<div class="log-login-log-list">
-			
 				<div class="common-title">登录日志</div>
 				
+				<!-- 搜索条件 -->
 				<div class="common-search">
 					<el-form label-width="80px" label-position="left">
 						<el-row :gutter="50">
 							<el-col :span="8">
-								<el-form-item label="登录日期">
+								<el-form-item label="登录时间">
 									<el-date-picker
 											v-model="search.loginDateRange"
 											type="daterange"
 											range-separator="至"
-											start-placeholder="开始日期"
-											end-placeholder="结束日期"
-											format="yyyy-MM-dd"
-											value-format="yyyy-MM-dd"
+											start-placeholder="开始时间"
+											end-placeholder="结束时间"
+											format="yyyy-MM-dd HH:mm:ss"
+											value-format="yyyy-MM-dd HH:mm:ss"
+											:default-time="['00:00:00','23:59:59']"
 											:editable="false"
+											:clearable="true"
 											style="width:100%;">
 									</el-date-picker>
 								</el-form-item>
@@ -30,15 +31,14 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-			
 						<div class="common-search-opt">
 							<el-button plain type="primary" size="medium" @click="handleSearch">查询</el-button>
 							<el-button plain type="info" size="medium" @click="handleReset">重置</el-button>
 						</div>
 					</el-form>
-	
 				</div>
 				
+				<!-- 列表数据 -->
 				<div class="common-list">
 					<el-table
 						:data="loginLogList"
@@ -58,10 +58,11 @@
 								{{$commons.formatDate(scope.row.loginTime)}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="loginIp" label="登录地点" align="center"></el-table-column>
+						<el-table-column prop="loginIp" label="登录IP" align="center"></el-table-column>
                     </el-table>
 				</div>
 				
+				<!-- 分页数据 -->
 				<div class="common-pagination">
 					<el-pagination
 						:page-sizes="[10,20,30,50]"
@@ -78,6 +79,7 @@
 				
 			</div>
 		`,
+		
 		data : function(){
 			var self = this;
 			
@@ -122,8 +124,8 @@
 			handleParams : function(search){
 				var searchCopy = this.$lodash.assign({},search);
 				if(searchCopy.loginDateRange && searchCopy.loginDateRange.length == 2){
-					searchCopy.startTime = searchCopy.loginDateRange[0] + ' 00:00:00';
-					searchCopy.endTime = searchCopy.loginDateRange[1] + ' 23:59:59';
+					searchCopy.startTime = searchCopy.loginDateRange[0];
+					searchCopy.endTime = searchCopy.loginDateRange[1];
 				}else{
 					searchCopy.startTime = '';
 					searchCopy.endTime = '';
