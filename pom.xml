@@ -22,7 +22,7 @@
     		<commons-lang.version>3.7</commons-lang.version>
     		<commons-dbcp.version>2.4.0</commons-dbcp.version>
     		<commons-net.version>3.6</commons-net.version>
-    		<commons-compress.version>1.18</commons-compress.version>
+    		<commons-compress.version>1.21</commons-compress.version>
     		<commons-beanutils.version>1.9.3</commons-beanutils.version>
     		<servlet.version>3.1.0</servlet.version>
     		<junit.version>4.12</junit.version>
